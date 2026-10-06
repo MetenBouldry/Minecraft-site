@@ -16,7 +16,7 @@ body{
 }
 
 .content h1 {
-    font-size: 60px; */ Це стиля для h1 і для p. px розмір шрифту */
+    font-size: 60px; /* Це стиля для h1 і для p. px розмір шрифту */
 }
 
 .content p {
