@@ -1,20 +1,22 @@
 body{
+/* Встановлює фон */
     background-image:
 
-            url("image/background.jpg");
-    background-size: cover;
-    background-position: center 0px;
-    background-repeat: no-repeat;
+            url("image/background.jpg"); /* Шлях на jpg для фону */
+    background-size: cover; /* Масштаб картинки */
+    background-position: center 0px; /* Розміщення картинки, де cover центру є по горизонталі,а px - по вертикалі */
+    background-repeat: no-repeat; /* Чи повторюватиметься картинка */
 
-    min-height: 100vh;
-    margin: 0;
+    min-height: 100vh; /* Мінімальна висота 'body',щоб висота сторінки була на максимум */
+    margin: 0; /* Прибирає відступи по краях,якщо 0 */
 
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    display: flex; /* flex для легкого центрування об'єктів */
+    align-items: center; /* Вирівню дочірні компоненти по вертикалі,працює разом зі flex /*
+    justify-content: center; /* Теж саме тільки по горизонталі */
+}
 
 .content h1 {
-    font-size: 60px;
+    font-size: 60px; */ Це стиля для h1 і для p. px розмір шрифту */
 }
 
 .content p {
@@ -23,6 +25,5 @@ body{
 
 .red {
     color: red;
-    font-weight: bold;
-}
+    font-weight: bold; /* Шрифт */
 }
