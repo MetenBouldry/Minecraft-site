@@ -1,6 +1,6 @@
 body{
-/* Встановлює фон */
-    background-image:
+
+    background-image: /* Встановлює фон */
 
             url("image/background.jpg"); /* Шлях на jpg для фону */
     background-size: cover; /* Масштаб картинки */
