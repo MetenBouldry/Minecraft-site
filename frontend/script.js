@@ -1,10 +1,9 @@
-fetch('lang/uk.json')
-    .then(response => response.json())
-    .then(data => {
-        const titleWords = data.title.split(' ');
-        const lastWord = titleWords.pop();
-        document.getElementById('title').innerHTML = titleWords.join(' ') + ' <span class="red">' + lastWord + '</span>';
+// Визначаємо мову url. Типово = uk
+const params = new URLSearchParams(window.location.search);
+const lang = params.get('lang') || 'uk';
 
-        const colored = data.subtitle.replace(/(ЛЮБЛЮ)/g, '<span class="red">$1</span>');
-        document.getElementById('subtitle').innerHTML = colored;})
-.catch(error => console.error('Error loading language file:', error));
+// Завантажуємо JSON файл з перекладом
+fetch(`lang/${lang}.json`)
+    .then(response =>) response.json())
+    .then(data => {
+        // Встановлюємо текст для елементів з id "title" та "subtitle", якщо вони є
