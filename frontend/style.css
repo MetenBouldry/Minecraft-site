@@ -15,6 +15,32 @@ body{
     justify-content: center; /* Теж саме тільки по горизонталі */
 }
 
+/* ═══════════════════════════════════════ */
+/*          ПЕРЕМИКАЧ МОВ                  */
+/* ═══════════════════════════════════════ */
+:lang.switch {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 10;
+    display: flex;
+    gap: 5;
+}
+
+.lang.switch button {
+    background: rgba(0, 0, 0, 0.6);
+    color: #fff;
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    padding: 8px 14px;
+    border-radius: 16px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.lang.switch button:hover{
+    background: rgba(0, 0, 0, 0.9);
+}
 .content h1 {
     font-size: 60px; /* Це стиля для h1 і для p. px розмір шрифту */
 }
