@@ -16,17 +16,23 @@
 
 <div class="content"> <!-- Контейнер, в якому лежить контент сторінки(текст) -->
     <div class="lang-switch"> <!-- Додавння шторки -->
+        <button class="lang-toggle" onclick="toggleLangMenu()">
+            <span id="currentLang">UA</span> ▼
+        </button>
+        <div class="lang-menu" id="langMenu">
             <button onclick="setLang('uk')">UA</button>
             <button onclick="setLang('en')">EN</button>
         </div>
-
     </div>
+
+
 
     <h1 id="title"></h1> <!-- id заголовка сторінки, який вимагає заповнення зі script(наступний такий же) файл lang -->
 
-    <p id="subtitle"></p> <!-- id тексту файл lang -->
-</div>
+    <p id="text1"></p> <!-- id тексту файл lang -->
+    <p id="text2"></p> 
 
+</div>
 
     <script src="script.js"></script> <!-- Підключення файлу -->
 </body>
