@@ -11,7 +11,7 @@ body{
     margin: 0; /* Прибирає відступи по краях,якщо 0 */
 
     display: flex; /* flex для легкого центрування об'єктів */
-    align-items: center; /* Вирівню дочірні компоненти по вертикалі,працює разом зі flex /*
+    align-items: center; /* Вирівню дочірні компоненти по вертикалі,працює разом зі flex */
     justify-content: center; /* Теж саме тільки по горизонталі */
 }
 
@@ -27,7 +27,7 @@ body{
     /* gap: 5; */
 }
 
-.lang-switch select {
+.lang-switch button {
     background: rgba(0, 0, 0, 0.6);
     color: #fff;
     border: 1px solid rgba(255, 255, 255, 0.4);
@@ -38,11 +38,11 @@ body{
     /* transition: background 0.2s; */
 }
 
-.lang-switch select:hover{
+.lang-switch button:hover{
     background: rgba(0, 0, 0, 0.9);
 }
 
-.lang-switch select option{
+.lang-switch button option{
     background: #222;
     color: #fff;
 }
