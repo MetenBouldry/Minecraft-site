@@ -11,7 +11,7 @@ body{
     margin: 0; /* Прибирає відступи по краях,якщо 0 */
 
     display: flex; /* flex для легкого центрування об'єктів */
-    align-items: center; /* Вирівню дочірні компоненти по вертикалі,працює разом зі flex /*
+    align-items: center; /* Вирівню дочірні компоненти по вертикалі,працює разом зі flex */
     justify-content: center; /* Теж саме тільки по горизонталі */
 }
 
@@ -27,28 +27,74 @@ body{
     /* gap: 5; */
 }
 
-.lang-switch select {
+.lang-toggle {
     background: rgba(0, 0, 0, 0.6);
     color: #fff;
     border: 1px solid rgba(255, 255, 255, 0.4);
-    padding: 8px 12px;
-    border-radius: 16px;
-    font-size: 14px;
+    padding: 2px 2px; /* Внутрішні відступи*/
+    border-radius: 18px;
+    font-size: 10px; /* Розмір тексту */
     cursor: pointer;
+    min-width: 60px; /* Мінімальна ширина */
+    font-family: inherit;
     /* transition: background 0.2s; */
 }
 
-.lang-switch select:hover{
+.lang-toggle:hover{
     background: rgba(0, 0, 0, 0.9);
 }
 
-.lang-switch select option{
-    background: #222;
+.lang-menu {
+    display: none;
+    position: absolute;
+    top: 100%;
+    right: 0;
+    margin-top: 5px;
+    background: rgba(0, 0, 0, 0.9);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 10px;
+    overflow: hidden;
+    min-width: 100%;
+    /* color: #fff; */
+}
+
+.lang-menu.show {
+    display: block;
+}
+
+.lang-menu button {
+    display: block;
+    width: 100%;
+    background: transparent;
     color: #fff;
+    border: none;
+    padding: 10px 16px;
+    font-size: 14px;
+    cursor: pointer;
+    text-align: left;
+    font-family: inherit;
+}
+
+.lang-menu button:hover{
+    background: rgba(255, 255, 255, 0.15);
 }
 
 .content h1 {
-    font-size: 60px; /* Це стиля для h1 і для p. px розмір шрифту */
+    /*Позиція*/
+    position: fixed; /* або absolute */
+    top: 0px; /* Відступ зверху */
+    left: 50%;
+    transform: translateX(-50%) scaleX(1.4) skewX(-15deg); /* Центрування по горизонталі */
+    z-index: 1000; /* Поверх інших елементів */
+    /* Стиль */
+    letter-spacing: 3px; /* Відстань міш буквами, + збільшити; - зменшити */
+    /* transform: scaleX(1.5);  Розтягнути слово де 1,5 розтягнути; менше 1,0 зтягнути 
+    transform: rotate(-10deg);  - нахил вліво, + вправо 
+    transform: skewX(-10deg); */
+    font-size: 60px; /*Це стиль(розмір) шрифту */
+    font-weight: bold;
+    color: #971010;
+    text-align: center;
 }
 
 .content p {
