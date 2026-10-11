@@ -4,14 +4,13 @@ body{
 
             url("image/background.jpg"); /* Шлях на jpg для фону */
     background-size: cover; /* Масштаб картинки */
-    background-position: center 0px; /* Розміщення картинки, де cover центру є по горизонталі,а px - по вертикалі */
+    background-position: center 0; /* Розміщення картинки, де cover центру є по горизонталі,а px - по вертикалі */
     background-repeat: no-repeat; /* Чи повторюватиметься картинка */
 
     min-height: 100vh; /* Мінімальна висота 'body',щоб висота сторінки була на максимум */
     margin: 0; /* Прибирає відступи по краях,якщо 0 */
 
     display: flex; /* flex для легкого центрування об'єктів */
-    align-items: center; /* Вирівню дочірні компоненти по вертикалі,працює разом зі flex */
     align-items: center; /* Вирівню дочірні компоненти по вертикалі,працює разом зі flex */
     justify-content: center; /* Теж саме тільки по горизонталі */
 }
@@ -83,11 +82,31 @@ body{
 .content h1 {
     /*Позиція*/
     position: fixed; /* або absolute */
-    top: 0px; /* Відступ зверху */
+    top: 0; /* Відступ зверху */
     left: 50%;
     transform: translateX(-50%) scaleX(1.4) skewX(-15deg); /* Центрування по горизонталі */
     z-index: 1000; /* Поверх інших елементів */
+
     /* Стиль */
+    font-family: 'Arial Black', sans-serif; /* Або піксельний шрифт */
+    text-transform: uppercase;
+
+    /* Градієнт. Тут фіолетовий -> блакитний */
+    background: linear-gradient(0deg,
+        #ff0000,    /* яскраво-червоний */
+        #ff6b00,    /* оранжевий */
+        #ffcc00,    /* жовтий */
+        #ff6b00,    /* оранжевий */
+        #ff0000);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+
+    /* Обводка та 3D ефект */
+    -webkit-text-stroke: 3px #000; /* Обводка */
+    text-shadow:
+            3px 3px 0 #971010, /* тінь */
+            0 10px rgb(0 0 0 / 0.5), 3px 3px 0 #000; /* Світіння*!*/
+
     letter-spacing: 3px; /* Відстань міш буквами, + збільшити; - зменшити */
     /* transform: scaleX(1.5);  Розтягнути слово де 1,5 розтягнути; менше 1,0 зтягнути 
     transform: rotate(-10deg);  - нахил вліво, + вправо 
@@ -98,8 +117,22 @@ body{
     text-align: center;
 }
 
-.content p {
-    font-size: 24px;
+#mainpage-minecraftserver-info0 {
+    position: absolute;
+    top: 140px;
+    left: 20px;
+    margin-top: 0;
+    margin-bottom: 10px;
+    color: darkred;
+}
+
+#mainpage-minecraftserver-info1 {
+    position: absolute;
+    top: 160px;
+    left: 20px;
+    margin-top: 0;
+    margin-bottom: 10px;
+    color: white;
 }
 
 .red {
