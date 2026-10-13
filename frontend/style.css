@@ -40,6 +40,14 @@ body{
     /* transition: background 0.2s; */
 }
 
+/* Міняє параметри на шторці */
+.lang-toggle img { 
+    width: 20px;
+    height: 15px;
+    vertical-align: middle;
+    border-radius: 2px;
+}
+
 .lang-toggle:hover{
     background: rgba(0, 0, 0, 0.9);
 }
@@ -73,6 +81,15 @@ body{
     cursor: pointer;
     text-align: left;
     font-family: inherit;
+}
+
+/* Міняє параматри в середені шторки */
+.lang-menu button img { 
+    wedth: 20px;
+    height: 15px;
+    vertical-align: middle;
+    margin-right: 6px;
+    border-radius: 2px;
 }
 
 .lang-menu button:hover{
