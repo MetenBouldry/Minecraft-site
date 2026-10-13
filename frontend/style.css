@@ -11,7 +11,7 @@ body{
     margin: 0; /* Прибирає відступи по краях,якщо 0 */
 
     display: flex; /* flex для легкого центрування об'єктів */
-    align-items: center; /* Вирівню дочірні компоненти по вертикалі,працює разом зі flex */
+    align-items:   center; /* Вирівню дочірні компоненти по вертикалі,працює разом зі flex */
     justify-content: center; /* Теж саме тільки по горизонталі */
 }
 
@@ -31,11 +31,11 @@ body{
     background: rgba(0, 0, 0, 0.6);
     color: #fff;
     border: 1px solid rgba(255, 255, 255, 0.4);
-    padding: 2px 2px; /* Внутрішні відступи*/
-    border-radius: 18px;
+    padding: 6px 6px; /* Внутрішні відступи*/
+    border-radius: 20px; /* Округлість іконки, до 20*/
     font-size: 10px; /* Розмір тексту */
     cursor: pointer;
-    min-width: 60px; /* Мінімальна ширина */
+    min-width: 40px; /* Мінімальна ширина */
     font-family: inherit;
     /* transition: background 0.2s; */
 }
@@ -68,7 +68,7 @@ body{
     background: transparent;
     color: #fff;
     border: none;
-    padding: 10px 16px;
+    padding: 16px 20px;
     font-size: 14px;
     cursor: pointer;
     text-align: left;
@@ -81,8 +81,8 @@ body{
 
 .content h1 {
     /*Позиція*/
-    position: fixed; /* або absolute */
-    top: 0; /* Відступ зверху */
+    position: fixed; /* або absolute, fixed*/
+    top: 40px; /* Відступ зверху */
     left: 50%;
     transform: translateX(-50%) scaleX(1.4) skewX(-15deg); /* Центрування по горизонталі */
     z-index: 1000; /* Поверх інших елементів */
@@ -92,26 +92,27 @@ body{
     text-transform: uppercase;
 
     /* Градієнт. Тут фіолетовий -> блакитний */
-    background: linear-gradient(0deg,
-        #ff0000,    /* яскраво-червоний */
-        #ff6b00,    /* оранжевий */
-        #ffcc00,    /* жовтий */
-        #ff6b00,    /* оранжевий */
-        #ff0000);
+    background: linear-gradient(180deg,
+        #ff5555,    /* світлий */
+        #d92020,    /* середній */
+        #a31010,    /* темний */
+        #6b0a0a,    /* дуже темний */
+        #3d0000);   /* майже чорний */
     -webkit-background-clip: text;
+    background-clip: text;
     -webkit-text-fill-color: transparent;
 
     /* Обводка та 3D ефект */
     -webkit-text-stroke: 3px #000; /* Обводка */
-    text-shadow:
-            3px 3px 0 #971010, /* тінь */
-            0 10px rgb(0 0 0 / 0.5), 3px 3px 0 #000; /* Світіння*!*/
+    /* text-shadow:
+            3px 3px 0 #971010; тінь */
+            /* 0 10px rgb(0 0 0 / 0.5), 3px 3px 0 #000; Світіння*! */
 
     letter-spacing: 3px; /* Відстань міш буквами, + збільшити; - зменшити */
     /* transform: scaleX(1.5);  Розтягнути слово де 1,5 розтягнути; менше 1,0 зтягнути 
     transform: rotate(-10deg);  - нахил вліво, + вправо 
     transform: skewX(-10deg); */
-    font-size: 60px; /*Це стиль(розмір) шрифту */
+    font-size: 55px; /*Це стиль(розмір) шрифту */
     font-weight: bold;
     color: #971010;
     text-align: center;
@@ -119,7 +120,7 @@ body{
 
 #mainpage-minecraftserver-info0 {
     position: absolute;
-    top: 140px;
+    top: 170px;
     left: 20px;
     margin-top: 0;
     margin-bottom: 10px;
@@ -128,7 +129,7 @@ body{
 
 #mainpage-minecraftserver-info1 {
     position: absolute;
-    top: 160px;
+    top: 200px;
     left: 20px;
     margin-top: 0;
     margin-bottom: 10px;

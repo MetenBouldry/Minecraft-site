@@ -17,11 +17,15 @@
 <div class="content"> <!-- Контейнер, в якому лежить контент сторінки(текст) -->
     <div class="lang-switch"> <!-- Додавння шторки -->
         <button class="lang-toggle" onclick="toggleLangMenu()">
-            <span id="currentLang">UA</span> ▼
+            <span id="currentLang">🌐</span> ▼
         </button>
         <div class="lang-menu" id="langMenu">
-            <button onclick="setLang('uk')">🇺🇦 Українська</button>
-            <button onclick="setLang('en')">🇬🇧 English</button>
+            <button onclick="setLang('uk')">
+                <img src="https://flagcdn.com/24x18/ua.png" alt=""> Українська
+            </button>
+            <button onclick="setLang('en')">
+                <img src="https://flagcdn.com/24x18/gb.png" alt=""> English
+            </button>
         </div>
     </div>
 
