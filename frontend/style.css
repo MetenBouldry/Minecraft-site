@@ -85,7 +85,7 @@ body{
 
 /* Міняє параматри в середені шторки */
 .lang-menu button img { 
-    wedth: 20px;
+    width: 20px;
     height: 15px;
     vertical-align: middle;
     margin-right: 6px;
@@ -135,25 +135,61 @@ body{
     text-align: center;
 }
 
-#mainpage-minecraftserver-info0 {
+.server-info {
     position: absolute;
-    top: 170px;
     left: 20px;
-    margin-top: 0;
-    margin-bottom: 10px;
+    margin: 0 0 10px 0;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 20px;
+}
+
+#server-info0 {
+    top: 170px;
     color: darkred;
 }
 
-#mainpage-minecraftserver-info1 {
-    position: absolute;
+#server-info1 {
     top: 200px;
-    left: 20px;
-    margin-top: 0;
-    margin-bottom: 10px;
     color: white;
 }
 
 .red {
     color: red;
     font-weight: bold; /* Шрифт */
+}
+
+/* ═══════════════════════════════════════ */
+/*         СТАТУС СЕРВЕРІВ                 */
+/* ═══════════════════════════════════════ */
+.status-icon {
+    display: inline-block;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    margin-right: 8px;
+    vertical-align: middle;
+    background: #888;
+    transition: all 0.3s;
+}
+
+.status-icon.checking {
+    background: #fbbf24;
+    animation: pulse 1s infinite;
+}
+
+.status-icon.online {
+    background: #4ade80;
+    box-shadow: 0 0 8px #4ade80;
+}
+
+.status-icon.offline {
+    background: #ef4444;
+    box-shadow: 0 0 8px #ef4444;
+}
+
+@keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.4; }
 }
