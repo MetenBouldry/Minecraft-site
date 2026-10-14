@@ -2,6 +2,12 @@
 
 # HTML-структура
 
+## Зміст
+
+1. [`<!DOCTYPE html>`](#1-doctype-html)
+2. [`<html lang="uk">`](#2-html-languk)
+3. [`<head>`](#3-head)
+
 ## 1. `<!DOCTYPE html>`
 
 **Що це:** Оголошення типу документа. Повідомляє браузеру, що це — **HTML5**.
