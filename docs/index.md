@@ -2,7 +2,7 @@
 
 # HTML-структура
 
-## `<!DOCTYPE html>`
+## 1. `<!DOCTYPE html>`
 
 **Що це:** Оголошення типу документа. Повідомляє браузеру, що це — **HTML5**.
 
@@ -27,6 +27,7 @@
 <head>...</head>
 <body>...</body>
 </html>
+```
 
 ## 2. `<html lang="uk">`
 
@@ -60,6 +61,7 @@
     <head>...</head>
     <body>...</body>
 </html>
+```
 
 ## 3. `<head>`
 
@@ -85,3 +87,4 @@
     <title>Майнкрафт</title>
     <link rel="stylesheet" href="style.css">
 </head>
+```
