@@ -94,3 +94,58 @@ document.addEventListener('click', (e) => {
         menu.classList.remove('show');
     }
 });
+
+// ═══════════════════════════════════════
+//         СТАТУС MINECRAFT-СЕРВЕРІВ
+// ═══════════════════════════════════════
+
+// TODO: замінити на реальні URL, коли буде backend
+const API_URL ='';
+
+// Функція перевірки статусу. Поки неактивна
+async function checkServerStatus(serverName, iconId) {
+    const icon = document.getElementById(iconId);
+    if (!icon) return;
+
+// Показати статус "перевірка"
+    icon.classList.remove('online', 'offline');
+    icon.classList.add('checking');
+
+    try {
+    // Оли буде API_URL розкоментувати
+        /*const response = await fetch(`${API_URL}/status/${serverName}`);
+        console data = await response.json;*/
+
+    // Поки несправжні дані
+        const data = {
+            online: Math.random() > 0.5 //Випадкове
+        };
+
+    // оновити іконку
+        icon.classList.remove('checking');
+        if (data.online) {
+            icon.classList.add('online');
+            icon.title = 'Онлайн';
+        } else {
+            icon.classList.add('offline');
+            icon.title = 'Офлайн';
+        }
+    } catch (error) {
+        console.error('Помилка перевірки статусу', error);
+        icon.classList.remove('checking');
+        icon.classList.add('offline');
+        icon.title = 'Помилка';
+    }  
+}
+
+// Перевірка при завантаженні
+document.addEventListener('DOMContentLoaded', () => {
+    checkServerStatus('terrafirmagreg', 'status-tfg');
+    checkServerStatus('vanila', 'status-vanila');
+});
+
+// Оновлення. Виставленоо кожні 30 сек
+setInterval(() => {
+    checkServerStatus('terrafirmagreg', 'status-tfg');
+    checkServerStatus('vanila', 'status-vanila');
+}, 30000);
