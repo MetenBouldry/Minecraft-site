@@ -1,5 +1,10 @@
 {
+    "page-title": "Minecraft",
     "mainpage-title": "TerraFirmaGreg",
     "mainpage-minecraftserver-info0": "TerraFirmaGreg",
-    "mainpage-minecraftserver-info1": "Vanila"
+    "mainpage-minecraftserver-info1": "Vanilla",
+    "status-online": "Online",
+    "status-offline": "Offline",
+    "status-unknown": "Status unavailable",
+    "status-checking": "Checking..."
 }
