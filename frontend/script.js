@@ -8,19 +8,36 @@ const FLAGS = {
     en: 'https://flagcdn.com/24x18/gb.png'
 };
 
+// Поточні переклади (використовуються й для підказок статусу)
+let translations = {};
+
+function t(key, fallback) {
+    return translations[key] || fallback;
+}
+
 // Функція завантаження мови
 async function loadLanguage(lang) {
     try {
         const response = await fetch(`lang/${lang}.json`);
         const data = await response.json();
+        translations = data;
 
         // Оновити всі тексти
         Object.keys(data).forEach(key => {
             const element = document.getElementById(key);
             if (element) {
-                element.innerHTML = data[key];
+                element.textContent = data[key];
             }
         });
+
+        // Мова документа та заголовок вкладки
+        document.documentElement.lang = lang;
+        if (data['page-title']) {
+            document.title = data['page-title'];
+        }
+
+        // Підказки статусу відповідно до нової мови
+        refreshStatusTitles();
 
         // Оновлення прапорця на іконці
         const currentLangEl = document.getElementById('currentLang');
@@ -102,50 +119,72 @@ document.addEventListener('click', (e) => {
 // TODO: замінити на реальні URL, коли буде backend
 const API_URL ='';
 
-// Функція перевірки статусу. Поки неактивна
+const SERVERS = [
+    { name: 'terrafirmagreg', iconId: 'status-tfg' },
+    { name: 'vanila', iconId: 'status-vanila' }
+];
+
+// Стан іконки -> ключ підказки та запасний текст
+const STATUS_TITLES = {
+    online:  ['status-online',  'Online'],
+    offline: ['status-offline', 'Offline'],
+    unknown: ['status-unknown', 'Status unavailable'],
+    checking: ['status-checking', 'Checking...']
+};
+
+function setStatus(icon, state) {
+    icon.classList.remove('online', 'offline', 'checking');
+    if (state !== 'unknown') {
+        icon.classList.add(state);
+    }
+    icon.dataset.state = state;
+    const [key, fallback] = STATUS_TITLES[state];
+    icon.title = t(key, fallback);
+}
+
+// Оновити підказки після зміни мови
+function refreshStatusTitles() {
+    SERVERS.forEach(({ iconId }) => {
+        const icon = document.getElementById(iconId);
+        if (icon && icon.dataset.state) {
+            setStatus(icon, icon.dataset.state);
+        }
+    });
+}
+
+// Функція перевірки статусу.
+// Поки backend немає (API_URL порожній) — показуємо нейтральний сірий значок,
+// а не випадкові дані, щоб не вводити відвідувачів в оману.
 async function checkServerStatus(serverName, iconId) {
     const icon = document.getElementById(iconId);
     if (!icon) return;
 
-// Показати статус "перевірка"
-    icon.classList.remove('online', 'offline');
-    icon.classList.add('checking');
+    if (!API_URL) {
+        setStatus(icon, 'unknown');
+        return;
+    }
+
+    setStatus(icon, 'checking');
 
     try {
-    // Оли буде API_URL розкоментувати
-        /*const response = await fetch(`${API_URL}/status/${serverName}`);
-        console data = await response.json;*/
-
-    // Поки несправжні дані
-        const data = {
-            online: Math.random() > 0.5 //Випадкове
-        };
-
-    // оновити іконку
-        icon.classList.remove('checking');
-        if (data.online) {
-            icon.classList.add('online');
-            icon.title = 'Онлайн';
-        } else {
-            icon.classList.add('offline');
-            icon.title = 'Офлайн';
-        }
+        const response = await fetch(`${API_URL}/status/${serverName}`);
+        if (!response.ok) throw new Error(`HTTP ${response.status}`);
+        const data = await response.json();
+        setStatus(icon, data.online ? 'online' : 'offline');
     } catch (error) {
         console.error('Помилка перевірки статусу', error);
-        icon.classList.remove('checking');
-        icon.classList.add('offline');
-        icon.title = 'Помилка';
-    }  
+        setStatus(icon, 'unknown');
+    }
+}
+
+function checkAllServers() {
+    SERVERS.forEach(({ name, iconId }) => checkServerStatus(name, iconId));
 }
 
 // Перевірка при завантаженні
-document.addEventListener('DOMContentLoaded', () => {
-    checkServerStatus('terrafirmagreg', 'status-tfg');
-    checkServerStatus('vanila', 'status-vanila');
-});
+document.addEventListener('DOMContentLoaded', checkAllServers);
 
-// Оновлення. Виставленоо кожні 30 сек
-setInterval(() => {
-    checkServerStatus('terrafirmagreg', 'status-tfg');
-    checkServerStatus('vanila', 'status-vanila');
-}, 30000);
+// Періодичне оновлення (кожні 30 сек) — лише коли є API
+if (API_URL) {
+    setInterval(checkAllServers, 30000);
+}
