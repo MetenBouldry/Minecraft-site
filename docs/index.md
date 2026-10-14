@@ -7,7 +7,7 @@
 1. [`<!DOCTYPE html>`](#1-doctype-html)
 2. [`<html lang="uk">`](#2-html-languk)
 3. [`<head>`](#3-head)
-4. [`name`](##3.1-name)
+   - [3.1 `<name>`](#31-name)
 
 
 ## 1. `<!DOCTYPE html>`
