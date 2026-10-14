@@ -11,7 +11,7 @@ body{
     margin: 0; /* Прибирає відступи по краях,якщо 0 */
 
     display: flex; /* flex для легкого центрування об'єктів */
-    align-items:   center; /* Вирівню дочірні компоненти по вертикалі,працює разом зі flex */
+    align-items: flex-start; /* Контент зверху сторінки, працює разом зі flex */
     justify-content: center; /* Теж саме тільки по горизонталі */
 }
 
@@ -96,12 +96,16 @@ body{
     background: rgba(255, 255, 255, 0.15);
 }
 
+.content {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 40px 20px 20px;
+}
+
 .content h1 {
-    /*Позиція*/
-    position: fixed; /* або absolute, fixed*/
-    top: 40px; /* Відступ зверху */
-    left: 50%;
-    transform: translateX(-50%) scaleX(1.4) skewX(-15deg); /* Центрування по горизонталі */
+    /* Позиція: у звичайному потоці, щоб не вилазило за екран на мобільних */
+    margin: 0 0 30px;
+    transform: skewX(-15deg); /* Нахил заголовка */
     z-index: 1000; /* Поверх інших елементів */
 
     /* Стиль */
@@ -129,15 +133,13 @@ body{
     /* transform: scaleX(1.5);  Розтягнути слово де 1,5 розтягнути; менше 1,0 зтягнути 
     transform: rotate(-10deg);  - нахил вліво, + вправо 
     transform: skewX(-10deg); */
-    font-size: 55px; /*Це стиль(розмір) шрифту */
+    font-size: clamp(32px, 9vw, 55px); /* Розмір шрифту, масштабується з шириною екрана */
     font-weight: bold;
     color: #971010;
     text-align: center;
 }
 
 .server-info {
-    position: absolute;
-    left: 20px;
     margin: 0 0 10px 0;
     display: flex;
     align-items: center;
@@ -146,13 +148,26 @@ body{
 }
 
 #server-info0 {
-    top: 170px;
     color: darkred;
 }
 
 #server-info1 {
-    top: 200px;
     color: white;
+}
+
+@media (max-width: 600px) {
+    .content {
+        padding-top: 60px; /* місце під перемикач мов */
+    }
+
+    .content h1 {
+        letter-spacing: 1px;
+        -webkit-text-stroke-width: 2px;
+    }
+
+    .server-info {
+        font-size: 17px;
+    }
 }
 
 .red {
@@ -174,6 +189,7 @@ body{
     transition: all 0.3s;
 }
 
+/* Статус невідомий (немає API) — нейтральний сірий з базового .status-icon */
 .status-icon.checking {
     background: #fbbf24;
     animation: pulse 1s infinite;
