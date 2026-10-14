@@ -1,5 +1,10 @@
 {
+    "page-title": "Майнкрафт",
     "mainpage-title": "TerraFirmaGreg",
     "mainpage-minecraftserver-info0": "TerraFirmaGreg",
-    "mainpage-minecraftserver-info1": "Ваніла"
+    "mainpage-minecraftserver-info1": "Ваніла",
+    "status-online": "Онлайн",
+    "status-offline": "Офлайн",
+    "status-unknown": "Статус недоступний",
+    "status-checking": "Перевірка..."
 }

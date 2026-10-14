@@ -17,7 +17,7 @@
 ## 🏁 Як запустити локально
 
 1.  Клонуйте репозиторій:
-    `git clone https://github.com/MettenBouldry/Minecraft-site.git`
+    `git clone https://github.com/MetenBouldry/Minecraft-site.git`
 2.  Відкрийте папку `frontend` у вашому редакторі коду.
 3.  Запустіть `index.html` за допомогою розширення **Live Server** (або будь-якого іншого локального сервера).
 
