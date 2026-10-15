@@ -8,6 +8,9 @@
 2. [`<html lang="uk">`](#2-html-languk)
 3. [`<head>`](#3-head)
    - [3.1 `<meta>`](#31-meta)
+    - [3.1.1 `<charset>`](#311-charset)
+    - [3.1.2 `<name + content>`](#312-name-content)
+    - [3.1.3 `<http-equiv>`](313-http-equiv)
 
 
 ## 1. `<!DOCTYPE html>`
@@ -78,7 +81,7 @@
 **Де:** Всередині `<html>`, **перед** `<body>`. Закривається `</head>`.
 
 **Що містить:**
-- [`<meta>`](#31-meta)— кодування, viewport, опис, автор
+- `<meta>`— кодування, viewport, опис, автор
 - `<title>` — заголовок вкладки
 - `<link>` — підключення CSS, іконки
 - `<script>` — JS (рідко тут, краще перед `</body>`)
@@ -88,7 +91,7 @@
 - Видимого контенту (текст, картинки, кнопки) — це в `<body>`
 
 **Приклад:**
-```html
+```
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -98,3 +101,138 @@
 ```
 
 ### 3.1 `<meta>`
+
+**Що це:** Метадані — інформація **про** сторінку. **Не видно** на сайті, але потрібно **браузеру**, **Google**, **соцмережам**.
+
+**Де:** Всередині `<head>`. **Самозакриваючий** тег — `</meta>` **не потрібен**.
+
+**Синтаксис:**
+```html
+<meta атрибут="значення">
+```
+#### 3.1.1 `charset`
+
+`charset` — кодування
+```
+<meta charset="UTF-8">
+```
+**Що це:** Кодування символів — як **зберігаються** літери
+
+**Значення:**
+`UTF-8` — стандарт, усі мови світу ✅
+`windows-1251` — стара кирилиця (не використовуй)
+`ISO-8859-1` — латиниця (не для української)
+
+**Навіщо:** без нього українські літери («ї», «є», «ґ») — **кракозябри** (типу ÐŸÑ€Ð¸Ð²Ñ–Ñ‚).
+
+**Приклад:**
+```html
+<head>
+    <meta charset="UTF-8">
+    ...
+</head>
+```
+#### 3.1.2 `<name + content>`
+
+`name` + `content` — метадані
+```
+<meta name="ключ" content="значення">
+```
+**Що це:** Інформація для **Google**, соцмереж, браузера.
+Основні `name`:
+`description` — опис для **Google**
+
+**Приклад:**
+```
+<meta name="description" content="Сайт про модпак TerraFirmaGreg">
+```
+
+**Навіщо:** **Google** показує цей текст у **результатах пошуку. ~150 символів**.
+`keywords` — `ключові слова (застаріло)`
+**Навіщо:** раніше — для **SEO**. Зараз **Google** ігнорує.
+
+`author` — **автор**
+**Приклад:**
+```
+<meta name="author" content="MettenBouldry">
+```
+**Навіщо:** інформація про **автора**.
+
+`viewport` — **для мобільних**
+**Приклад:**
+```
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+```
+Навіщо: адаптивність. Без нього телефон показує зменшену версію десктопу.
+
+**Параметри:**
+
+`width=device-width` — ширина = ширина екрана
+
+`initial-scale=1.0` — початковий масштаб 100%
+
+`maximum-scale=1.0` — максимальний масштаб (забороняє zoom)
+
+`user-scalable=no` — забороняє масштабування пальцями (не рекомендується для доступності)
+
+**Приклад:**
+```
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+```
+
+**Open Graph (для Facebook, Telegram)**
+**Приклад:**
+```
+<meta property="og:title" content="TerraFirmaGreg">
+<meta property="og:description" content="Сайт про модпак">
+<meta property="og:image" content="https://example.com/preview.jpg">
+<meta property="og:url" content="https://example.com">
+```
+**Навіщо:** коли хтось ділиться посиланням — показує картинку, заголовок, опис.
+**Примітка:** використовується `property`, а не `name`.
+
+**Twitter Card**
+**Приклад:**
+```
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="TerraFirmaGreg">
+<meta name="twitter:image" content="https://example.com/preview.jpg">
+```
+**Навіщо:** Twitter показує красиву картку при публікації посилання.
+
+#### 3.1.3 `<http-equiv>`
+http-equiv — вказівки браузеру
+**Приклад:**
+```
+<meta http-equiv="ключ" content="значення">
+```
+**Що це:** «HTTP-заголовки» всередині HTML. Рідко використовується.
+
+**Основні**:
+`refresh` — автоперезавантаження
+**Приклад:**
+```
+<meta http-equiv="refresh" content="5">
+```
+**Навіщо:** перезавантажити сторінку через 5 секунд. Погана практика — не використовуй.
+
+`X-UA-Compatible` — сумісність з IE
+**Приклад:**
+```
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+```
+**Навіщо:** для старого Internet Explorer. Зараз — не потрібно.
+
+**Приклад розширеного:**
+```
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Сайт про модпак TerraFirmaGreg для Minecraft">
+    <meta name="author" content="MettenBouldry">
+    <meta property="og:title" content="TerraFirmaGreg">
+    <meta property="og:description" content="Сайт про модпак TerraFirmaGreg">
+    <meta property="og:type" content="website">
+    ...
+</head>
+```
