@@ -7,8 +7,8 @@
 
 1. [`<!DOCTYPE html>`](#1-doctype-html)
 2. [`<html lang="uk">`](#2-html-languk)
-   [3. `<head>`](#3-head)
-    [3.1 `<meta>`](#31-meta)
+3. [`<head>`](#3-head)
+    - 3.1 [`<meta>`](#31-meta)
     1. [`<charset>`](#311-charset)
     2. [`<name>` `<content>`](#312-name-content)
     3. [`<http-equiv>`](#313-http-equiv)
