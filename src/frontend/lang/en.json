@@ -6,5 +6,40 @@
     "status-online": "Online",
     "status-offline": "Offline",
     "status-unknown": "Status unavailable",
-    "status-checking": "Checking..."
+    "status-checking": "Checking...",
+
+    "auth-login": "login",
+    "auth-register": "Register",
+    "auth-logout": "Logout",
+
+    "reg-title": "Register",
+    "reg-username": "Username",
+    "reg-email": " Email",
+    "reg-password": "Password",
+    "reg-submit": "Submit",
+    "reg-has-account": "Already have an account?",
+    "reg-login-link": "Login",
+
+    "login-title": "Login",
+    "login-username": "Username",
+    "login-password": "Password",
+    "login-submit": "Submit",
+    "login-no-account": "No account?",
+    "login-register-link": "Register",
+
+    "setting-title": "Setting",
+    "setting-username": "Username",
+    "setting-email": "Email",
+    "setting-new-password": "New password (leave empty to keep current)",
+    "setting-save": "Save",
+    "setting-avatar": "Avatar",
+    "setting-upload": "Upload",
+
+    "admin-title": "Admin panel",
+    "admin-users": "Users",
+    "admin-role": "Role",
+    "admin-actions": "Actions",
+    "admin-save": "Save",
+    "admin-user": "User",
+    "admin-admin": "Admin"
 }
