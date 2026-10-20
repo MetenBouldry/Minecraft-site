@@ -8,13 +8,15 @@
     "status-unknown": "Status unavailable",
     "status-checking": "Checking...",
 
-    "auth-login": "login",
+    "button-back": "Back",
+
+    "auth-login": "Login",
     "auth-register": "Register",
     "auth-logout": "Logout",
 
     "reg-title": "Register",
     "reg-username": "Username",
-    "reg-email": " Email",
+    "reg-email": "Email",
     "reg-password": "Password",
     "reg-submit": "Submit",
     "reg-has-account": "Already have an account?",
@@ -27,7 +29,7 @@
     "login-no-account": "No account?",
     "login-register-link": "Register",
 
-    "setting-title": "Setting",
+    "setting-title": "Settings",
     "setting-username": "Username",
     "setting-email": "Email",
     "setting-new-password": "New password (leave empty to keep current)",

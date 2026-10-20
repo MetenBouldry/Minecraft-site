@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title data-i18n="settings-title">Налаштування</title>
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+
+<a href="../index.html" class="back-link" data-i18n="button-back"></a>
+
+<div class="content"> <!-- Контейнер, в якому лежить контент сторінки(текст) -->
+    <div class="lang-switch"> <!-- Додавння шторки -->
+        <button class="lang-toggle" onclick="toggleLangMenu()">
+            <span id="currentLang">🌐</span> ▼
+        </button>
+        <div class="lang-menu" id="langMenu">
+             <button onclick="setLang('uk')">
+                 <img src="https://flagcdn.com/24x18/ua.png" alt=""> Українська
+            </button>
+            <button onclick="setLang('en')">
+                  <img src="https://flagcdn.com/24x18/gb.png" alt=""> English
+         </button>
+     </div>
+</div>
+
+<div class="content">
+    <div class="auth-form">
+        <h1 data-i18n="settings-title"></h1>
+        <form id="settingsForm">
+            <div class="form-group">
+                <label data-i18n="settings-username"></label>
+                <input type="text" id="settingsUsername" name="username" disabled>
+            </div>
+            <div class="form-group">
+                <label data-i18n="settings-email"></label>
+                <input type="email" id="settingsEmail" name="email">
+            </div>
+            <div class="form-group">
+                <label data-i18n="settings-new-password"></label>
+                <input type="password" id="settingsPassword" name="password">
+            </div>
+
+            <!-- Блок для аватара(наразі лише кнопка) -->
+            <div class="form-group">
+                <label data-i18n="settings-avatar"></label>
+                <div style="display: flex; gap: 10px; align-items: center;">
+                    <input type="file" id="avatarInput" style="display: none;">
+                    <button type="button" class="btn-small" onclick="document.getElementById('avatarInput').click()" data-i18n="settings-upload"></button>
+                </div>
+            <button type="submit" data-i18n="settings-save"></button>
+        </form>
+    </div>
+</div>
+<script src="../js/script.js"></script>
+</body>
+</html>

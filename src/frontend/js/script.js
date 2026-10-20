@@ -15,19 +15,28 @@ function t(key, fallback) {
     return translations[key] || fallback;
 }
 
+// Визначаємо базовий шлях (для index.html та pages/*.html)
+const basePath = window.location.pathname.includes('/pages') ? '../' : './';
+
 // Функція завантаження мови
 async function loadLanguage(lang) {
     try {
-        const response = await fetch(`lang/${lang}.json`);
+        const response = await fetch(`${basePath}lang/${lang}.json`);
         const data = await response.json();
         translations = data;
 
         // Оновити всі тексти
         Object.keys(data).forEach(key => {
-            const element = document.getElementById(key);
-            if (element) {
-                element.textContent = data[key];
+            // За id
+            const elementById = document.getElementById(key);
+            if (elementById) {
+                elementById.textContent = data[key];
             }
+
+            const elementByAttr = document.querySelectorAll(`[data-i18n="${key}"]`);
+            elementByAttr.forEach(el => {
+                el.textContent = data[key];
+            });
         });
 
         // Мова документа та заголовок вкладки
