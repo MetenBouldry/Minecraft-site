@@ -2,9 +2,9 @@ body{
 
     background-image: /* Встановлює фон */
 
-            url("image/background.jpg"); /* Шлях на jpg для фону */
+            url("../assets/background/background.jpg"); /* Шлях на jpg для фону */
     background-size: cover; /* Масштаб картинки */
-    background-position: center 0; /* Розміщення картинки, де cover центру є по горизонталі,а px - по вертикалі */
+    background-position: center 50px; /* Розміщення картинки, де cover центру є по горизонталі,а px - по вертикалі */
     background-repeat: no-repeat; /* Чи повторюватиметься картинка */
 
     min-height: 100vh; /* Мінімальна висота 'body',щоб висота сторінки була на максимум */
@@ -20,9 +20,9 @@ body{
 /* ═══════════════════════════════════════ */
 .lang-switch {
     position: fixed;
-    top: 5px;
+    top: 8px;
     right: 25px;
-    z-index: 10;
+    z-index: 110;
     /* display: flex; */
     /* gap: 5; */
 }
@@ -99,7 +99,7 @@ body{
 .content {
     width: 100%;
     box-sizing: border-box;
-    padding: 40px 20px 20px;
+    padding: 70px 20px 20px;
 }
 
 .content h1 {
@@ -157,7 +157,7 @@ body{
 
 @media (max-width: 600px) {
     .content {
-        padding-top: 60px; /* місце під перемикач мов */
+        padding-top: 100px; /* місце під перемикач мов */
     }
 
     .content h1 {
@@ -208,4 +208,183 @@ body{
 @keyframes pulse {
     0%, 100% { opacity: 1; }
     50% { opacity: 0.4; }
+}
+
+/* ═══ МАЛЕНЬКІ КНОПКИ (для налаштувань) ═══ */
+.btn-small {
+    padding: 8px 16px;
+    background: rgba(255, 255, 255, 0.1);
+    color: #fff;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background 0.3s;
+}
+
+.btn-small:hover {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+/* ═══ ШАПКА САЙТУ (HEADER) ═══ */
+.site-header {
+    position: fixed;
+    top: 0;
+    right: 0;
+    left: 0;
+    height: 50px;
+    background: rgba(0, 0, 0, 0.8);
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    padding: 0 120px 0 25px;
+    z-index: 100;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.header-right {
+    display: flex;
+    gap: 15px;
+}
+
+.header-right a {
+    color: #fff;
+    text-decoration: none;
+    font-size: 14px;
+    padding: 6px 12px;
+    border-radius: 5px;
+    transition: background 0.3s;
+}
+
+.header-right a:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+/* ═══ КНОПКИ АВТОРИЗАЦІЇ (на головній) ═══ */
+/* .auth-buttons {
+    position: fixed;
+    top: 5px;
+    left: 25px;
+    z-index: 10;
+    display: flex;
+    gap: 10px;
+}
+
+.auth-buttons a {
+    background: rgba(0, 0, 0, 0.6);
+    color: #fff;
+    text-decoration: none;
+    padding: 6px 15px;
+    border-radius: 20px;
+    font-size: 14px;
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    transition: background 0.3s;
+}
+
+.auth-buttons a:hover {
+    background: rgba(0, 0, 0, 0.9);
+} */
+
+.auth-form {
+    background: rgba(0, 0, 0, 0.7);
+    border: 1px solid rgba(0, 0, 0, 0.3);
+    border-radius: 10px;
+    padding: 40px;
+    max-width: 400px;
+    margin: 100px auto;
+    color: #fff;
+    box-sizing: border-box;
+}
+
+.auth-form form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+/* Заголовок всередині форми — менший */
+.auth-form h1 {
+    font-size: 32px;      /* менший розмір */
+    margin-bottom: 20px;  /* менший відступ */
+    transform: none;      /* без нахилу (щоб не вилазило) */
+    -webkit-text-stroke: 2px #000; /* тонша обводка */
+    letter-spacing: 2px;  /* менший інтервал */
+
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.form-group label {
+    font-size: 14px;
+    color: #ddd;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 5px;
+    background: rgba(255, 255, 255, 0.1);
+    color: #fff;
+    font-size: 16px;
+    box-sizing: border-box;
+}
+
+.form-group input:focus {
+    outline: none;
+    border-color: #ff5555;
+}
+
+.auth-form button {
+    padding: 12px;
+    background: #d92020;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background 0.3s;
+}  
+
+.auth-form button:hover {
+    background: #ff5555;
+}
+
+.auth-link {
+    text-align: center;
+    margin-top: 10px;
+    font-size: 14px;
+}
+
+.auth-link a {
+    color: #ff5555;
+    text-decoration: none;
+}
+
+.auth-link a:hover {
+    text-decoration: underline;
+}
+
+/* ═══ КНОПКА «НАЗАД» ═══ */
+.back-link {
+    position: fixed;
+    top: 5px;
+    left: 25px;
+    z-index: 10;
+    background: rgba(0, 0, 0, 0.6);
+    color: #fff;
+    text-decoration: none;
+    padding: 6px 15px;
+    border-radius: 20px;
+    font-size: 14px;
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    transition: background 0.3s;
+}
+
+.back-link:hover {
+    background: rgba(0, 0, 0, 0.9);
 }

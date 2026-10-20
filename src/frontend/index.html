@@ -4,15 +4,21 @@
 
 <head> <!-- Основа сайту, кодування, заголовок вкладки, підключення CSS,метадані для пошуку -->
     <meta charset="UTF-8"> <!-- Кодування символів -->
-
-<meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- Вказує на те, що сайт адаптивний -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- Вказує на те, що сайт адаптивний -->
 
     <title>Майнкрафт</title>
 
-    <link rel="stylesheet" href="style.css"> <!-- Підключення CSS -->
+    <link rel="stylesheet" href="css/style.css"> <!-- Підключення CSS -->
 </head>
 
 <body> <!-- Видима частина,те що буде лежати на сторінці(наприклад текст) -->
+
+<header class="site-header">
+    <div class="header-right">
+        <a href="pages/login.html" data-i18n="auth-login"></a>
+        <a href="pages/register.html" data-i18n="auth-register"></a>
+    </div>
+</header>
 
 <div class="content"> <!-- Контейнер, в якому лежить контент сторінки(текст) -->
     <div class="lang-switch"> <!-- Додавння шторки -->
@@ -29,7 +35,10 @@
         </div>
     </div>
 
-
+    <!-- <div class="auth-buttons"> Кнопки реєстрації  
+        <a href="pages/login.html" data-i18n="auth-login"></a>
+        <a href="pages/register.html" data-i18n="auth-register"></a>
+    </div> -->
 
     <h1 id="mainpage-title"></h1> <!-- id заголовка сторінки, який вимагає заповнення зі script(наступний такий же) файл lang -->
 
@@ -44,6 +53,6 @@
     </p>
 </div>
 
-    <script src="script.js"></script> <!-- Підключення файлу -->
+    <script src="js/script.js"></script> <!-- Підключення файлу -->
 </body>
 </html>
