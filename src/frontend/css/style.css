@@ -83,7 +83,7 @@ body{
     font-family: inherit;
 }
 
-/* Міняє параматри в середені шторки */
+/* Міняє параметри в середині шторки */
 .lang-menu button img { 
     width: 20px;
     height: 15px;
@@ -123,14 +123,14 @@ body{
     background-clip: text;
     -webkit-text-fill-color: transparent;
 
-    /* Обводка та 3D ефект */
-    -webkit-text-stroke: 3px #000; /* Обводка */
+    /* Обвідка та 3D ефект */
+    -webkit-text-stroke: 3px #000; /* Обвідка */
     /* text-shadow:
             3px 3px 0 #971010; тінь */
             /* 0 10px rgb(0 0 0 / 0.5), 3px 3px 0 #000; Світіння*! */
 
     letter-spacing: 3px; /* Відстань міш буквами, + збільшити; - зменшити */
-    /* transform: scaleX(1.5);  Розтягнути слово де 1,5 розтягнути; менше 1,0 зтягнути 
+    /* transform: scaleX(1.5);  Розтягнути слово де 1,5 розтягнути; менше 1,0 стиснути
     transform: rotate(-10deg);  - нахил вліво, + вправо 
     transform: skewX(-10deg); */
     font-size: clamp(32px, 9vw, 55px); /* Розмір шрифту, масштабується з шириною екрана */
@@ -307,7 +307,7 @@ body{
     font-size: 32px;      /* менший розмір */
     margin-bottom: 20px;  /* менший відступ */
     transform: none;      /* без нахилу (щоб не вилазило) */
-    -webkit-text-stroke: 2px #000; /* тонша обводка */
+    -webkit-text-stroke: 2px #000; /* тонша обвідка */
     letter-spacing: 2px;  /* менший інтервал */
 
 }
