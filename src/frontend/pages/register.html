@@ -23,31 +23,31 @@
             </button>
             <button onclick="setLang('en')">
                   <img src="https://flagcdn.com/24x18/gb.png" alt=""> English
-        </button>
+            </button>
+        </div>
     </div>
-</div>
 
     <div class="auth-form">
         <h1 data-i18n="reg-title"></h1>
             <form id="registerForm">
-            <div class="form-group">
-                <label data-i18n="reg-username"></label>
-                <input type="text" id="username" name="username" required>
-            </div>
-            <div class="form-group">
-                <label data-i18n="reg-email"></label>
-                <input type="email" id="email" name="email" required>
-            </div>
-            <div class="form-group">
-                <label data-i18n="reg-password"></label>
-                <input type="password" id="password" name="password" required>
-            </div>
-            <button type="submit" data-i18n="reg-submit"></button>
-            <p class="auth-link">
-                <span data-i18n="reg-has-account"></span>
-                <a href="login.html" data-i18n="reg-login-link"></a>
-            </p>
-        </form>
+                <div class="form-group">
+                    <label for="username" data-i18n="reg-username"></label>
+                    <input type="text" id="username" name="username" required>
+                </div>
+                <div class="form-group">
+                    <label for="email" data-i18n="reg-email"></label>
+                    <input type="email" id="email" name="email" required>
+                </div>
+                <div class="form-group">
+                    <label for="password" data-i18n="reg-password"></label>
+                    <input type="password" id="password" name="password" required>
+                </div>
+                <button type="submit" data-i18n="reg-submit"></button>
+                <p class="auth-link">
+                    <span data-i18n="reg-has-account"></span>
+                    <a href="login.html" data-i18n="reg-login-link"></a>
+                </p>
+            </form>
     </div>
 </div>
 <script src="../js/script.js"></script>
