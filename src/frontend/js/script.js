@@ -60,7 +60,7 @@ async function loadLanguage(lang) {
         // Запам'ятовування вибору
         localStorage.setItem('lang', lang);
 
-        // Оновлення URL( без перезавантаження)
+        // Оновлення URL(без перезавантаження)
         const url = new URL(window.location);
         url.searchParams.set('lang', lang);
         history.pushState({}, '', url);
@@ -72,7 +72,7 @@ async function loadLanguage(lang) {
 
 // Функція перемикання(викликається кнопкою)
 function setLang(newLang) {
-    loadLanguage(newLang);
+    loadLanguage(newLang).catch(err => console.error('Помилка зміни мов', err));
 }
 
 // ═══════════════════════════════════════
@@ -86,7 +86,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const params = new URLSearchParams(window.location.search);
     lang = params.get('lang');
 
-    // 2. З loclstorage
+    // 2. З localstorage
     if (!lang) {
         lang = localStorage.getItem('lang');
     }
@@ -101,7 +101,7 @@ document.addEventListener('DOMContentLoaded', () => {
         lang = 'uk';
     }
 
-    loadLanguage(lang);
+    loadLanguage(lang).catch(err => console.error('Помилка завантаження мови', err));
  });
 
  // ═══════════════════════════════════════
@@ -115,7 +115,7 @@ function toggleLangMenu() {
     }
 }
 
-// Закрити після кліку поза меню
+// Закрити після клацання поза меню
 document.addEventListener('click', (e) => {
     const menu = document.getElementById('langMenu');
     const toggle = document.querySelector('.lang-toggle');
@@ -180,7 +180,9 @@ async function checkServerStatus(serverName, iconId) {
 
     try {
         const response = await fetch(`${API_URL}/status/${serverName}`);
-        if (!response.ok) throw new Error(`HTTP ${response.status}`);
+        if (!response.ok) {
+            setStatus(icon, 'unknow')
+        }
         const data = await response.json();
         setStatus(icon, data.online ? 'online' : 'offline');
     } catch (error) {

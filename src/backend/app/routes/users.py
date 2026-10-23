@@ -12,11 +12,11 @@ def read_user_me(current_user: User = Depends(get_current_user)):
     return current_user
 
 @router.get("/users", response_model=list[UserResponse])
-def get_users(db: Session = Depends(get_db), current_admin: User = Depends(get_current_admin)):
+def get_users(db: Session = Depends(get_db), _ = Depends(get_current_admin)):
     return db.query(User).all()
 
 @router.patch("/users/{user_id}/role", response_model=UserResponse)
-def  update_user_role(user_id: int, role: str, db: Session = Depends(get_db), current_admin: User = Depends(get_current_admin)):
+def  update_user_role(user_id: int, role: str, db: Session = Depends(get_db), _ = Depends(get_current_admin)):
     user = db.query(User).filter(User.id == user_id).first()
     if not user:
         raise HTTPException(status_code=404, detail="User not found")

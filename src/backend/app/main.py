@@ -1,5 +1,5 @@
 from fastapi import FastAPI
-from fastapi.middleware.cors import CORSMiddleware
+from starlette.middleware.cors import CORSMiddleware
 from .database import engine
 from .models import Base
 from .routes import auth, users
@@ -11,11 +11,11 @@ app = FastAPI(title="Minecraft site API")
 
 # CORS(щоб фронт міг робити запити)
 app.add_middleware(
-    CORSMiddleware,
-    allow_origins=["*"],
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"]
+    CORSMiddleware, # type: ignore
+    allow_origins=["*"], # type: ignore
+    allow_credentials=True, # type: ignore
+    allow_methods=["*"], # type: ignore
+    allow_headers=["*"] # type: ignore
 )
 
 # Підключення маршруту
