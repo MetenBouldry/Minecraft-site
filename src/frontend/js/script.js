@@ -11,6 +11,8 @@ const FLAGS = {
 // Поточні переклади (використовуються й для підказок статусу)
 let translations = {};
 
+// Функція t() — бере текст з JSON за ключем.
+// Якщо ключа немає — повертає fallback (запасний текст)
 function t(key, fallback) {
     return translations[key] || fallback;
 }
@@ -33,6 +35,7 @@ async function loadLanguage(lang) {
                 elementById.textContent = data[key];
             }
 
+            // За data-i18n
             const elementByAttr = document.querySelectorAll(`[data-i18n="${key}"]`);
             elementByAttr.forEach(el => {
                 el.textContent = data[key];
@@ -196,4 +199,46 @@ document.addEventListener('DOMContentLoaded', checkAllServers);
 // Періодичне оновлення (кожні 30 сек) — лише коли є API
 if (API_URL) {
     setInterval(checkAllServers, 30000);
+}
+
+// ═══════════════════════════════════════
+//     РЕЄСТРАЦІЯ (підключення до API)
+// ═══════════════════════════════════════
+
+// Знаходимо форму реєстрації (якщо ми на сторінці register.html)
+const registerForm = document.getElementById('registerForm');
+if (registerForm) {
+    // Слухаємо подію submit (коли користувач натискає "Зареєструватися")
+    registerForm.addEventListener('submit', async(e) => {
+        e.preventDefault(); // Зупиняємо перезавантаження сторінки
+
+        // Беремо значення з полів
+        const username = document.getElementById('username').value;
+        const email = document.getElementById('email').value;
+        const password = document.getElementById('password').value;
+
+        try {
+            // Відправляємо POST-запит на бекенд
+            const response = await fetch('http://127.0.0.1:8000/api/register', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json' },
+                body: JSON.stringify({ username, email, password })
+            });
+
+            const data = await response.json()
+
+            if (response.ok) {
+                // Успіх — показуємо повідомлення і переходимо на логін
+                alert(t('reg-success', 'Реєстрація успішна!'));
+                window.location.href = 'login.html';
+            } else {
+                // Помилка — показуємо текст з сервера
+                alert(t('reg-error', 'Помилка') + ': ' + (data.detail || t('unknown-error', 'Невідома помилка')));
+            }
+        } catch (error) {
+            // Помилка з'єднання (сервер не запущений)
+            console.error(error);
+            alert(t('connection-error', 'Помилка з\'єднання'));
+        }
+    });
 }

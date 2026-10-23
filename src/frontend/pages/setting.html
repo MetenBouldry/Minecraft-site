@@ -22,23 +22,23 @@
             </button>
             <button onclick="setLang('en')">
                   <img src="https://flagcdn.com/24x18/gb.png" alt=""> English
-        </button>
+            </button>
+        </div>
     </div>
-</div>
 
     <div class="auth-form">
         <h1 data-i18n="settings-title"></h1>
         <form id="settingsForm">
             <div class="form-group">
-                <label data-i18n="settings-username"></label>
+                <label for="settingsUsername" data-i18n="settings-username"></label>
                 <input type="text" id="settingsUsername" name="username" disabled>
             </div>
             <div class="form-group">
-                <label data-i18n="settings-email"></label>
+                <label for="settingsEmail" data-i18n="settings-email"></label>
                 <input type="email" id="settingsEmail" name="email">
             </div>
             <div class="form-group">
-                <label data-i18n="settings-new-password"></label>
+                <label for="settingsPassword" data-i18n="settings-new-password"></label>
                 <input type="password" id="settingsPassword" name="password">
             </div>
 
@@ -49,6 +49,7 @@
                     <input type="file" id="avatarInput" style="display: none;">
                     <button type="button" class="btn-small" onclick="document.getElementById('avatarInput').click()" data-i18n="settings-upload"></button>
                 </div>
+            </div>
             <button type="submit" data-i18n="settings-save"></button>
         </form>
     </div>
