@@ -181,7 +181,8 @@ async function checkServerStatus(serverName, iconId) {
     try {
         const response = await fetch(`${API_URL}/status/${serverName}`);
         if (!response.ok) {
-            setStatus(icon, 'unknow')
+            setStatus(icon, 'unknown');
+            return;
         }
         const data = await response.json();
         setStatus(icon, data.online ? 'online' : 'offline');
@@ -203,15 +204,21 @@ if (API_URL) {
     setInterval(checkAllServers, 30000);
 }
 
-// ═══════════════════════════════════════
-//     РЕЄСТРАЦІЯ (підключення до API)
-// ═══════════════════════════════════════
+// ═══════════════════════════════════════════════════════════
+//    3. АВТОРИЗАЦІЯ (Підключення до API)
+// ═══════════════════════════════════════════════════════════
+
+const API_BASE_URL = 'http://127.0.0.1:8000/api'; // Базова URL-адреса бекенду
+
+// ─────────────────────────────────────────────
+//  3.1. РЕЄСТРАЦІЯ
+// ─────────────────────────────────────────────
 
 // Знаходимо форму реєстрації (якщо ми на сторінці register.html)
 const registerForm = document.getElementById('registerForm');
+
 if (registerForm) {
-    // Слухаємо подію submit (коли користувач натискає "Зареєструватися")
-    registerForm.addEventListener('submit', async(e) => {
+    registerForm.addEventListener('submit', async (e) => {
         e.preventDefault(); // Зупиняємо перезавантаження сторінки
 
         // Беремо значення з полів
@@ -220,19 +227,19 @@ if (registerForm) {
         const password = document.getElementById('password').value;
 
         try {
-            // Відправляємо POST-запит на бекенд
-            const response = await fetch('http://127.0.0.1:8000/api/register', {
+            // Відправляємо POST-запит на бекенд (JSON)
+            const response = await fetch(`${API_BASE_URL}/register`, {
                 method: 'POST',
-                headers: {'Content-Type': 'application/json' },
-                body: JSON.stringify({ username, email, password })
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({username, email, password})
             });
 
-            const data = await response.json()
+            const data =await response.json();
 
             if (response.ok) {
                 // Успіх — показуємо повідомлення і переходимо на логін
                 alert(t('reg-success', 'Реєстрація успішна!'));
-                window.location.href = 'login.html';
+                window.location.href = '../login.html';
             } else {
                 // Помилка — показуємо текст з сервера
                 alert(t('reg-error', 'Помилка') + ': ' + (data.detail || t('unknown-error', 'Невідома помилка')));
@@ -240,7 +247,85 @@ if (registerForm) {
         } catch (error) {
             // Помилка з'єднання (сервер не запущений)
             console.error(error);
-            alert(t('connection-error', 'Помилка з\'єднання'));
+            alert(t('connection-error', 'Помилка з\'єднання з сервером'));
+
         }
     });
+}
+
+// ─────────────────────────────────────────────
+//  3.2. ВХІД (ЛОГІН)
+// ─────────────────────────────────────────────
+
+// Знаходимо форму входу (якщо ми на сторінці login.html)
+const loginForm = document.getElementById('loginForm');
+
+if (loginForm) {
+    loginForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+        const username = document.getElementById('loginUsername').value;
+        const password = document.getElementById('loginPassword').value;
+
+        try {
+            // Відправляємо POST-запит на бекенд (form-data)
+            const response = await fetch(`${API_BASE_URL}/login`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                body: new URLSearchParams({username, password})
+            });
+
+            const data = await response.json();
+
+            if (response.ok) {
+                // Успіх — зберігаємо токен у localStorage
+                localStorage.setItem('token', data.access_token);
+                alert(t('login-success', 'Вхід успішний!'));
+                window.location.href = '../index.html';
+            } else {
+                // Помилка — показуємо текст з сервера
+                alert(t('login-error', 'Невірний логін або пароль'));
+            }
+        } catch (error) {
+            console.error(error);
+            alert(t('connection-error', 'Помилка з\'єднання з сервером'));
+        }
+    });
+}
+
+// ─────────────────────────────────────────────
+//  3.3. НАЛАШТУВАННЯ (ПРОФІЛЬ)
+// ─────────────────────────────────────────────
+
+// Знаходимо форму налаштувань (якщо ми на сторінці settings.html)
+const settingsForm = document.getElementById('settingsForm');
+
+if (settingsForm) {
+    // Беремо токен з localStorage (який зберегли після входу)
+    const token = localStorage.getItem('token');
+
+    if (token) {
+        // Якщо токен є — запитуємо дані користувача
+        fetch(`${API_BASE_URL}/me`, {
+            headers: { 'Authorization': 'Bearer' + token }
+        })
+        .then(r => r.json())
+        .then(data => {
+            if (data.username) {
+                // Заповнюємо поля форми
+                document.getElementById('settingsUsername').value = data.username;
+                document.getElementById('settingsEmail').value = data.email;
+            }
+        })
+        .catch(error => {
+            console.error('Помилка завантаження профілю:', error);
+            // Якщо токен недійсний — перекидаємо на логін
+            localStorage.removeItem('token');
+            window.location.href = '../login.html';
+        });
+    } else {
+        // Якщо токена немає — перекидаємо на логін
+        window.location.href = '../login.html';        
+    }
+
 }
