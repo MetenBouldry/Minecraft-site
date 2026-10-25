@@ -1,4 +1,4 @@
-Minecraft-site
+?Minecraft-site
 
 Вебсайт для Minecraft-проєкту з підтримкою модпаку TerraFirmaGreg та Vanilla-сервера.
 
@@ -86,7 +86,7 @@ Minecraft-site/
    
    git clone https://github.com/MetenBouldry/Minecraft-site.git
 
-2. Відкрийте папку "Minecraft-site" у редакторі коду.
+2. Відкрийте теку "Minecraft-site" у редакторі коду.
 
 3. Запустіть "src/frontend/index.html" за допомогою розширення Live Server або іншого локального вебсервера.
 
@@ -111,7 +111,7 @@ Minecraft-site/
 
 📚 Документація
 
-У папці "docs/" містяться навчальні нотатки та пояснення щодо структури HTML, стилів CSS, JavaScript і механізму перемикання мов.
+У теці "docs/" містяться навчальні нотатки та пояснення щодо структури HTML, стилів CSS, JavaScript і механізму перемикання мов.
 
 📄 Ліцензія
 

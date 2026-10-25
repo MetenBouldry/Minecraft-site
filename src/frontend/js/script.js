@@ -17,12 +17,10 @@ function t(key, fallback) {
     return translations[key] || fallback;
 }
 
-// Визначаємо базовий шлях (для index.html та pages/*.html)
-const basePath = window.location.pathname.includes('/pages') ? '../' : './';
-
 // Функція завантаження мови
 async function loadLanguage(lang) {
     try {
+        const basePath = window.location.pathname.includes('/pages') ? '../' : '';
         const response = await fetch(`${basePath}lang/${lang}.json`);
         const data = await response.json();
         translations = data;
@@ -239,7 +237,7 @@ if (registerForm) {
             if (response.ok) {
                 // Успіх — показуємо повідомлення і переходимо на логін
                 alert(t('reg-success', 'Реєстрація успішна!'));
-                window.location.href = '../login.html';
+                window.location.href = 'login.html';
             } else {
                 // Помилка — показуємо текст з сервера
                 alert(t('reg-error', 'Помилка') + ': ' + (data.detail || t('unknown-error', 'Невідома помилка')));
@@ -307,7 +305,7 @@ if (settingsForm) {
     if (token) {
         // Якщо токен є — запитуємо дані користувача
         fetch(`${API_BASE_URL}/me`, {
-            headers: { 'Authorization': 'Bearer' + token }
+            headers: { 'Authorization': 'Bearer ' + token }
         })
         .then(r => r.json())
         .then(data => {
@@ -321,11 +319,10 @@ if (settingsForm) {
             console.error('Помилка завантаження профілю:', error);
             // Якщо токен недійсний — перекидаємо на логін
             localStorage.removeItem('token');
-            window.location.href = '../login.html';
+            window.location.href = 'login.html';
         });
     } else {
         // Якщо токена немає — перекидаємо на логін
-        window.location.href = '../login.html';        
+        window.location.href = 'login.html';
     }
-
 }
