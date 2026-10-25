@@ -45,6 +45,7 @@ Backend — у розробці
 
 📁 Структура проєкту
 
+```
 Minecraft-site/
 ├── docs/
 │   ├── index.md
@@ -79,6 +80,7 @@ Minecraft-site/
 ├── .gitignore
 ├── LICENSE
 └── README.md
+```
 
 🚀 Як запустити frontend локально
 
