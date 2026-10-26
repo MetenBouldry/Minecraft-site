@@ -46,7 +46,7 @@
         <main class="profile-content">
 
             <!-- Вкладка 1: Загальні -->
-            <div id="tab-general" class="tab-panel active">
+            <div id="tab-general" class="tab-pane active">
                 <h3>Загальна інформація</h3>
                 <form id="generalForm">
                     <div class="form-group">
@@ -57,14 +57,40 @@
                         <label for="profileEmail">Email</label>
                         <input type="text" id="profileEmail" name="email" required>
                     </div>
-                    <button type="submit" class="btn-primary">Зберігти зміни</button>
+                    <button type="submit" class="btn-primary">Зберегти зміни</button>
                 </form>
             </div>
 
             <!-- Вкладка 2: Безпека -->
+            <div id="tab-security" class="tab-pane">
+                <h3>Зміна паролю</h3>
+                <form id="secureForm">
+                    <div class="form-group">
+                        <label for="currentPassword">Поточний пароль</label>
+                        <input type="password" id="currentPassword" name="current_password" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="newPassword">Новий пароль</label>
+                        <input type="password" id="newPassword" name="new_password" required>
+                    </div>
+                    <button type="submit" class="btn-primary">Оновити пароль</button>
+                </form>
+            </div>
+
+            <!-- Вкладка 3: Аватар -->
+            <div id="tab-avatar">
+                <h3>Зміна аватара</h3>
+                <div class="avatar-upload-area">
+                    <img id="mainAvatar" src="https://via.placeholder.com/150" alt="Avatar" class="avatar-large">
+
+                    <br>
+                    <input type="file" id="avatarInput" accept="image/*" style="display: none">
+                    <button type="button" class="btn-primary" onclick="document.getElementById('avatarInput').click()">Обрати файл</button>
+                </div>
+            </div>
         </main>
     </div>
 </div>
-
+<script src="../js/script.js"></script>
 </body>
 </html>
