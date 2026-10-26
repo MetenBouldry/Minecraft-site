@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title data-i18n="profile-title">Мій профіль</title>
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+
+<a href="../index.html" class="back-link" data-i18n="button-back"></a>
+
+<div class="content">
+    <div class="lang-switch"> <!-- Додавання шторки -->
+        <button class="lang-toggle" onclick="toggleLangMenu()">
+            <span id="currentLang">🌐</span> ▼
+        </button>
+        <div class="lang-menu" id="langMenu">
+             <button onclick="setLang('uk')">
+                 <img src="https://flagcdn.com/24x18/ua.png" alt=""> Українська
+            </button>
+            <button onclick="setLang('en')">
+                  <img src="https://flagcdn.com/24x18/gb.png" alt=""> English
+            </button>
+        </div>
+    </div>
+
+    <!-- ГОЛОВНИЙ КОНТЕЙНЕР ПРОФІЛЮ -->
+    <div class="profile-container">
+
+        <!-- ЛІВА ПАНЕЛЬ (Вкладки) -->
+        <aside class="profile-sidebar">
+
+        </aside>
+    </div>
+</div>
+
+</body>
+</html>
