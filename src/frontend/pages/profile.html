@@ -46,7 +46,22 @@
         <main class="profile-content">
 
             <!-- Вкладка 1: Загальні -->
+            <div id="tab-general" class="tab-panel active">
+                <h3>Загальна інформація</h3>
+                <form id="generalForm">
+                    <div class="form-group">
+                        <label for="profileUsername">Ім'я користувача</label>
+                        <input type="text" id="profileUsername" name="username" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="profileEmail">Email</label>
+                        <input type="text" id="profileEmail" name="email" required>
+                    </div>
+                    <button type="submit" class="btn-primary">Зберігти зміни</button>
+                </form>
+            </div>
 
+            <!-- Вкладка 2: Безпека -->
         </main>
     </div>
 </div>
