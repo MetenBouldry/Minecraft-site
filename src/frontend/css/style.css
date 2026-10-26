@@ -438,7 +438,8 @@ body{
     font-size: 1.2rem;
     margin: 0;
     word-break: break-all;
-    font-weight: 'Arial Black', sans-serif;
+    font-family: 'Arial Black', sans-serif;
+    font-weight: bold;
     letter-spacing: 1px;
 }
 
@@ -496,11 +497,10 @@ body{
 }
 
 .profile-content h3 {
-    margin: 0;
+    margin: 0 0 22px 0;
     color: #fff;
     border-bottom:1px solid rgba(255, 255, 255, 0.1);
     padding: 15px;
-    margin-bottom: 22px;
     font-size: 22px;
     letter-spacing: 1px;
 }
@@ -511,7 +511,7 @@ body{
 }
 
 .avatar-large {
-    weight: 150px;
+    width: 150px;
     height: 150px;
     border-radius: 50%;
     object-fit: cover;
