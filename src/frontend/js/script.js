@@ -326,3 +326,180 @@ if (settingsForm) {
         window.location.href = 'login.html';
     }
 }
+
+// ═══════════════════════════════════════════════════════════
+//    5. СТОРІНКА ПРОФІЛЮ (ВКЛАДКИ ТА ЛОГІКА)
+// ═══════════════════════════════════════════════════════════
+
+const profileContainer = document.querySelector('.profile-container');
+
+if (profileContainer) {
+    const token = localStorage.getItem('token');
+
+        if (!token) {
+            window.location.href = 'login.html';
+        } else {
+
+            // ── 4.1. ПЕРЕМИКАННЯ ВКЛАДОК ──
+            const navBtns = document.querySelectorAll('.nav-btn');
+            const tabPanes = document.querySelectorAll('.tab-pane');
+
+            navBtns.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    // Прибираємо активний клас з усіх
+                    navBtns.forEach(b => b.classList.remove('active'));
+                    tabPanes.forEach(t => t.classList.remove('active'));
+
+                    // Робимо активним натиснуте
+                    btn.classList.add('active');
+                    const targetId = btn.getAttribute('data-tab');
+                    document.getElementById(targetId).classList.add('active');
+                });
+            });
+
+            // ── 4.2. ЗАВАНТАЖЕННЯ ДАНИХ ПРОФІЛЮ (GET /me) ──
+            fetch(`${API_BASE_URL}/me` , {
+                headers: { 'Authorization': 'Bearer ' + token }
+            })
+            .then(async (r) => {
+                if (r.status === 401) {
+                    localStorage.removeItem('token');
+                    window.location.href = 'login.html';
+                    return null;
+                }
+                if (!r.ok) throw new Error('HTTP' + r.status);
+                return r.json();
+            })
+            .then(data => {
+                if (!data) return;
+
+                // Заповнюємо поля форми
+                document.getElementById('profileUsername').value = data.username || '';
+                document.getElementById('profileEmail').value = data.email || '';
+                document.getElementById('sidebarUsername').textContent = data.username || 'User';
+
+                // Встановлюємо аватар (якщо є — беремо з сервера, якщо ні — заглушку)
+                const defaultAvatar = 'https://via.placeholder.com/100';
+                const avatarUrl = data.avatar_url ? `http://127.0.0.1:8000${data.avatar_url}`: defaultAvatar; //Переписати при переносі на хостинг
+
+                document.getElementById('sidebarAvatar').src = avatarUrl;
+                document.getElementById('mainAvatar').src = avatarUrl;
+            })
+            .catch (error => console.error('Помилка завантаження профілю', error));
+
+            // ── 4.3. ЗБЕРЕЖЕННЯ ЗАГАЛЬНИХ ДАНИХ (Username + Email) ──
+            const generalForm = document.getElementById('generalForm');
+            if (generalForm) {
+                generalForm.addEventListener('submit', async (e) => {
+                    e.preventDefault();
+                    const username = document.getElementById('profileUsername').value.trim();
+                    const email = document.getElementById('profileEmail').value.trim();
+
+                    try {
+                        const response = await fetch(`${API_BASE_URL}/me`, {
+                            method: 'PATCH',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'Authorization': 'Bearer ' + token
+                            },
+                            body: JSON.stringify({username, email})
+                        });
+                        const data = await response.json();
+
+                        if (response.ok) {
+                            alert('Дані успішно оновлено!');
+                            // Оновлюємо ім'я в бічній панелі
+                            document.getElementById('sidebarUsername').textContent = data.username;
+                        } else {
+                            alert(data.detail || 'Помилка збереження');
+                        }
+                    } catch (err) {
+                        alert('Помилка з\'єднання з сервером');
+                    }
+                });
+            }
+
+            // ── 4.4. ЗМІНА ПАРОЛЮ (Current + New) ──
+            const securityForm = document.getElementById('securityForm');
+            if (securityForm) {
+                securityForm.addEventListener('submit', async (e) => {
+                    e.preventDefault();
+                    const current_password = document.getElementById('currentPassword').value;
+                    const new_password = document.getElementById('newPassword').value;
+
+                    try {
+                        const response = await fetch(`${API_BASE_URL}/me`, {
+                            method: 'PATCH',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'Authorization': 'Bearer ' + token
+                            },
+                            body: JSON.stringify({current_password, new_password})
+                        });
+                        const data = await response.json();
+
+                        if (response.ok) {
+                            alert('Пароль успішно змінено!');
+                            securityForm.reset();  // Очищаємо поля після успіху
+                        } else {
+                            alert(data.detail || 'Помилка зміни паролю');
+                        }
+                    } catch (err) {
+                        alert('Помилка з\'єднання з сервером')
+                    }
+                });
+            }
+
+            // ── 5.5. ЗАВАНТАЖЕННЯ АВАТАРА ──
+            const avatarInput = document.getElementById('avatarInput');
+            const sidebarAvatar = document.getElementById('sidebarAvatar');
+            const mainAvatar = document.getElementById('mainAvatar');
+
+            if (avatarInput) {
+                avatarInput.addEventListener('change', async (e) => {
+                    const file = e.target.files[0];
+                    if (!file) return;
+
+                    // Перевірка розміру (макс 2МБ)
+                    if (file.size > 2 * 1024 *1024) {
+                        alert('Файл занадто великий! Максимум 2 МБ.');
+                        avatarInput.value = '';
+                        return;
+                    }
+                    const formData = new FormData();
+                    formData.append('file', file);
+
+                    try {
+                        mainAvatar.style.opacity = '0.5';  // Ефект завантаження
+
+                        const response = await fetch(`${API_BASE_URL}/me/avatar`, {
+                            method: 'POST',
+                            headers: {
+                                'Authorization': 'Bearer ' + token
+                                // Content-Type НЕ вказуємо, браузер сам поставить multipart/form-data
+                            },
+                            body: formData
+                        });
+
+                        const data = await response.json();
+
+                        if (response.ok) {
+                            // ?t=Date.now() потрібен, щоб браузер не показував стару картинку з кешу
+                            const newAvatarUrl = `http://127.0.0.1:8000${data.avatar_url}?t=${Date.now()}`;
+                            mainAvatar.src = newAvatarUrl;
+                            sidebarAvatar.src = newAvatarUrl;
+                            alert('Аватар успішно оновлено!');
+                        } else {
+                            alert(data.detail || 'Помилка завантаження аватара');
+                        }
+                    }catch(err) {
+                        console.error(err);
+                        alert('Помилка з\'єднання з сервером');
+                    } finally{
+                        mainAvatar.style.opacity = '1';  // Повертаємо прозорість
+                        avatarInput.value = ''; // Очищаємо інпут
+                    }
+                });
+            }
+        }
+}
