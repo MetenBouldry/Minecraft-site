@@ -8,7 +8,7 @@
     "status-unknown": "Status unavailable",
     "status-checking": "Checking...",
 
-    "button-back": "Back",
+    "button-back": "Main",
 
     "auth-login": "Login",
     "auth-register": "Register",
@@ -29,6 +29,9 @@
     "connection-error": "Connection error",
     "invalid-credentials": "Incorrect login or password",
     "unknown-error": "Unknown error",
+
+    "nav-profile": "My profile",
+    "nav-logout": "Logout",
 
     "login-title": "Login",
     "login-username": "Username",

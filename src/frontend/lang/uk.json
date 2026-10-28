@@ -8,7 +8,7 @@
     "status-unknown": "Статус недоступний",
     "status-checking": "Перевірка...",
 
-    "button-back": "Назад",
+    "button-back": "Головна",
 
     "auth-login": "Вхід",
     "auth-register": "Реєстрація",
@@ -29,6 +29,9 @@
     "connection-error": "Помилка з'єднання",
     "invalid-credentials": "Невірний логін чи пароль",
     "unknown-error": "Невідома помилка",
+
+    "nav-profile": "Мій профіль",
+    "nav-logout": "Вийти",
 
     "login-title": "Вхід",
     "login-username": "Ім'я користувача",

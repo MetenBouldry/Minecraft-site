@@ -5,9 +5,7 @@
 <head> <!-- Основа сайту, кодування, заголовок вкладки, підключення CSS, метадані для пошуку -->
     <meta charset="UTF-8"> <!-- Кодування символів -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- Вказує на те, що сайт адаптивний -->
-
     <title>Майнкрафт</title>
-
     <link rel="stylesheet" href="css/style.css"> <!-- Підключення CSS -->
 </head>
 
@@ -15,8 +13,17 @@
 
 <header class="site-header">
     <div class="header-right">
+        <!-- Блок для гостей (не залогінені) -->
+        <div id="guestNav" style="display: none;">
         <a href="pages/login.html" data-i18n="auth-login"></a>
         <a href="pages/register.html" data-i18n="auth-register"></a>
+        </div>
+
+        <!-- Блок для авторизованих -->
+        <div id="authNav" style="display: none">
+            <a href="pages/profile.html" data-i18n="nav-profile">Мій профіль</a>
+            <a href="#" id="logoutBtn" data-i18n="nav-logout">Вийти</a>
+        </div>
     </div>
 </header>
 
@@ -34,11 +41,6 @@
             </button>
         </div>
     </div>
-
-    <!-- <div class="auth-buttons"> Кнопки реєстрації  
-        <a href="pages/login.html" data-i18n="auth-login"></a>
-        <a href="pages/register.html" data-i18n="auth-register"></a>
-    </div> -->
 
     <h1 id="mainpage-title"></h1> <!-- id заголовка сторінки, який вимагає заповнення зі script(наступний такий же) файл lang -->
 
