@@ -11,7 +11,23 @@
 <body>
 
 <a href="../index.html" class="back-link" data-i18n="button-back"></a>
-        
+
+<!-- ═══════ ДОДАЄМО ШАПКУ ОСЬ ТУТ ═══════ -->    
+<header class="site-header">
+    <div class="header-right">
+        <div id="guestNav" style="display: none;">
+            <a href="login.html" data-i18n="auth-login"></a>
+            <a href="register.html" data-i18n="auth-register"></a>
+        </div>
+
+        <!-- Блок для авторизованих -->
+        <div id="authNav" style="display: none;">
+            <a href="profile.html" data-i18n="nav-profile">Мій профіль</a>
+            <a href="#" id="logoutBtn" data-i18n="nav-logout">Вийти</a>
+        </div>
+    </div>
+</header>    
+
 <div class="content"> <!-- Контейнер, в якому лежить контент сторінки(текст) -->
     <div class="lang-switch"> <!-- Додавання шторки -->
         <button class="lang-toggle" onclick="toggleLangMenu()">

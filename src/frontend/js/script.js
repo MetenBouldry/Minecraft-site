@@ -503,3 +503,113 @@ if (profileContainer) {
             }
         }
 }
+
+// ═══════════════════════════════════════════════════════════
+//    5. ДИНАМІЧНА ШАПКА (ГІСТЬ vs АВТОРИЗОВАНИЙ)
+// ═══════════════════════════════════════════════════════════
+
+document.addEventListener('DOMContentLoaded', () => {
+    const guestNav = document.getElementById('guestNav');
+    const authNav = document.getElementById('authNav');
+    const logoutBtn = document.getElementById('logoutBtn');
+
+    if (guestNav && authNav) {
+        const token = localStorage.getItem('token');
+
+        if (token) {
+            guestNav.style.display="none";
+            authNav.style.display='flex';
+        } else {
+            guestNav.style.display="flex";
+            authNav.style.display="none";
+        }
+    }
+
+    if (logoutBtn) {
+        logoutBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            localStorage.removeItem('token');
+
+            const isSubPage = window.location.pathname.includes('/pages');
+            window.location.href = isSubPage? '../index.html' : 'index.html'
+        });
+    }
+});
+
+// ═══════════════════════════════════════════════════════════
+//    6. АДМІН-ПАНЕЛЬ
+// ═══════════════════════════════════════════════════════════
+
+const usersTableBody = document.getElementById('usersTableBody');
+
+if (usersTableBody) {
+    const token = localStorage.getItem('token');
+
+    if (!token) {
+        window.location.href = 'login.html';
+    } else {
+        // Функція для завантаження списку користувачів
+        const loadUsers = async () => {
+            try {
+                const response = await fetch(`${API_BASE_URL}/users`, {
+                    headers: { 'Authorization': 'Bearer ' + token }
+                });
+
+                if (response.status == 403 || response.status == 401) {
+                alert('У вас немає прав доступу до цієї сторінки!');
+                window.location.href = '../index.html';
+                return;
+                }
+
+            const users = await response.json();
+            usersTableBody.innerHTML = ''; // Очищаємо таблицю
+
+            users.forEach(user => {
+                const tr = document.createElement('tr');
+
+                // Визначаємо, яка кнопка має бути
+                const actionBtn = user.role === 'admin'
+                    ? `<button class="role-btn" onclick="changeRole(${user.id}, 'user')">Зробити користувачем</button>`
+
+                    : `<button class="role-btn" onclick="changeRole(${user.id}, 'admin')">Зробити адміном</button>`;
+
+                tr.innerHTML = `
+                <td>${user.id}</td>
+                <td>${user.username}</td>
+                <td>${user.email}</td>
+                <td><strong>${user.role.toUpperCase()}</strong></td>
+                <td>${actionBtn}</td>
+                `;
+                usersTableBody.appendChild(tr);
+                });
+                } catch (error) {
+                    console.error('Помилка завантаження користувачів:', error);
+            }
+        };
+
+        // Завантажуємо список при відкритті сторінки
+        loadUsers();
+
+        // Глобальна функція для зміни ролі (викликається з HTML)
+        window.changeRole = async (userId, newRole) => {
+            if (!confirm(`Ви впевнені, що хочете змінити роль на ${newRole}?`)) return;
+
+            try {
+                const response = await fetch(`${API_BASE_URL}/users/${userId}/role?role=${newRole}`, {
+                    method: 'PATCH',
+                    headers: { 'Authorization': 'Bearer ' + token }
+                });
+
+                if (response.ok) {
+                    alert('Роль успішно змінено');
+                    loadUsers();
+                } else {
+                    const data = await response.json();
+                    alert(data.detail || 'пималка зміни ролі');
+                }
+            } catch (error) {
+                alert('Помилка з\'єднання з сервером')            
+            }
+        };
+    }
+}

@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+
+<html lang="uk">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title data-i18n="login-title">Адмін панель</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <style>
+        /* Додаткові стилі для таблиці */
+        .admin-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            color: #fff;
+        }
+
+        .admin-table th, .admin-table td {
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 12px;
+            text-align: left;
+        }
+
+        .admin-table th {
+            background: rgba(217, 32, 32, 0.3);
+            font-weight: bold;
+        }
+
+        .admin-table tr:hover {
+            background: rgba(255, 255, 255, 0.03);
+        }
+
+        .role-btn {
+            background: #d92020;
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .role-btn:hover { background: #ff5555; }
+    </style>
+</head>
+<body>
+
+<a href="../index.html" class="back-link" data-i18n="button-back"></a>
+
+<!-- ═══════ ДОДАЄМО ШАПКУ ОСЬ ТУТ ═══════ -->    
+<header class="site-header">
+    <div class="header-right">
+        <div id="guestNav" style="display: none;">
+            <a href="login.html" data-i18n="auth-login"></a>
+            <a href="register.html" data-i18n="auth-register"></a>
+        </div>
+
+        <!-- Блок для авторизованих -->
+        <div id="authNav" style="display: none;">
+            <a href="profile.html" data-i18n="nav-profile">Мій профіль</a>
+            <a href="#" id="logoutBtn" data-i18n="nav-logout">Вийти</a>
+        </div>
+    </div>
+</header>
+
+<div class="content">
+    <div class="auth-form" style="max-width: 900px; margin-top: 100px;">
+        <h1 data-i18n="admin-title">Адмін панель</h1>
+        <p data-i18n="admin-desc">Керування користувачами сайту.</p>
+
+        <div style="overflow-x: auto;">
+            <table class="admin-table" id="userTable">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th data-i18n="admin-username">Ім'я</th>
+                        <th>Email</th>
+                        <th data-i18n="admin-role">Роль</th>
+                        <th data-i18n="admin-actions">Дії</th>
+                    </tr>
+                </thead>
+                <tbody id="usersTableBody">
+                    <!-- Тут будуть дані з JS -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<script src="..js/script.js"></script>
+</body>
+</html>
