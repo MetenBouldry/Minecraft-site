@@ -552,47 +552,46 @@ if (usersTableBody) {
         const loadUsers = async () => {
             try {
                 const response = await fetch(`${API_BASE_URL}/users`, {
-                    headers: { 'Authorization': 'Bearer ' + token }
+                    headers: { 'Authorization': 'Bearer ' + token }                  
                 });
 
-                if (response.status == 403 || response.status == 401) {
-                alert('У вас немає прав доступу до цієї сторінки!');
-                window.location.href = '../index.html';
-                return;
+                if (response.status === 403 || response.status === 401) {
+                    alert('У вас немає прав на цю сторінку');
+                    window.location.href = '../index.html';
+                    return;
                 }
 
-            const users = await response.json();
-            usersTableBody.innerHTML = ''; // Очищаємо таблицю
+                const users = await response.json();
+                usersTableBody.innerHTML = '';
 
-            users.forEach(user => {
-                const tr = document.createElement('tr');
+                users.forEach(user => {
+                    const tr = document.createElement('tr');
 
-                // Визначаємо, яка кнопка має бути
-                const actionBtn = user.role === 'admin'
-                    ? `<button class="role-btn" onclick="changeRole(${user.id}, 'user')">Зробити користувачем</button>`
-
-                    : `<button class="role-btn" onclick="changeRole(${user.id}, 'admin')">Зробити адміном</button>`;
-
-                tr.innerHTML = `
-                <td>${user.id}</td>
-                <td>${user.username}</td>
-                <td>${user.email}</td>
-                <td><strong>${user.role.toUpperCase()}</strong></td>
-                <td>${actionBtn}</td>
-                `;
-                usersTableBody.appendChild(tr);
+                    // Визначаємо, яка кнопка має бути
+                    const actionBtn = user.role === 'admin'
+                        ? `<button class="role-btn" onclick="changeRole(${user.id}, 'user')">Зробити користувачем</button>`
+                        : `<button class="role-btn" onclick="changeRole(${user.id}, 'admin')">Зробити адміністратором</button>`;
+                    
+                    tr.innerHTML = `
+                        <td>${user.id}</td>
+                        <td>${user.username}</td>
+                        <td>${user.email}</td>
+                        <td><strong>${user.role.toUpperCase()}</strong></td>
+                        <td>${actionBtn}</td>
+                    `;
+                    usersTableBody.appendChild(tr);
                 });
-                } catch (error) {
-                    console.error('Помилка завантаження користувачів:', error);
+            } catch (error) {
+                console.error('Помилка завантаження користувачів', error);
             }
         };
-
+        
         // Завантажуємо список при відкритті сторінки
         loadUsers();
 
         // Глобальна функція для зміни ролі (викликається з HTML)
         window.changeRole = async (userId, newRole) => {
-            if (!confirm(`Ви впевнені, що хочете змінити роль на ${newRole}?`)) return;
+            if(!confirm(`Ви впевненні, що хочете змінити роль на ${newRole}?`)) return;
 
             try {
                 const response = await fetch(`${API_BASE_URL}/users/${userId}/role?role=${newRole}`, {
@@ -601,14 +600,14 @@ if (usersTableBody) {
                 });
 
                 if (response.ok) {
-                    alert('Роль успішно змінено');
+                    alert('Зміна ролі успішна');
                     loadUsers();
                 } else {
                     const data = await response.json();
-                    alert(data.detail || 'пималка зміни ролі');
+                    alert(data.detail || 'Помилка зміни ролі');
                 }
             } catch (error) {
-                alert('Помилка з\'єднання з сервером')            
+                alert('Помилка з\'єднання з сервером');
             }
         };
     }
