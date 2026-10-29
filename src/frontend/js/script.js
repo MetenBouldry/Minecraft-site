@@ -278,7 +278,7 @@ if (loginForm) {
             if (response.ok) {
                 // Успіх — зберігаємо токен у localStorage
                 localStorage.setItem('token', data.access_token);
-                alert(t('login-success', 'Вхід успішний!'));
+                // alert(t('login-success', 'Вхід успішний!'));
                 window.location.href = '../index.html';
             } else {
                 // Помилка — показуємо текст з сервера
