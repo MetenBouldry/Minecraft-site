@@ -499,7 +499,7 @@ body{
 .profile-content h3 {
     margin: 0 0 22px 0;
     color: #fff;
-    border-bottom:1px solid rgba(255, 255, 255, 0.1);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
     padding: 15px;
     font-size: 22px;
     letter-spacing: 1px;
@@ -543,7 +543,7 @@ body{
 @media (max-width: 768px) {
     .profile-container {
         flex-direction: column;
-        margin: 80px;
+        margin: 80px 10px 20px;
     }
     .profile-sidebar {
         width: 100%;
