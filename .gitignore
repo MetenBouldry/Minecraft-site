@@ -1,8 +1,27 @@
-.venv/
+#Python
 __pycache__/
-*.pyc
-.vscode/
+*.py[cod]
+*$py.class
+venv/
+.venv/
 .env
+
+# SQLITE БД
 *.db
+*.sqlite
+*.sqlite3
+
+# Завантажені файли
+src/backend/uploads
+!src/backend/uploads/.gitkeep
+
+# Системні файли IDE
+.DS_Store
+Thumbs.db
+.vscode/
 test.db
 .idea/
+
+*.log
+
+node_modules/
