@@ -63,6 +63,20 @@
 </header>
 
 <div class="content">
+    <div class="lang-switch"> <!-- Додавання шторки -->
+        <button class="lang-toggle" onclick="toggleLangMenu()">
+            <span id="currentLang">🌐</span> ▼
+        </button>
+        <div class="lang-menu" id="langMenu">
+             <button onclick="setLang('uk')">
+                 <img src="https://flagcdn.com/24x18/ua.png" alt=""> Українська
+            </button>
+            <button onclick="setLang('en')">
+                  <img src="https://flagcdn.com/24x18/gb.png" alt=""> English
+            </button>
+        </div>
+    </div>
+
     <div class="auth-form" style="max-width: 900px; margin-top: 100px;">
         <h1 data-i18n="admin-title">Адмін панель</h1>
         <p data-i18n="admin-desc">Керування користувачами сайту.</p>
