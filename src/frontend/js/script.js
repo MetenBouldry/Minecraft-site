@@ -127,7 +127,7 @@ document.addEventListener('click', (e) => {
 // ═══════════════════════════════════════
 
 // TODO: замінити на реальні URL, коли буде backend
-const API_URL ='';
+const API_URL ='https://minemine.my-work.pp.ua/api';
 
 const SERVERS = [
     { name: 'terrafirmagreg', iconId: 'status-tfg' },
@@ -328,7 +328,7 @@ if (settingsForm) {
 }
 
 // ═══════════════════════════════════════════════════════════
-//    5. СТОРІНКА ПРОФІЛЮ (ВКЛАДКИ ТА ЛОГІКА)
+//    4. СТОРІНКА ПРОФІЛЮ (ВКЛАДКИ ТА ЛОГІКА)
 // ═══════════════════════════════════════════════════════════
 
 const profileContainer = document.querySelector('.profile-container');
@@ -380,10 +380,15 @@ if (profileContainer) {
 
                 // Встановлюємо аватар (якщо є — беремо з сервера, якщо ні — заглушку)
                 const defaultAvatar = 'https://via.placeholder.com/100';
-                const avatarUrl = data.avatar_url ? `http://127.0.0.1:8000${data.avatar_url}`: defaultAvatar; //Переписати при переносі на хостинг
+                const avatarUrl = data.avatar_url ? `https://minemine.my-work.pp.ua${data.avatar_url}`: defaultAvatar; //Переписати при переносі на хостинг
 
                 document.getElementById('sidebarAvatar').src = avatarUrl;
                 document.getElementById('mainAvatar').src = avatarUrl;
+
+                if (data.role === 'admin') {
+                    const adminTabBtn = document.getElementById('adminTabBtn');
+                    if (adminTabBtn) adminTabBtn.style.display = 'block'
+                }
             })
             .catch (error => console.error('Помилка завантаження профілю', error));
 
@@ -450,7 +455,7 @@ if (profileContainer) {
                 });
             }
 
-            // ── 5.5. ЗАВАНТАЖЕННЯ АВАТАРА ──
+            // ── 4.5. ЗАВАНТАЖЕННЯ АВАТАРА ──
             const avatarInput = document.getElementById('avatarInput');
             const sidebarAvatar = document.getElementById('sidebarAvatar');
             const mainAvatar = document.getElementById('mainAvatar');
@@ -485,7 +490,7 @@ if (profileContainer) {
 
                         if (response.ok) {
                             // ?t=Date.now() потрібен, щоб браузер не показував стару картинку з кешу
-                            const newAvatarUrl = `http://127.0.0.1:8000${data.avatar_url}?t=${Date.now()}`;
+                            const newAvatarUrl = `https://minemine.my-work.pp.ua${data.avatar_url}?t=${Date.now()}`;
                             mainAvatar.src = newAvatarUrl;
                             sidebarAvatar.src = newAvatarUrl;
                             alert('Аватар успішно оновлено!');
