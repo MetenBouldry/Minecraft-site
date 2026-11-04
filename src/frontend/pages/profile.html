@@ -54,6 +54,7 @@
                 <button class="nav-btn active" data-tab="tab-general">📝 Загальні</button>
                 <button class="nav-btn" data-tab="tab-security">🔒 Безпека</button>
                 <button class="nav-btn" data-tab="tab-avatar">🖼️ Аватар</button>
+                <button class="nav-btn" id="adminTabBtn" data-tab="tab-admin" style="display: none;">🛡️ Адмінка</button>
             </nav>
         </aside>
 
@@ -102,6 +103,13 @@
                     <input type="file" id="avatarInput" accept="image/*" style="display: none">
                     <button type="button" class="btn-primary" onclick="document.getElementById('avatarInput').click()">Обрати файл</button>
                 </div>
+            </div>
+
+            <!-- Вкладка 4: Адмін-->
+            <div id="tab-admin" class="tab-pane">
+                <h3>Керування сайтом</h3>
+                <p style="color: #ddd; margin-bottom: 20px;">Вітаємо адмністраторе! Тут ви можете керувати користувачами</p>
+                <a href="admin.html" class="btn-primary" style="text-decoration: none; display: block; text-align: center;">Перейти в адмін панель</a>
             </div>
         </main>
     </div>
