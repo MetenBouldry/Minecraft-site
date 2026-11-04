@@ -15,7 +15,9 @@ app.add_middleware(
     allow_origins=[
         "http://localhost:63342",
         "http://127.0.0.1:5500",
-        "http://localhost:5500"
+        "http://localhost:5500",
+        "https://minecraft.my-work.pp.ua",  
+        "https://minecraft-site-ac7.pages.dev"
     ], # type: ignore
     allow_credentials=True, # type: ignore
     allow_methods=["*"], # type: ignore
