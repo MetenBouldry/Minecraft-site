@@ -346,6 +346,11 @@ if (profileContainer) {
 
             navBtns.forEach(btn => {
                 btn.addEventListener('click', () => {
+                    // Якщо натиснули на кнопку "Адмінка" — переходимо на admin.html
+                    if (btn.id === 'adminTabBtn') {
+                        window.location.href = 'admin.html';
+                        return;
+                    }
                     // Прибираємо активний клас з усіх
                     navBtns.forEach(b => b.classList.remove('active'));
                     tabPanes.forEach(t => t.classList.remove('active'));
