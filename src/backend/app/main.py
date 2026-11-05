@@ -2,7 +2,7 @@ from fastapi import FastAPI
 from starlette.middleware.cors import CORSMiddleware
 from .database import engine
 from .models import Base
-from .routes import auth, users
+from .routes import auth, users, server
 
 #Створюємо таблицю в БД(якщо немає)
 Base.metadata.create_all(bind=engine)
@@ -27,6 +27,7 @@ app.add_middleware(
 # Підключення маршруту
 app.include_router(auth.router, prefix="/api", tags=["Auth"])
 app.include_router(users.router, prefix="/api", tags=["User"])
+app.include_router(server.router, prefix="/api", tags=["Server"])
 
 @app.get("/")
 def root():

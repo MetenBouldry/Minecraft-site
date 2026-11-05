@@ -50,6 +50,7 @@
                 <img id="sidebarAvatar" src="https://via.placeholder.com/10" alt="Avatar" class="avatar-preview">
                 <h2 id="sidebarUsername">Завантаження</h2>
             </div>
+
             <nav class="profile-nav">
                 <button class="nav-btn active" data-tab="tab-general">📝 Загальні</button>
                 <button class="nav-btn" data-tab="tab-security">🔒 Безпека</button>
@@ -69,6 +70,7 @@
                         <label for="profileUsername">Ім'я користувача</label>
                         <input type="text" id="profileUsername" name="username" required>
                     </div>
+
                     <div class="form-group">
                         <label for="profileEmail">Email</label>
                         <input type="text" id="profileEmail" name="email" required>
@@ -83,11 +85,18 @@
                 <form id="securityForm">
                     <div class="form-group">
                         <label for="currentPassword">Поточний пароль</label>
-                        <input type="password" id="currentPassword" name="current_password" required>
+                        <div class="password-wrapper">
+                            <input type="password" id="currentPassword" name="current_password" required>
+                            <span class="toggle-password" onclick="togglePassword('currentPassword', this)">👁️</span>
+                        </div>
                     </div>
+
                     <div class="form-group">
                         <label for="newPassword">Новий пароль</label>
-                        <input type="password" id="newPassword" name="new_password" required>
+                        <div class="password-wrapper">
+                            <input type="password" id="newPassword" name="new_password" required>
+                            <span class="toggle-password" onclick="togglePassword('newPassword', this)">👁️</span>
+                        </div>
                     </div>
                     <button type="submit" class="btn-primary">Оновити пароль</button>
                 </form>

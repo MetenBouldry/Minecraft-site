@@ -54,10 +54,15 @@
                     <label for="email" data-i18n="reg-email"></label>
                     <input type="email" id="email" name="email" required>
                 </div>
+                
                 <div class="form-group">
-                    <label for="password" data-i18n="reg-password"></label>
-                    <input type="password" id="password" name="password" required>
+                    <label for="loginPassword" data-i18n="login-password"></label>
+                    <div class="password-wrapper">
+                        <input type="password" id="loginPassword" name="password" required>
+                        <span class="toggle-password" onclick="togglePassword('loginPassword', this)">👁️</span>
+                    </div>
                 </div>
+
                 <button type="submit" data-i18n="reg-submit"></button>
                 <p class="auth-link">
                     <span data-i18n="reg-has-account"></span>
