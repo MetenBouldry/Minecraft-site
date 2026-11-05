@@ -15,6 +15,7 @@ class UserResponse(BaseModel):
     username: str
     email: str
     role: str
+    avatar_url: Optional[str]
 
     class Config:
         from_attributes = True
@@ -28,3 +29,10 @@ class ProfileUpdate(BaseModel):
     email: Optional[EmailStr] = None
     current_password: Optional[str] = None
     new_password: Optional[str] = None
+
+class PasswordResetRequest(BaseModel):
+    email: EmailStr
+
+class PasswordResetConfirm(BaseModel):
+    token: str
+    new_password: str

@@ -122,6 +122,22 @@ document.addEventListener('click', (e) => {
     }
 });
 
+// ═════════════════════════════════════════════════════
+//         ФУНКЦІЯ ПЕРЕМИКАННЯ ВИДИМОСТІ ПАРОЛЮ
+// ═════════════════════════════════════════════════════
+
+function togglePassword(inputId, iconElement) {
+    const input = document.getElementById(inputId);
+
+    if (input.type === 'password'){
+        input.type = 'text';
+        iconElement.textContent = '🚫'; // закрите вічко. ЗАМІНИТИ!!!!!!!
+    } else {
+        input.type = 'text';
+        iconElement.textContent = '👁️';
+    }
+}
+
 // ═══════════════════════════════════════
 //         СТАТУС MINECRAFT-СЕРВЕРІВ
 // ═══════════════════════════════════════
@@ -131,7 +147,7 @@ const API_URL ='https://minemine.my-work.pp.ua/api';
 
 const SERVERS = [
     { name: 'terrafirmagreg', iconId: 'status-tfg' },
-    { name: 'vanila', iconId: 'status-vanila' }
+    { name: 'vanilla', iconId: 'status-vanilla' }
 ];
 
 // Стан іконки -> ключ підказки та запасний текст
