@@ -655,7 +655,7 @@ if (forgotForm) {
         try {
             const response =await fetch(`${API_BASE_URL}/forgot-password`, {
                 method: 'POST',
-                headers: { 'Content-type': 'application/json' },
+                headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ email })
             });
             const data = await response.json();
@@ -685,7 +685,7 @@ if (forgotForm) {
         try {
             const response = await fetch(`${API_BASE_URL}/reset-password`, {
                 method: 'POST',
-                headers: { 'Content-type': 'application/json' },
+                headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ token, new_password})
             });
             const data = await response.json();
