@@ -638,3 +638,68 @@ if (usersTableBody) {
         };
     }
 }
+
+// ═══════════════════════════════════════════════════════════
+//    7. ВІДНОВЛЕННЯ ПАРОЛЮ
+// ═══════════════════════════════════════════════════════════
+
+const forgotForm = document.getElementById('forgotForm');
+const resetForm = document.getElementById('resetForm');
+
+if (forgotForm) {
+    // Крок 1: Запит токена (введення Email)
+    forgotForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const email = document.getElementById('resetEmail').value;
+
+        try {
+            const response =await fetch(`${API_BASE_URL}/forgot-password`, {
+                method: 'POST',
+                headers: { 'Content-type': 'application/json' },
+                body: JSON.stringify({ email })
+            });
+            const data = await response.json();
+
+            if (response.ok) {
+                // Показуємо повідомлення, що токен створено
+                const msg = document.getElementById('forgotMessage');
+                msg.textContent = "Токен створено! Перевірте логи Docker (Portainer).";
+                msg.style.display = 'block';
+
+                // Показуємо другу форму для введення токена
+                resetForm.style.display = 'flex';
+            } else {
+                alert(data.detail || 'Помилка');
+            }
+        } catch (err) {
+            alert('Помилка з\'єднання з сервером')
+        }
+    });
+
+    // Крок 2: Зміна паролю (введення токена та нового паролю)
+    resetForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const token = document.getElementById('resetToken').value;
+        const new_password = document.getElementById('newPasswordReset').value;
+
+        try {
+            const response = await fetch(`${API_BASE_URL}/reset-password`, {
+                method: 'POST',
+                headers: { 'Content-type': 'application/json' },
+                body: JSON.stringify({ token, new_password})
+            });
+            const data = await response.json();
+
+            if (response.ok) {
+                alert('Пароль успішно змінено! Тепер можете увійти.');
+                window.location.href = 'login.html';
+            } else {
+                alert(data.detail || 'Помилка зміни паролю');
+            }
+        } catch (err) {
+            alert('Помилка з\'єднання з сервером')
+        }
+    });
+        
+    
+}
