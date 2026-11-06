@@ -62,7 +62,7 @@ jobs:
         with:
           files: docker-info.txt
 
-      - name: Trigger Portainer Redeploy
-        if: success()
-        run: |
-          curl -X POST "${{ secrets.PORTAINER_WEBHOOK }}"
+      # - name: Trigger Portainer Redeploy
+      #   if: success()
+      #   run: |
+      #     curl -X POST "${{ secrets.PORTAINER_WEBHOOK }}"
