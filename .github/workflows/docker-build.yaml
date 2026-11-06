@@ -4,14 +4,14 @@ on:
   push:
     tags:
       - 'v*'
+  workflow_dispatch:
 
 env:
   REGISTRY: ghcr.io
-  # ДОДАНО | tr '[:upper:]' '[:lower:]' — це перетворює всі літери на маленькі
   IMAGE_NAME: ${{ github.repository }} 
 
 jobs:
-  build-and-push:
+  build:
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -28,17 +28,19 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      # ДОДАНО ЦЕЙ КРОК: Він бере назву репозиторію і робить її маленькими літерами
-      - name: Prepare lowercase image name
-        run: |
-          echo "IMAGE_NAME_LOWER=$(echo ${{ env.IMAGE_NAME }} | tr '[:upper:]' '[:lower:]')" >> $GITHUB_ENV
+      - name: Extract metadata
+        id: meta
+        uses: docker/metadata-action@v5
+        with: 
+          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+          tags: |
+            type=ref,event=tag
+            type=raw,value=latest
+
 
       - name: Build and Push
         uses: docker/build-push-action@v5
         with:
           context: ./src/backend
           push: true
-          # ТЕПЕР ВИКОРИСТОВУЄМО ЗМІННУ IMAGE_NAME_LOWER
-          tags: |
-            ${{ env.REGISTRY }}/${{ env.IMAGE_NAME_LOWER }}:${{ github.ref_name }}
-            ${{ env.REGISTRY }}/${{ env.IMAGE_NAME_LOWER }}:latest
+          tags: ${{ steps.meta.outputs.tags }}
