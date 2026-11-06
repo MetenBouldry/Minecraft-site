@@ -1,8 +1,13 @@
 from fastapi import FastAPI
 from starlette.middleware.cors import CORSMiddleware
+from .migrate import run_migrations
 from .database import engine
 from .models import Base
 from .routes import auth, users, server
+
+# ═══════ ВИКЛИК МІГРАЦІЇ ═══════
+run_migrations()
+
 
 #Створюємо таблицю в БД(якщо немає)
 Base.metadata.create_all(bind=engine)
