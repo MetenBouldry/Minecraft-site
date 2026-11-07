@@ -133,7 +133,7 @@ function togglePassword(inputId, iconElement) {
         input.type = 'text';
         iconElement.textContent = '🚫'; // закрите вічко. ЗАМІНИТИ!!!!!!!
     } else {
-        input.type = 'text';
+        input.type = 'password';
         iconElement.textContent = '👁️';
     }
 }
@@ -703,3 +703,10 @@ if (forgotForm) {
         
     
 }
+
+// Закрити меню при кліку на будь-яке посилання в ньому
+document.querySelectorAll('.lang-menu button').forEach(btn => {
+    btn.addEventListener('click', () => {
+        document.getElementById('langMenu').classList.remove('show');
+    });
+});
