@@ -12,7 +12,7 @@ env:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     permissions:
       contents: write
       packages: write
@@ -62,7 +62,7 @@ jobs:
         with:
           files: docker-info.txt
 
-      # - name: Trigger Portainer Redeploy
-      #   if: success()
-      #   run: |
-      #     curl -X POST "${{ secrets.PORTAINER_WEBHOOK }}"
+      - name: Trigger Portainer Redeploy
+        if: success()
+        run: |
+          curl -k -X POST "https://app1.homelab.local:9444/api/stacks/webhooks/***REMOVED***"
