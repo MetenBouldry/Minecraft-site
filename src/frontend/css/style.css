@@ -1,43 +1,85 @@
+/* ═══════════════════════════════════════ */
+/*          БАЗОВІ СТИЛІ (BODY)            */
+/* ═══════════════════════════════════════ */
+
 body{
-
-    background-image: /* Встановлює фон */
-
-            url("../assets/background/background.jpg"); /* Шлях на jpg для фону */
+    /* Фон сторінки */
+    background-image: url("../assets/background/background.jpg"); /* Шлях на jpg для фону */
     background-size: cover; /* Масштаб картинки */
     background-position: center 50px; /* Розміщення картинки, де cover центру є по горизонталі,а px - по вертикалі */
     background-repeat: no-repeat; /* Чи повторюватиметься картинка */
 
+    /* Розміри та відступи */
     min-height: 100vh; /* Мінімальна висота 'body',щоб висота сторінки була на максимум */
     margin: 0; /* Прибирає відступи по краях,якщо 0 */
 
+    /* Вирівнювання */
     display: flex; /* flex для легкого центрування об'єктів */
     align-items: flex-start; /* Контент зверху сторінки, працює разом зі flex */
     justify-content: center; /* Теж саме тільки по горизонталі */
 }
 
 /* ═══════════════════════════════════════ */
+/*          ГОЛОВНИЙ КОНТЕЙНЕР             */
+/* ═══════════════════════════════════════ */
+
+.content {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 70px 20px 20px;
+}
+
+/* ═══════════════════════════════════════ */
+/*          ГОЛОВНИЙ ЗАГОЛОВОК (H1)        */
+/* ═══════════════════════════════════════ */
+
+.content h1 {
+    margin: 0 0 30px; /* Відступ знизу */
+    transform: skewX(-15deg); /* Нахил заголовка */
+    z-index: 1000; /* Поверх інших елементів */
+
+    /* Шрифт */
+    font-family: 'Arial Black', sans-serif; /* Або піксельний шрифт */
+    text-transform: uppercase; /* Всі літери великі */
+    font-size: clamp(32px, 9vw, 55px); /* Адаптивний розмір шрифту */
+    font-weight: bold;
+    letter-spacing: 3px; /* Відстань між літерами */
+    text-align: center;
+
+    /* Ефект градієнту та обводки */
+    background: linear-gradient(180deg,#ff5555,#d92020,#a31010,#6b0a0a,#3d0000);
+    -webkit-background-clip: text; /* Вирізає фон по літерах */
+    background-clip: text;
+    -webkit-text-fill-color: transparent; /* Робить текст прозорим, щоб було видно градієнт */
+    -webkit-text-stroke: 3px #000; /* Чорна обводка навколо літер */
+    color: #971010; /* Запасний колір (якщо градієнт не спрацює) */
+}
+
+/* ═══════════════════════════════════════ */
 /*          ПЕРЕМИКАЧ МОВ                  */
 /* ═══════════════════════════════════════ */
+
 .lang-switch {
-    position: fixed;
+    position: fixed; /* Фіксується на екрані, не рухається при скролі */
     top: 8px;
     right: 25px;
-    z-index: 110;
-    /* display: flex; */
-    /* gap: 5; */
+    z-index: 110; /* Поверх інших елементів */
 }
 
 .lang-toggle {
-    background: rgba(0, 0, 0, 0.6);
+    background: rgba(0, 0, 0, 0.6); /* Напівпрозорий чорний */
     color: #fff;
     border: 1px solid rgba(255, 255, 255, 0.4);
-    padding: 6px 6px; /* Внутрішні відступи*/
+    padding: 6px; /* Внутрішні відступи*/
     border-radius: 20px; /* Округлість іконки, до 20*/
     font-size: 10px; /* Розмір тексту */
-    cursor: pointer;
+    cursor: pointer; /* Зміна курсора на "руку" */
     min-width: 40px; /* Мінімальна ширина */
     font-family: inherit;
-    /* transition: background 0.2s; */
+}
+
+.lang-toggle:hover{
+    background: rgba(0, 0, 0, 0.9); /* Темнішає при наведенні */
 }
 
 /* Міняє параметри на шторці */
@@ -48,14 +90,11 @@ body{
     border-radius: 2px;
 }
 
-.lang-toggle:hover{
-    background: rgba(0, 0, 0, 0.9);
-}
-
+/* Випадаюче меню мов */
 .lang-menu {
-    display: none;
+    display: none; /* Спочатку приховане */
     position: absolute;
-    top: 100%;
+    top: 100%; /* З'являється під кнопкою */
     right: 0;
     margin-top: 5px;
     background: rgba(0, 0, 0, 0.9);
@@ -63,11 +102,10 @@ body{
     border-radius: 10px;
     overflow: hidden;
     min-width: 100%;
-    /* color: #fff; */
 }
 
 .lang-menu.show {
-    display: block;
+    display: block; /* Показується, коли додано клас .show через JS */
 }
 
 .lang-menu button {
@@ -83,6 +121,10 @@ body{
     font-family: inherit;
 }
 
+.lang-menu button:hover{
+    background: rgba(255, 255, 255, 0.15); /* Підсвітка при наведенні */
+}
+
 /* Міняє параметри в середині шторки */
 .lang-menu button img { 
     width: 20px;
@@ -92,152 +134,55 @@ body{
     border-radius: 2px;
 }
 
-.lang-menu button:hover{
-    background: rgba(255, 255, 255, 0.15);
-}
-
-.content {
-    width: 100%;
-    box-sizing: border-box;
-    padding: 70px 20px 20px;
-}
-
-.content h1 {
-    /* Позиція: у звичайному потоці, щоб не вилазило за екран на мобільних */
-    margin: 0 0 30px;
-    transform: skewX(-15deg); /* Нахил заголовка */
-    z-index: 1000; /* Поверх інших елементів */
-
-    /* Стиль */
-    font-family: 'Arial Black', sans-serif; /* Або піксельний шрифт */
-    text-transform: uppercase;
-
-    /* Градієнт. Тут фіолетовий -> блакитний */
-    background: linear-gradient(180deg,
-        #ff5555,    /* світлий */
-        #d92020,    /* середній */
-        #a31010,    /* темний */
-        #6b0a0a,    /* дуже темний */
-        #3d0000);   /* майже чорний */
-    -webkit-background-clip: text;
-    background-clip: text;
-    -webkit-text-fill-color: transparent;
-
-    /* Обвідка та 3D ефект */
-    -webkit-text-stroke: 3px #000; /* Обвідка */
-    /* text-shadow:
-            3px 3px 0 #971010; тінь */
-            /* 0 10px rgb(0 0 0 / 0.5), 3px 3px 0 #000; Світіння*! */
-
-    letter-spacing: 3px; /* Відстань міш буквами, + збільшити; - зменшити */
-    /* transform: scaleX(1.5);  Розтягнути слово де 1,5 розтягнути; менше 1,0 стиснути
-    transform: rotate(-10deg);  - нахил вліво, + вправо 
-    transform: skewX(-10deg); */
-    font-size: clamp(32px, 9vw, 55px); /* Розмір шрифту, масштабується з шириною екрана */
-    font-weight: bold;
-    color: #971010;
-    text-align: center;
-}
+/* ═══════════════════════════════════════ */
+/*         СТАТУС MINECRAFT-СЕРВЕРІВ       */
+/* ═══════════════════════════════════════ */
 
 .server-info {
     margin: 0 0 10px 0;
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 8px; /* Відстань між кружечком і текстом */
     font-size: 20px;
 }
 
-#server-info0 {
-    color: darkred;
-}
+#server-info0 { color: darkred; } /* Колір тексту для першого сервера */
+#server-info1 { color: white; } /* Колір тексту для другого сервера */
 
-#server-info1 {
-    color: white;
-}
-
-@media (max-width: 600px) {
-    .content {
-        padding-top: 100px; /* місце під перемикач мов */
-    }
-
-    .content h1 {
-        letter-spacing: 1px;
-        -webkit-text-stroke-width: 2px;
-    }
-
-    .server-info {
-        font-size: 17px;
-    }
-}
-
-.red {
-    color: red;
-    font-weight: bold; /* Шрифт */
-}
-
-/* ═══════════════════════════════════════ */
-/*         СТАТУС СЕРВЕРІВ                 */
-/* ═══════════════════════════════════════ */
 .status-icon {
-    display: inline-block;
+    display: inline-block; /* Розмір кружечка */
     width: 12px;
     height: 12px;
-    border-radius: 50%;
+    border-radius: 50%; /* Робить його круглим */
     margin-right: 8px;
     vertical-align: middle;
-    background: #888;
-    transition: all 0.3s;
+    background: #888; /* Сірий колір за типово (невідомо) */
+    transition: all 0.3s; /* Плавна зміна кольору */
 }
 
-/* Статус невідомий (немає API) — нейтральний сірий з базового .status-icon */
-.status-icon.checking {
-    background: #fbbf24;
-    animation: pulse 1s infinite;
-}
-
-.status-icon.online {
-    background: #4ade80;
-    box-shadow: 0 0 8px #4ade80;
-}
-
-.status-icon.offline {
-    background: #ef4444;
-    box-shadow: 0 0 8px #ef4444;
-}
+/* Класи, які додає JS залежно від статусу */
+.status-icon.checking { background: #fbbf24; animation: pulse 1s infinite; } /* Жовтий, блимає */
+.status-icon.online { background: #4ade80; box-shadow: 0 0 8px #4ade80; } /* Зелений, світиться */
+.status-icon.offline { background: #ef4444; box-shadow: 0 0 8px #ef4444; } /* Червоний, світиться */
 
 @keyframes pulse {
-    0%, 100% { opacity: 1; }
+    0%, 100% { opacity: 1; } /* Ефект "дихання" для статусу перевірки */
     50% { opacity: 0.4; }
 }
 
-/* ═══ МАЛЕНЬКІ КНОПКИ (для налаштувань) ═══ */
-.btn-small {
-    padding: 8px 16px;
-    background: rgba(255, 255, 255, 0.1);
-    color: #fff;
-    border: 1px solid rgba(255, 255, 255, 0.3);
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 14px;
-    transition: background 0.3s;
-}
+/* ═══════════════════════════════════════ */
+/*               ШАПКА САЙТУ               */
+/* ═══════════════════════════════════════ */
 
-.btn-small:hover {
-    background: rgba(255, 255, 255, 0.2);
-}
-
-/* ═══ ШАПКА САЙТУ (HEADER) ═══ */
 .site-header {
-    position: fixed;
-    top: 0;
-    right: 0;
-    left: 0;
+    position: fixed; /* Приліплена до верху екрана */
+    top: 0; right: 0; left: 0;
     height: 50px;
     background: rgba(0, 0, 0, 0.8);
     display: flex;
     align-items: center;
-    justify-content: flex-end;
-    padding: 0 120px 0 25px;
+    justify-content: flex-end; /* Кнопки притискаються до правого краю */
+    padding: 0 120px 0 25px; /* Відступ справа, щоб не закривати перемикач мов */
     z-index: 100;
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
@@ -257,20 +202,18 @@ body{
 }
 
 .header-right a:hover {
-    background: rgba(255, 255, 255, 0.1);
+    background: rgba(255, 255, 255, 0.1); /* Легка підсвітка при наведенні */
 }
 
-/* ═══ КНОПКИ АВТОРИЗАЦІЇ (на головній) ═══ */
-/* .auth-buttons {
+/* ═══════════════════════════════════════ */
+/*          КНОПКА «НАЗАД»                 */
+/* ═══════════════════════════════════════ */
+
+.back-link {
     position: fixed;
-    top: 5px;
+    top: 8px;
     left: 25px;
-    z-index: 10;
-    display: flex;
-    gap: 10px;
-}
-
-.auth-buttons a {
+    z-index: 110;
     background: rgba(0, 0, 0, 0.6);
     color: #fff;
     text-decoration: none;
@@ -281,32 +224,36 @@ body{
     transition: background 0.3s;
 }
 
-.auth-buttons a:hover {
+.back-link:hover {
     background: rgba(0, 0, 0, 0.9);
-} */
+}
+
+/* ═══════════════════════════════════════ */
+/*          ФОРМИ АВТОРИЗАЦІЇ              */
+/* ═══════════════════════════════════════ */
 
 .auth-form {
-    background: rgba(0, 0, 0, 0.7);
+    background: rgba(0, 0, 0, 0.7); /* Темний напівпрозорий фон */
     border: 1px solid rgba(0, 0, 0, 0.3);
     border-radius: 10px;
     padding: 40px;
-    max-width: 400px;
-    margin: 100px auto;
+    max-width: 400px; /* Максимальна ширина форми */
+    margin: 100px auto; /* Центрування по горизонталі з відступом зверху */
     color: #fff;
     box-sizing: border-box;
 }
 
 .auth-form form {
     display: flex;
-    flex-direction: column;
-    gap: 15px;
+    flex-direction: column; /* Елементи форми йдуть один під одним */
+    gap: 15px; /* Відстань між полями */
 }
 
 /* Заголовок всередині форми — менший */
 .auth-form h1 {
     font-size: 32px;      /* менший розмір */
     margin-bottom: 20px;  /* менший відступ */
-    transform: none;      /* без нахилу (щоб не вилазило) */
+    transform: none;      /* Прибирає нахил, який є у головного заголовка */
     -webkit-text-stroke: 2px #000; /* тонша обвідка */
     letter-spacing: 2px;  /* менший інтервал */
 
@@ -336,7 +283,7 @@ body{
 
 .form-group input:focus {
     outline: none;
-    border-color: #ff5555;
+    border-color: #ff5555; /* Червона рамка при кліку на поле */
 }
 
 .auth-form button {
@@ -369,47 +316,97 @@ body{
     text-decoration: underline;
 }
 
-/* ═══ КНОПКА «НАЗАД» ═══ */
-.back-link {
-    position: fixed;
-    top: 8px;
-    left: 25px;
-    z-index: 110;
-    background: rgba(0, 0, 0, 0.6);
+/* ═══════════════════════════════════════ */
+/*          ПОЛЕ ПАРОЛЮ (ВІЧКО)            */
+/* ═══════════════════════════════════════ */
+
+.password-wrapper {
+    position: relative; /* Щоб іконка могла бути поверх поля */
+    width: 100%;
+}
+
+.password-wrapper input {
+    padding-right: 40px; /* Місце для іконки */
+}
+
+/* Іконка "вічко" */
+.toggle-password {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%); /* Вирівнювання по центру вертикалі */
+    cursor: pointer;
+    color: #aaa;
+    user-select: none; /* Забороняє виділяти іконку як текст */
+    font-size: 18px;
+}
+
+.toggle-password:hover {
     color: #fff;
-    text-decoration: none;
-    padding: 6px 15px;
-    border-radius: 20px;
+}
+
+/* ═══════════════════════════════════════ */
+/*          СТОРІНКА ВІДНОВЛЕННЯ ПАРОЛЮ    */
+/* ═══════════════════════════════════════ */
+
+.reset-title {
+    font-size: 24px;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.reset-message {
+    color: #4ade80; /* Зелений колір для успіху */
+    text-align: center;
+    margin-top: 10px;
+    display: none; /* Приховано типово */
+}
+
+#resetForm {
+    display: none; /* Приховано, поки не буде токена */
+    margin-top: 20px;
+    border-top: 1px solid #444;
+    padding-top: 20px;
+}
+
+/* Посилання "Забули пароль?" */
+.forgot-link {
+    text-align: right;
+    margin-top: 5px;
+    margin-bottom: 10px;
+}
+
+.forgot-link a {
+    color: #ff5555;
     font-size: 14px;
-    border: 1px solid rgba(255, 255, 255, 0.4);
-    transition: background 0.3s;
+    text-decoration: none;
 }
 
-.back-link:hover {
-    background: rgba(0, 0, 0, 0.9);
+.forgot-link a:hover {
+    text-decoration: underline;
 }
 
-/* =========================================
-   СТОРІНКА ПРОФІЛЮ (ВКЛАДКИ)
-   ========================================= */
+/* ═══════════════════════════════════════ */
+/*          СТОРІНКА ПРОФІЛЮ               */
+/* ═══════════════════════════════════════ */
 
 .profile-container {
-    display: flex;
+    display: flex; /* Розташовує сайдбар і контент в один ряд */
     gap: 0; /* Прибираємо відступ, бо є рамки */
     max-width: 900px;
     margin: 100px auto 40px; /* Відступ зверху, щоб не лізло під шапку */
     background: rgba(0, 0, 0, 0.7);  /* Як у auth-form */
     border: 1px solid rgba(255, 255, 255, 0.1);
     border-radius: 10px;
-    box-shadow: 0 10px 30px rgba(255, 255, 255, 0.1);
-    overflow: hidden;
+    box-shadow: 0 10px 30px rgba(255, 255, 255, 0.1); /* Легка тінь */
+    overflow: hidden; /* Щоб кути не вилазили за межі */
     min-height: 500px;
 }
 
 /* Ліва панель(вкладка) */
 .profile-sidebar {
     display: flex;
-    width: 250px;
+    width: 250px; /* Фіксована ширина лівої панелі */
     background: rgba(0, 0, 0, 0.4); /* Трохи менші за основний фон */
     border: 1px solid rgba(255, 255, 255, 0.1);
     padding: 30px 20px;
@@ -426,8 +423,8 @@ body{
 .avatar-preview {
     width: 90px;
     height: 90px;
-    border-radius: 50%;
-    object-fit: cover;
+    border-radius: 50%; /* Робить аватар круглим */
+    object-fit: cover; /* Зберігає пропорції картинки */
     border: 3px solid #d92020; /* Червона рамка як акцент */
     margin-bottom: 15px;
     background: #222;
@@ -437,7 +434,7 @@ body{
     color: #fff;
     font-size: 1.2rem;
     margin: 0;
-    word-break: break-all;
+    word-break: break-all; /* Переносить довгі слова */
     font-family: 'Arial Black', sans-serif;
     font-weight: bold;
     letter-spacing: 1px;
@@ -468,8 +465,8 @@ body{
     color: #fff;
 }
 
-.nav-btn:active {
-    background: rgba(217, 32, 32, 0.15);
+.nav-btn.active {
+    background: rgba(217, 32, 32, 0.15); /* Червоний фон для активної вкладки */
     border-color: #d92020;
     color: #ff5555;
     font-weight: bold;
@@ -477,18 +474,18 @@ body{
 
 /* Права панель (контент) */
 .profile-content {
-    flex: 1;
+    flex: 1; /* Займає весь залишок ширини */
     padding: 40px;
 }
 
 /* Ховання вкладок */
 .tab-pane {
-    display: none;
-    animation: fadeIn 0.3s ease-in-out;
+    display: none; /* Вкладки приховані типово */
+    animation: fadeIn 0.3s ease-in-out; /* Плавна поява */
 }
 
 .tab-pane.active {
-    display: block;
+    display: block; /* Показує активну вкладку */
 }
 
 @keyframes fadeIn {
@@ -539,89 +536,159 @@ body{
     background: #ff5555;
 }
 
-/* Адаптивність до телефона */
+/* ═══════════════════════════════════════ */
+/*          СТОРІНКА АДМІНКИ               */
+/* ═══════════════════════════════════════ */
+
+.admin-table {
+    width: 100%;
+    border-collapse: collapse; /* Прибирає подвійні рамки */
+    margin-top: 20px;
+    color: #fff;
+}
+
+.admin-table th, .admin-table td {
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    padding: 12px;
+    text-align: left;
+}
+
+.admin-table th {
+    background: rgba(217, 32, 32, 0.3); /* Напівпрозорий червоний фон для заголовків таблиці */
+    font-weight: bold;
+}
+
+.admin-table tr:hover {
+    background: rgba(255, 255, 255, 0.03); /* Підсвітка рядка при наведенні */
+}
+
+.role-btn {
+    background: #d92020;
+    color: white;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.role-btn:hover { 
+    background: #ff5555;
+}
+
+/* ═══════════════════════════════════════ */
+/*          ДОДАТКОВІ КНОПКИ               */
+/* ═══════════════════════════════════════ */
+
+.btn-small {
+    padding: 8px 16px;
+    background: rgba(255, 255, 255, 0.1);
+    color: #fff;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background 0.3s;
+}
+
+.btn-small:hover {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+/* ═══════════════════════════════════════ */
+/*          АДАТАПТИВНІСТЬ ДО ТЕЛЕФОНУ     */
+/* ═══════════════════════════════════════ */
+
 @media (max-width: 768px) {
+
+    /* Базові елементи */
+    .content {
+        padding-top: 100px; /* місце під перемикач мов */
+    }
+
+    .content h1 {
+        letter-spacing: 1px;
+        -webkit-text-stroke-width: 2px;
+    }
+
+    .server-info {
+        font-size: 17px;
+    }
+
+    /* Шапка */
+    .site-header {
+        height: 60px;
+        padding: 0 15px;
+        justify-content: space-between;
+    }
+
+    .header-right {
+        gap: 10px;
+    }
+
+    .header-right a {
+        font-size: 12px;
+        padding: 4px 8px;
+    }
+
+    /* Кнопка назад в мобільних */
+    .back-link {
+        top: 70px;
+        left: 15px;
+        font-size: 12px;
+        padding: 4px 10px;
+        z-index: 90;
+    }
+
+    /* Вхід/Реєстрація */
+    .auth-form {
+        margin: 80px 15px 20px;
+        padding: 15px 20px;
+    }
+
+    .auth-form h1 {
+        font-size: 24px;
+        letter-spacing: 1px;
+    }
+
+    /* Профіль */
     .profile-container {
         flex-direction: column;
         margin: 80px 10px 20px;
     }
+    
     .profile-sidebar {
         width: 100%;
         border-right: none;
         border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-        padding: 20px;
+        padding: 15px;
     }
+
+    /* Вкладки стають горизонтальними */
+    .profile-nav {
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 8px;
+    }
+
     .nav-btn {
+        flex: 1 1 40%;
         text-align: center;
-        padding: 8px 12px;
-        font-size: 14px;
-        flex: 1 1 auto;
+        padding: 10px 5px;
+        font-size: 13px;   
     }
+
     .profile-content {
-        padding: 25px 20px;
+        padding: 20px 15px;
     }
-}
 
-/* Обгортка для поля паролю */
-.password-wrapper {
-    position: relative;
-    width: 100%;
-}
+    .user-brief {
+        margin-top: 10px;
+        padding: 5px;
+    }
 
-.password-wrapper input {
-    padding-right: 40px; /* Місце для іконки */
-}
-
-/* Іконка "вічко" */
-.toggle-password {
-    position: absolute;
-    right: 10px;
-    top: 50%;
-    transform: translateY(-50%);
-    cursor: pointer;
-    color: #aaa;
-    user-select: none;
-    font-size: 18px;
-}
-
-.toggle-password:hover {
-    color: #fff;
-}
-
-/* ═══ СТОРІНКА ВІДНОВЛЕННЯ ПАРОЛЮ ═══ */
-.reset-title {
-    font-size: 24px;
-    text-align: center;
-    margin-bottom: 20px;
-}
-
-.reset-message {
-    color: #4ade80;
-    text-align: center;
-    margin-top: 10px;
-    display: none;
-}
-
-#resetForm {
-    display: none;
-    margin-top: 20px;
-    border-top: 1px solid #444;
-    padding-top: 20px;
-}
-
-/* Посилання "Забули пароль?" */
-.forgot-link {
-    text-align: right;
-    margin-top: 5px;
-    margin-bottom: 10px;
-}
-
-.forgot-link a {
-    color: #ff5555;
-    font-size: 14px;
-    text-decoration: none;
-}
-
-.forgot-link a:hover {
-    text-decoration: underline;
+    .avatar-preview {
+        width: 70px;
+        height: 70px;
+    }
 }
