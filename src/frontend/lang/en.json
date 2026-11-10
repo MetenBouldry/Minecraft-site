@@ -1,4 +1,66 @@
 {
+    "title": {
+        "index": "Minecraft",
+        "admin": "Admin",
+        "forgot_password": "Password recovery",
+        "login": "Login",
+        "profile": "Profile",
+        "register": "Register",
+        "settings": "Settings",
+        "title": "TerraFirmaGreg"
+    },
+
+    "nav": {
+        "main": "Main",
+        "login": "Login",
+        "register": "Register",
+        "logout": "Logout"
+    },
+
+    "admin": {
+        "title": "Admin panel",
+        "desc": "Managing website users.",
+        "role": "Role",
+        "actions": "Actions",
+        "admin": "Admin"
+    },
+
+    "reset": {
+        "title": "Password recovery",
+        "email": "Your email",
+        "submit": "Get a token",
+        "token": "Token from the server",
+        "forgot": "Forgot a password?",
+        "new_password": "New password",
+        "change": "Change password"
+    },
+
+    "login": {
+        "password": "Password",
+        "submit": "Submit"
+    },
+
+    "profile": {
+        "username": "Username",
+        "email": "Email",
+        "save_change": "Save change",
+        "download": "Download",
+        "loading": "Loading...",
+        "general": "General",
+        "security": "Security",
+        "current_password": "Current password",
+        "avatar": "Avatar",
+        "change_avatar": "Change avatar",
+        "file": "Select a file",
+        "info0": "General information"
+    },
+
+    "settings": {
+        "upload": "Upload",
+        "save": "Save",
+        "new_password": "New password (leave empty to keep current)"
+    },
+
     "page-title": "Minecraft",
     "mainpage-title": "TerraFirmaGreg",
     "mainpage-minecraftserver-info0": "TerraFirmaGreg",

@@ -5,25 +5,25 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title data-i18n="login-title">Вхід</title>
+    <title data-i18n="title.login"></title>
     <link rel="stylesheet" href="../css/style.css">
 </head>
 <body>
 
-<a href="../index.html" class="back-link" data-i18n="button-back"></a>
+<a href="../index.html" class="back-link" data-i18n="nav.main"></a>
 
 <!-- ═══════ ДОДАЄМО ШАПКУ ОСЬ ТУТ ═══════ -->    
 <header class="site-header">
     <div class="header-right">
         <div id="guestNav" style="display: none;">
-            <a href="login.html" data-i18n="auth-login"></a>
-            <a href="register.html" data-i18n="auth-register"></a>
+            <a href="login.html" data-i18n="nav.login"></a>
+            <a href="register.html" data-i18n="nav.register"></a>
         </div>
 
         <!-- Блок для авторизованих -->
         <div id="authNav" style="display: none;">
-            <a href="profile.html" data-i18n="nav-profile">Мій профіль</a>
-            <a href="#" id="logoutBtn" data-i18n="nav-logout">Вийти</a>
+            <a href="profile.html" data-i18n="nav.profile"></a>
+            <a href="#" id="logoutBtn" data-i18n="nav.logout"></a>
         </div>
     </div>
 </header>    
@@ -47,28 +47,28 @@
         <h1 data-i18n="login-title"></h1>
         <form id="loginForm">
             <div class="form-group">
-                <label for="loginUsername" data-i18n="login-username"></label>
+                <label for="loginUsername" data-i18n="profile.username"></label>
                 <input type="text" id="loginUsername" name="username" required>
             </div>
 
             <div class="form-group">
-                <label for="loginPassword" data-i18n="login-password"></label>
+                <label for="loginPassword" data-i18n="login.password"></label>
                 <div class="password-wrapper">
                     <input type="password" id="loginPassword" name="password" required>
                     <span class="toggle-password" onclick="togglePassword('loginPassword', this)">👁️</span>
                 </div>
             </div>
 
-            <button type="submit" data-i18n="login-submit"></button>
+            <button type="submit" data-i18n="login.submit"></button>
             
             <p class="forgot-link">
                 <!-- <span data-i18n=""></span> -->
-                 <a href="forgot-password.html">Забули пароль?</a>
+                 <a href="forgot-password.html" data-i18n="reset.forgot"></a>
             </p>
 
             <p class="auth-link">
                 <span data-i18n="login-no-account"></span>
-                <a href="register.html" data-i18n="login-register-link"></a>
+                <a href="register.html" data-i18n="nav.register"></a>
             </p>
         </form>
     </div>

@@ -3,25 +3,25 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title data-i18n="profile-title">Мій профіль</title>
+    <title data-i18n="title.profile"></title>
     <link rel="stylesheet" href="../css/style.css">
 </head>
 <body>
 
-<a href="../index.html" class="back-link" data-i18n="button-back"></a>
+<a href="../index.html" class="back-link" data-i18n="nav.main"></a>
 
 <!-- ═══════ ДОДАЄМО ШАПКУ ОСЬ ТУТ ═══════ -->    
 <header class="site-header">
     <div class="header-right">
         <div id="guestNav" style="display: none;">
-            <a href="login.html" data-i18n="auth-login"></a>
-            <a href="register.html" data-i18n="auth-register"></a>
+            <a href="login.html" data-i18n="nav.login"></a>
+            <a href="register.html" data-i18n="nav.register"></a>
         </div>
 
         <!-- Блок для авторизованих -->
         <div id="authNav" style="display: none;">
-            <a href="profile.html" data-i18n="nav-profile">Мій профіль</a>
-            <a href="#" id="logoutBtn" data-i18n="nav-logout">Вийти</a>
+            <a href="profile.html" data-i18n="nav.profile"></a>
+            <a href="#" id="logoutBtn" data-i18n="nav.logout"></a>
         </div>
     </div>
 </header>
@@ -48,14 +48,14 @@
         <aside class="profile-sidebar">
             <div class="user-brief">
                 <img id="sidebarAvatar" src="https://via.placeholder.com/10" alt="Avatar" class="avatar-preview">
-                <h2 id="sidebarUsername">Завантаження</h2>
+                <h2 id="sidebarUsername" data-i18n="profile.loading"></h2>
             </div>
 
             <nav class="profile-nav">
-                <button class="nav-btn active" data-tab="tab-general">📝 Загальні</button>
-                <button class="nav-btn" data-tab="tab-security">🔒 Безпека</button>
-                <button class="nav-btn" data-tab="tab-avatar">🖼️ Аватар</button>
-                <button class="nav-btn" id="adminTabBtn" data-tab="tab-admin" style="display: none;">🛡️ Адмінка</button>
+                <button class="nav-btn active" data-tab="tab-general" data-i18n="profile.general">📝 </button>
+                <button class="nav-btn" data-tab="tab-security" data-i18n="profile.security">🔒 </button>
+                <button class="nav-btn" data-tab="tab-avatar" data-i18n="profile.avatar">🖼️ </button>
+                <button class="nav-btn" id="adminTabBtn" data-tab="tab-admin" style="display: none;" data-i18n="admin.admin">🛡️ </button>
             </nav>
         </aside>
 
@@ -64,27 +64,27 @@
 
             <!-- Вкладка 1: Загальні -->
             <div id="tab-general" class="tab-pane active">
-                <h3>Загальна інформація</h3>
+                <h3 data-i18n="profile.info0"></h3>
                 <form id="generalForm">
                     <div class="form-group">
-                        <label for="profileUsername">Ім'я користувача</label>
+                        <label for="profileUsername" data-i18n="profile.username"></label>
                         <input type="text" id="profileUsername" name="username" required>
                     </div>
 
                     <div class="form-group">
-                        <label for="profileEmail">Email</label>
+                        <label for="profileEmail" data-i18n="profile.email"></label>
                         <input type="text" id="profileEmail" name="email" required>
                     </div>
-                    <button type="submit" class="btn-primary">Зберегти зміни</button>
+                    <button type="submit" class="btn-primary" data-i18n="profile.save_change"></button>
                 </form>
             </div>
 
             <!-- Вкладка 2: Безпека -->
             <div id="tab-security" class="tab-pane">
-                <h3>Зміна пароля</h3>
+                <h3 data-i18n="reset.change"></h3>
                 <form id="securityForm">
                     <div class="form-group">
-                        <label for="currentPassword">Поточний пароль</label>
+                        <label for="currentPassword" data-i18n="profile.current_password"></label>
                         <div class="password-wrapper">
                             <input type="password" id="currentPassword" name="current_password" required>
                             <span class="toggle-password" onclick="togglePassword('currentPassword', this)">👁️</span>
@@ -92,25 +92,25 @@
                     </div>
 
                     <div class="form-group">
-                        <label for="newPassword">Новий пароль</label>
+                        <label for="newPassword" data-i18n="reset.new_password"></label>
                         <div class="password-wrapper">
                             <input type="password" id="newPassword" name="new_password" required>
                             <span class="toggle-password" onclick="togglePassword('newPassword', this)">👁️</span>
                         </div>
                     </div>
-                    <button type="submit" class="btn-primary">Оновити пароль</button>
+                    <button type="submit" class="btn-primary" data-i18n="reset.change"></button>
                 </form>
             </div>
 
             <!-- Вкладка 3: Аватар -->
             <div id="tab-avatar" class="tab-pane">
-                <h3>Зміна аватара</h3>
+                <h3 data-i18n="profile.change_avatar"></h3>
                 <div class="avatar-upload-area">
                     <img id="mainAvatar" src="https://via.placeholder.com/150" alt="Avatar" class="avatar-large">
 
                     <br>
                     <input type="file" id="avatarInput" accept="image/*" style="display: none">
-                    <button type="button" class="btn-primary" onclick="document.getElementById('avatarInput').click()">Обрати файл</button>
+                    <button type="button" class="btn-primary" onclick="document.getElementById('avatarInput').click()" data-i18n="profile.file"></button>
                 </div>
             </div>
         </main>

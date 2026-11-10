@@ -11,10 +11,16 @@ const FLAGS = {
 // Поточні переклади (використовуються й для підказок статусу)
 let translations = {};
 
-// Функція t() — бере текст з JSON за ключем.
+// Допоміжна функція: дістає значення з вкладеного об'єкта за шляхом "main.login"
+function getNestedValue(obj, path) {
+    return path.split('.').reduce((acc, part) => acc && acc[part], obj);
+}
+
+// Функція t() — бере текст з JSON за ключем (тепер підтримує крапки)
 // Якщо ключа немає — повертає fallback (запасний текст)
 function t(key, fallback) {
-    return translations[key] || fallback;
+    const translation = getNestedValue(translations, key);
+    return translation || fallback;
 }
 
 // Функція завантаження мови
@@ -23,27 +29,26 @@ async function loadLanguage(lang) {
         const basePath = window.location.pathname.includes('/pages') ? '../' : '';
         const response = await fetch(`${basePath}lang/${lang}.json`);
         const data = await response.json();
-        translations = data;
 
-        // Оновити всі тексти
-        Object.keys(data).forEach(key => {
-            // За id
-            const elementById = document.getElementById(key);
-            if (elementById) {
-                elementById.textContent = data[key];
+        translations = data; // Зберігаємо для функції t()
+
+        // Оновлюємо ВСІ елементи, які мають атрибут data-i18n
+        document.querySelectorAll('[data-i18n]').forEach(el => {
+            const key = el.getAttribute('data-i18n'); // Наприклад, "main.login"
+            const translation = getNestedValue(data, key);
+
+            if (translation) {
+                el.textContent = translation;
             }
-
-            // За data-i18n
-            const elementByAttr = document.querySelectorAll(`[data-i18n="${key}"]`);
-            elementByAttr.forEach(el => {
-                el.textContent = data[key];
-            });
         });
+
+        // Оновлюємо елементи за ID (якщо вони є, для зворотної сумісності)
+        // (Але краще використовувати тільки data-i18n)
 
         // Мова документа та заголовок вкладки
         document.documentElement.lang = lang;
-        if (data['page-title']) {
-            document.title = data['page-title'];
+        if (data.page && data.page.title) {
+            document.title = data.page.title;
         }
 
         // Підказки статусу відповідно до нової мови
@@ -116,7 +121,7 @@ function toggleLangMenu() {
 // Закрити після клацання поза меню
 document.addEventListener('click', (e) => {
     const menu = document.getElementById('langMenu');
-    const toggle = document.querySelector('.lang-toggle');
+    const toggle = document.querySelectorAll('.lang-toggle');
     if (menu && toggle && !menu.contains(e.target) && !toggle.contains(e.target)) {
         menu.classList.remove('show');
     }
