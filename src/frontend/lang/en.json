@@ -14,7 +14,16 @@
         "main": "Main",
         "login": "Login",
         "register": "Register",
-        "logout": "Logout"
+        "logout": "Logout",
+        "profile": "My profile"
+    },
+
+    "index": {
+        "title": "TerraFirmaGreg",
+        "server": {
+            "tfg": "TerraFirmaGreg",
+            "vanilla": "vanilla"
+        }
     },
 
     "admin": {
@@ -22,7 +31,8 @@
         "desc": "Managing website users.",
         "role": "Role",
         "actions": "Actions",
-        "admin": "Admin"
+        "admin": "Admin",
+        "user": "Username"
     },
 
     "reset": {
@@ -32,11 +42,16 @@
         "token": "Token from the server",
         "forgot": "Forgot a password?",
         "new_password": "New password",
-        "change": "Change password"
+        "change": "Change password",
+        "message": "GRUUUUUUT"
     },
 
     "login": {
+        "title": "Title",
+        "user": "Username",
         "password": "Password",
+        "no_account": "No account?",
+        "register": "Register",
         "submit": "Submit"
     },
 
@@ -55,66 +70,23 @@
         "info0": "General information"
     },
 
-    "settings": {
-        "upload": "Upload",
-        "save": "Save",
-        "new_password": "New password (leave empty to keep current)"
+    "reg": {
+        "title": "Register",
+        "user": "Username",
+        "email":"Your email",
+        "password": "Your password",
+        "submit": "Submit",
+        "login": "Login",
+        "has_account": "Already have an account?"
     },
 
-    "page-title": "Minecraft",
-    "mainpage-title": "TerraFirmaGreg",
-    "mainpage-minecraftserver-info0": "TerraFirmaGreg",
-    "mainpage-minecraftserver-info1": "Vanilla",
-    "status-online": "Online",
-    "status-offline": "Offline",
-    "status-unknown": "Status unavailable",
-    "status-checking": "Checking...",
-
-    "button-back": "Main",
-
-    "auth-login": "Login",
-    "auth-register": "Register",
-    "auth-logout": "Logout",
-
-    "reg-title": "Register",
-    "reg-username": "Username",
-    "reg-email": "Email",
-    "reg-password": "Password",
-    "reg-submit": "Submit",
-    "reg-has-account": "Already have an account?",
-    "reg-login-link": "Login",
-
-    "reg-success": "Registration successful! Now log in",
-    "reg-error": "Registration error",
-    "login-success": "Login successful",
-    "login-error": "Incorrect login or password",
-    "connection-error": "Connection error",
-    "invalid-credentials": "Incorrect login or password",
-    "unknown-error": "Unknown error",
-
-    "nav-profile": "My profile",
-    "nav-logout": "Logout",
-
-    "login-title": "Login",
-    "login-username": "Username",
-    "login-password": "Password",
-    "login-submit": "Submit",
-    "login-no-account": "No account?",
-    "login-register-link": "Register",
-
-    "settings-title": "Settings",
-    "settings-username": "Username",
-    "settings-email": "Email",
-    "settings-new-password": "New password (leave empty to keep current)",
-    "settings-save": "Save",
-    "settings-avatar": "Avatar",
-    "settings-upload": "Upload",
-
-    "admin-title": "Admin panel",
-    "admin-users": "Users",
-    "admin-role": "Role",
-    "admin-actions": "Actions",
-    "admin-save": "Save",
-    "admin-user": "User",
-    "admin-admin": "Admin"
+    "settings": {
+        "title": "Settings",
+        "upload": "Upload",
+        "save": "Save",
+        "user": "Username",
+        "email": "Email",
+        "new_password": "New password (leave empty to keep current)" ,
+        "avatar": "Avatar"     
+    }
 }

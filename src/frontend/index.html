@@ -21,7 +21,7 @@
 
         <!-- Блок для авторизованих -->
         <div id="authNav" style="display: none">
-            <a href="pages/profile.html" data-i18n="nav-profile"></a>
+            <a href="pages/profile.html" data-i18n="nav.profile"></a>
             <a href="#" id="logoutBtn" data-i18n="nav.logout"></a>
         </div>
     </div>
@@ -41,17 +41,18 @@
             </button>
         </div>
     </div>
-
-    <h1 id="title.title"></h1> <!-- id заголовка сторінки, який вимагає заповнення зі script(наступний такий же) файл lang -->
+    
+    <!-- Сама сторінка -->
+    <h1 id="mainpage-title" data-i18n="index.title"></h1> <!-- id заголовка сторінки, який вимагає заповнення зі script(наступний такий же) файл lang -->
 
     <p class="server-info" id="server-info0">
-        <span class="status-icon" id="status-tfg"></span> <!-- Іконка статусу -->
-        <span id="mainpage-minecraftserver-info0"></span>    
+        <span class="status-icon" id="status-tfg"></span> <!-- Іконка статусу --> 
+        <span data-i18n="index.server.tfg"></span>   
         </p> <!-- id тексту файл lang -->
 
     <p class="server-info" id="server-info1">
         <span class="status-icon" id="status-vanilla"></span>
-        <span id="mainpage-minecraftserver-info1"></span>
+        <span data-i18n="index.server.vanilla"></span>
     </p>
 </div>
 

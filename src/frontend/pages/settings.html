@@ -41,16 +41,17 @@
             </button>
         </div>
     </div>
-
+    
+    <!-- Самі налаштування -->
     <div class="auth-form">
-        <h1 data-i18n="settings-title"></h1>
+        <h1 data-i18n="settings.title"></h1>
         <form id="settingsForm">
             <div class="form-group">
-                <label for="settingsUsername" data-i18n="profile.username"></label>
+                <label for="settingsUsername" data-i18n="settings.user"></label>
                 <input type="text" id="settingsUsername" name="username" disabled>
             </div>
             <div class="form-group">
-                <label for="settingsEmail" data-i18n="profile.email"></label>
+                <label for="settingsEmail" data-i18n="settings.email"></label>
                 <input type="email" id="settingsEmail" name="email">
             </div>
             <div class="form-group">
@@ -60,7 +61,7 @@
 
             <!-- Блок для аватара(наразі лише кнопка) -->
             <div class="form-group">
-                <label data-i18n="settings-avatar"></label>
+                <label data-i18n="settings.avatar"></label>
                 <div style="display: flex; gap: 10px; align-items: center;">
                     <input type="file" id="avatarInput" style="display: none;">
                     <button type="button" class="btn-small" onclick="document.getElementById('avatarInput').click()" data-i18n="settings.upload"></button>
