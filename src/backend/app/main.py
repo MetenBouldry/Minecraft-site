@@ -1,4 +1,5 @@
 from fastapi import FastAPI
+from fastapi.staticfiles import StaticFiles
 from starlette.middleware.cors import CORSMiddleware
 from .migrate import run_migrations
 from .database import engine
@@ -13,6 +14,8 @@ run_migrations()
 Base.metadata.create_all(bind=engine)
 
 app = FastAPI(title="Minecraft site API")
+
+app.mount("/uploads", StaticFiles(directory="uploads"), name="uploads")
 
 # CORS(щоб фронт міг робити запити)
 app.add_middleware(

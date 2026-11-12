@@ -444,7 +444,7 @@ if (profileContainer) {
                 document.getElementById('sidebarUsername').textContent = data.username || 'User';
 
                 // Встановлюємо аватар (якщо є — беремо з сервера, якщо ні — заглушку)
-                const defaultAvatar = 'https://via.placeholder.com/100';
+                const defaultAvatar = 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="50" cy="50" r="50" fill="%23333"/><circle cx="50" cy="40" r="15" fill="%23888"/><path d="M20 90c0-15 15-25 30-25s30 10 30 25" fill="%23888"/></svg>';
                 const avatarUrl = data.avatar_url ? `https://minemine.my-work.pp.ua${data.avatar_url}`: defaultAvatar; //Переписати при переносі на хостинг
 
                 document.getElementById('sidebarAvatar').src = avatarUrl;
