@@ -88,5 +88,27 @@
         "email": "Email",
         "new_password": "New password (leave empty to keep current)" ,
         "avatar": "Avatar"     
+    },
+
+    "alert": {
+    "reg_success": "Registration success",
+    "error": "Error",
+    "reg_error": "Registration error",
+    "unknown_error": "Unknown error",
+    "save_error": "Save error",
+    "avatar_load_error": "Avatar loading error",
+    "role_change_error": "Role change error",
+    "connection_error": "Error connecting to the server",
+    "change_password_error": "Password change error",
+    "success_password": "Your password has been successfully changed!",
+    "success_password1": "Your password has been successfully changed! You can now login.",
+    "avatar_success": "Your avatar has been successfully updated!",
+    "role_success": "The role change was successful", 
+    "login_error": "Incorrect username or password",
+    "settings_saved": "The data has been successfully updated!",
+    "big_file": "The file is too large! The maximum size is 2 MB.",
+    "access_denied": "You do not have permission to view this page."
     }
 }
+
+

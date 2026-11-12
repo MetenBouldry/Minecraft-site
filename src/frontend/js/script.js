@@ -8,6 +8,45 @@ const FLAGS = {
     en: 'https://flagcdn.com/24x18/gb.png'
 };
 
+// ═══════════════════════════════════════
+//     СИСТЕМА СПОВІЩЕНЬ (ТОСТИ)
+// ═══════════════════════════════════════
+function showToast(message, type = 'info') {
+    // 1. Створюємо контейнер, якщо його ще немає
+    let container = document.getElementById('toast-container');
+    if (!container) {
+        container = document.createElement('div');
+        container.id = 'toast-container';
+        document.body.appendChild(container);
+    }
+
+     // 2. Створюємо саме сповіщення
+     const toast = document.createElement('div');
+     toast.className = `toast ${type}`;
+
+     // 3. Вибираємо іконку
+     let icon = 'ℹ️';
+     if (type === 'success') icon = '✅';
+     if (type === 'error') icon = '❌';
+
+     // 4. Наповнюємо HTML
+     toast.innerHTML = `
+        <span class = "toast-icon">${icon}</span>
+        <span class = "toast-message">${message}</span>
+        `;
+
+        // 5. Додаємо на сторінку
+        container.appendChild(toast);
+
+        // 6. Видаляємо через 3 секунди (з анімацією)
+        setTimeout(() => {
+            toast.classList.add('hide');
+            toast.addEventListener('animationend', () => {
+                toast.remove();
+            });
+        }, 3000)
+}
+
 // Поточні переклади (використовуються й для підказок статусу)
 let translations = {};
 
@@ -257,16 +296,16 @@ if (registerForm) {
 
             if (response.ok) {
                 // Успіх — показуємо повідомлення і переходимо на логін
-                alert(t('reg-success', 'Реєстрація успішна!'));
+                showToast(t('alert.reg_success', 'Реєстрація успішна!'), 'success');
                 window.location.href = 'login.html';
             } else {
                 // Помилка — показуємо текст з сервера
-                alert(t('reg-error', 'Помилка') + ': ' + (data.detail || t('unknown-error', 'Невідома помилка')));
+                showToast(t('alert.reg_error', 'Помилка') + ': ' + (data.detail || t('alert.unknown_error', 'Невідома помилка')), 'error');
             }
         } catch (error) {
             // Помилка з'єднання (сервер не запущений)
             console.error(error);
-            alert(t('connection-error', 'Помилка з\'єднання з сервером'));
+            showToast(t('alert.connection_error', 'Помилка з\'єднання з сервером'), 'error');
 
         }
     });
@@ -303,11 +342,11 @@ if (loginForm) {
                 window.location.href = '../index.html';
             } else {
                 // Помилка — показуємо текст з сервера
-                alert(t('login-error', 'Невірний логін або пароль'));
+                showToast(t('alert.login_error', 'Невірний логін або пароль'), 'error');
             }
         } catch (error) {
             console.error(error);
-            alert(t('connection-error', 'Помилка з\'єднання з сервером'));
+            showToast(t('alert.connection_error', 'Помилка з\'єднання з сервером'), 'error');
         }
     });
 }
@@ -438,14 +477,14 @@ if (profileContainer) {
                         const data = await response.json();
 
                         if (response.ok) {
-                            alert('Дані успішно оновлено!');
+                            showToast(t('alert.settings_saved', 'Дані успішно оновлено!'), 'success');
                             // Оновлюємо ім'я в бічній панелі
                             document.getElementById('sidebarUsername').textContent = data.username;
                         } else {
-                            alert(data.detail || 'Помилка збереження');
+                            showToast(data.detail || t('alert.save_error', 'Помилка збереження'), 'error');
                         }
                     } catch (err) {
-                        alert('Помилка з\'єднання з сервером');
+                        showToast(t('alert.connection_error', 'Помилка з\'єднання з сервером'), 'error');
                     }
                 });
             }
@@ -470,13 +509,13 @@ if (profileContainer) {
                         const data = await response.json();
 
                         if (response.ok) {
-                            alert('Пароль успішно змінено!');
+                            showToast(t('alert.success_password', 'Пароль успішно змінено!'), 'success');
                             securityForm.reset();  // Очищаємо поля після успіху
                         } else {
-                            alert(data.detail || 'Помилка зміни паролю');
+                            showToast(data.detail || t('alert.change_password_error', 'Помилка зміни паролю'), 'error');
                         }
                     } catch (err) {
-                        alert('Помилка з\'єднання з сервером')
+                        showToast(t('alert.connection_error', 'Помилка з\'єднання з сервером'), 'error');
                     }
                 });
             }
@@ -493,7 +532,7 @@ if (profileContainer) {
 
                     // Перевірка розміру (макс 2МБ)
                     if (file.size > 2 * 1024 *1024) {
-                        alert('Файл занадто великий! Максимум 2 МБ.');
+                        showToast(t('alert.big_file', 'Файл занадто великий! Максимум 2 МБ.'), 'error');
                         avatarInput.value = '';
                         return;
                     }
@@ -519,13 +558,13 @@ if (profileContainer) {
                             const newAvatarUrl = `https://minemine.my-work.pp.ua${data.avatar_url}?t=${Date.now()}`;
                             mainAvatar.src = newAvatarUrl;
                             sidebarAvatar.src = newAvatarUrl;
-                            alert('Аватар успішно оновлено!');
+                            showToast(t('alert.avatar_success', 'Аватар успішно оновлено!'), 'success');
                         } else {
-                            alert(data.detail || 'Помилка завантаження аватара');
+                            showToast(data.detail || t('alert.avatar_load_error', 'Помилка завантаження аватара'), 'error');
                         }
                     }catch(err) {
                         console.error(err);
-                        alert('Помилка з\'єднання з сервером');
+                        showToast(t('alert.connection_error', 'Помилка з\'єднання з сервером'), 'error');
                     } finally{
                         mainAvatar.style.opacity = '1';  // Повертаємо прозорість
                         avatarInput.value = ''; // Очищаємо інпут
@@ -587,7 +626,7 @@ if (usersTableBody) {
                 });
 
                 if (response.status === 403 || response.status === 401) {
-                    alert('У вас немає прав на цю сторінку');
+                    showToast(t('alert.access_denied', 'У вас немає прав на цю сторінку'), 'error');
                     window.location.href = '../index.html';
                     return;
                 }
@@ -631,14 +670,14 @@ if (usersTableBody) {
                 });
 
                 if (response.ok) {
-                    alert('Зміна ролі успішна');
+                    showToast(t('alert.role_success', 'Зміна ролі успішна'), 'success');
                     loadUsers();
                 } else {
                     const data = await response.json();
-                    alert(data.detail || 'Помилка зміни ролі');
+                    showToast(data.detail || t('alert.role_change_error', 'Помилка зміни ролі'), 'error');
                 }
             } catch (error) {
-                alert('Помилка з\'єднання з сервером');
+                showToast(t('alert.connection_error', 'Помилка з\'єднання з сервером'), 'error');
             }
         };
     }
@@ -674,10 +713,10 @@ if (forgotForm) {
                 // Показуємо другу форму для введення токена
                 resetForm.style.display = 'flex';
             } else {
-                alert(data.detail || 'Помилка');
+                showToast(data.detail || t('alert.error', 'Помилка'), 'error');
             }
         } catch (err) {
-            alert('Помилка з\'єднання з сервером')
+            showToast(t('alert.connection_error', 'Помилка з\'єднання з сервером'), 'error');
         }
     });
 
@@ -696,13 +735,13 @@ if (forgotForm) {
             const data = await response.json();
 
             if (response.ok) {
-                alert('Пароль успішно змінено! Тепер можете увійти.');
+                showToast(t('alert.success_password1','Пароль успішно змінено! Тепер можете увійти.'), 'success');
                 window.location.href = 'login.html';
             } else {
-                alert(data.detail || 'Помилка зміни паролю');
+                showToast(data.detail || t('alert.change_password_error', 'Помилка зміни паролю'), 'error');
             }
         } catch (err) {
-            alert('Помилка з\'єднання з сервером')
+            showToast(t('alert.connection_error', 'Помилка з\'єднання з сервером'), 'error');
         }
     });
         

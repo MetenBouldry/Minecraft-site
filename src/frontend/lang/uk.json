@@ -1,58 +1,112 @@
 {
-    "page-title": "Майнкрафт",
-    "mainpage-title": "TerraFirmaGreg",
-    "mainpage-minecraftserver-info0": "TerraFirmaGreg",
-    "mainpage-minecraftserver-info1": "Ваніла",
-    "status-online": "Онлайн",
-    "status-offline": "Офлайн",
-    "status-unknown": "Статус недоступний",
-    "status-checking": "Перевірка...",
+    "title": {
+        "index": "Minecraft",
+        "admin": "Адмін",
+        "forgot_password": "Відновлення паролю",
+        "login": "Вхід",
+        "profile": "Профіль",
+        "register": "Реєстрація",
+        "settings": "Налаштування",
+        "title": "TerraFirmaGreg"
+    },
 
-    "button-back": "Головна",
+    "nav": {
+        "main": "Головна",
+        "login": "Вхід",
+        "register": "Реєстрація",
+        "logout": "Вихід",
+        "profile": "Мій профіль"
+    },
 
-    "auth-login": "Вхід",
-    "auth-register": "Реєстрація",
-    "auth-logout": "Вихід",
+    "index": {
+        "title": "TerraFirmaGreg",
+        "server": {
+            "tfg": "TerraFirmaGreg",
+            "vanilla": "vanilla"
+        }
+    },
 
-    "reg-title": "Реєстрація",
-    "reg-username": "Ім'я користувача",
-    "reg-email": " Email",
-    "reg-password": "Пароль",
-    "reg-submit": "Реєстрація",
-    "reg-has-account": "Вже є акаунт?",
-    "reg-login-link": "Вхід",
+    "admin": {
+        "title": "Адмінка",
+        "desc": "Управління користувачами веб-сайту.",
+        "role": "Роль",
+        "actions": "Дії",
+        "admin": "Адмін",
+        "user": "Ім'я користувача"
+    },
 
-    "reg-success": "Реєстрація успішна! Увійдіть",
-    "reg-error": "Помилка реєстрації",
-    "login-success": "Вхід успішний",
-    "login-error": "Невірний логін чи пароль",
-    "connection-error": "Помилка з'єднання",
-    "invalid-credentials": "Невірний логін чи пароль",
-    "unknown-error": "Невідома помилка",
+    "reset": {
+        "title": "Відновлення паролю",
+        "email": "Ваш email",
+        "submit": "Видати токен",
+        "token": "Токен із сервера",
+        "forgot": "Забули пароль?",
+        "new_password": "Новий пароль",
+        "change": "Змінити пароль",
+        "message": "GRUUUUUUT"
+    },
 
-    "nav-profile": "Мій профіль",
-    "nav-logout": "Вийти",
+    "login": {
+        "title": "Заголовок",
+        "user": "Ім'я користувача",
+        "password": "Пароль",
+        "no_account": "Нема аккаунта?",
+        "register": "Реєстрація",
+        "submit": "Надіслати"
+    },
 
-    "login-title": "Вхід",
-    "login-username": "Ім'я користувача",
-    "login-password": "Пароль",
-    "login-submit": "Увійти",
-    "login-no-account": "Немає акаунту?",
-    "login-register-link": "Реєстрація",
+    "profile": {
+        "username": "Ім'я користувача",
+        "email": "Email",
+        "save_change": "Зберігти зміни",
+        "download": "Завантажити",
+        "loading": "Завантаження...",
+        "general": "Загальне",
+        "security": "Безпека",
+        "current_password": "Поточний пароль",
+        "avatar": "Аватар",
+        "change_avatar": "Змінити аватар",
+        "file": "Вибрати файл",
+        "info0": "Загальна інформація"
+    },
 
-    "settings-title": "Налаштування",
-    "settings-username": "Ім'я користувача",
-    "settings-email": "Email",
-    "settings-new-password": "Новий пароль (залиште порожнім, якщо не змінюєте)",
-    "settings-save": "Зберегти",
-    "settings-avatar": "Аватар",
-    "settings-upload": "Завантажити",
+    "reg": {
+        "title": "Реєстрація",
+        "user": "Ім'я користувача",
+        "email":"Ваш email",
+        "password": "Ваш пароль",
+        "submit": "Надіслати",
+        "login": "Від",
+        "has_account": "Вже маєте аккаунт?"
+    },
 
-    "admin-title": "Панель адміністратора",
-    "admin-users": "Користувачі",
-    "admin-role": "Ролі",
-    "admin-actions": "Дії",
-    "admin-save": "Зберегти",
-    "admin-user": "Ім'я користувача",
-    "admin-admin": "Адміністратор"
+    "settings": {
+        "title": "Налаштування",
+        "upload": "Завантажити",
+        "save": "Зберігти",
+        "user": "Ім'я користувача",
+        "email": "Email",
+        "new_password": "Новий пароль (залиште поле порожнім, щоб зберегти поточний пароль)" ,
+        "avatar": "Аватар"     
+    },
+
+    "alert": {
+    "reg_success": "Реєстрація успішна",
+    "error": "Помилка",
+    "reg_error": "Помилка реєстрації",
+    "unknown_error": "Невідома помилка",
+    "save_error": "Помилка збереження",
+    "avatar_load_error": "Помилка завантаження аватара",
+    "role_change_error": "Помилка зміни ролі",
+    "connection_error": "Помилка підключення до сервера",
+    "change_password_error": "Помилка зміни паролю",
+    "success_password": "Ваш пароль було успішно змінено!",
+    "success_password1": "Ваш пароль було успішно змінено! Тепер можете увійти.",
+    "avatar_success": "Ваш аватар був успішно оновлений!",
+    "role_success": "Зміна ролі успішна", 
+    "login_error": "Невірний логін або пароль",
+    "settings_saved": "Дані успішно оновлено!",
+    "big_file": "Файл занадто великий! Максимум 2 МБ.",
+    "access_denied": "У вас немає прав на цю сторінку."
+    }
 }
