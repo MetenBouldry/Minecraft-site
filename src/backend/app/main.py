@@ -1,21 +1,22 @@
+import os
 from fastapi import FastAPI
 from fastapi.staticfiles import StaticFiles
 from starlette.middleware.cors import CORSMiddleware
 from .migrate import run_migrations
 from .database import engine
 from .models import Base
-from .routes import auth, users, server
+from .routes import auth, users, server, stats
 
 # ═══════ ВИКЛИК МІГРАЦІЇ ═══════
 run_migrations()
-
-
 #Створюємо таблицю в БД(якщо немає)
 Base.metadata.create_all(bind=engine)
 
 app = FastAPI(title="Minecraft site API")
 
-app.mount("/uploads", StaticFiles(directory="/app/uploads"), name="uploads")
+# Створюємо папку uploads, якщо її немає (це вирішує баг)
+os.makedirs("uploads", exist_ok=True)
+app.mount("/uploads", StaticFiles(directory="uploads"), name="uploads")
 
 # CORS(щоб фронт міг робити запити)
 app.add_middleware(
@@ -36,6 +37,7 @@ app.add_middleware(
 app.include_router(auth.router, prefix="/api", tags=["Auth"])
 app.include_router(users.router, prefix="/api", tags=["User"])
 app.include_router(server.router, prefix="/api", tags=["Server"])
+app.include_router(stats.router, prefix="/api", tags=["Stats"])
 
 @app.get("/")
 def root():

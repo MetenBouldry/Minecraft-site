@@ -1,0 +1,19 @@
+# Секрет
+.env
+
+# База даних
+*.db
+*.sqlite
+
+# Кеш python
+__pycache__/
+*.pyc
+*.pyo
+
+# Завантажені файли (вони мають бути в volumes, а не в образі)
+uploads/
+
+# Git та IDE
+.git/
+.idea/
+.vscode/

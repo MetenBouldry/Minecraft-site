@@ -1,24 +1,31 @@
 import os
 from datetime import datetime, timedelta, timezone
 from typing import Optional
-from jose import JWTError, jwt
-from pwdlib import PasswordHash
 from fastapi import Depends, HTTPException, status
-from fastapi.security import HTTPBearer
+from fastapi.security import OAuth2PasswordBearer
+from jose import JWTError, jwt
 from sqlalchemy.orm import Session
-from .database import get_db
-from .models import User
+from sqlalchemy import select
 from dotenv import load_dotenv
 
+from .database import get_db
+from .models import User
+from pwdlib import PasswordHash
+
+# Завантажуємо .env для локальної розробки
 load_dotenv()
 
-SECRET_KEY = os.getenv("SECRET_KEY", "super-secret-key")
-ALGORITHM = os.getenv("ALGORITHM", "HS256")
-ACCESS_TOKEN_EXPIRE_MINUTES = int(os.getenv("ACCESS_TOKEN_EXPIRE_MINUTES", 30))
+# ═══════ БЕЗПЕКА ═══════
+SECRET_KEY = os.getenv("SECRET_KEY")
+if not SECRET_KEY :
+    raise ValueError("❌ КРИТИЧНА ПОМИЛКА: SECRET_KEY не встановлений в оточенні!")
+
+ALGORITHM = "HS256"
+ACCESS_TOKEN_EXPIRE_MINUTES = 60 * 24 #Доба
 
 # PasswordHash.recommended() автоматично обирає Argon2 як основний алгоритм
 password_hash = PasswordHash.recommended()
-oauth2_scheme = HTTPBearer()
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/api/login")
 
 def verify_password(plain_password, hashed_password):
     return password_hash.verify(plain_password, hashed_password)
@@ -32,14 +39,11 @@ def create_access_token(data: dict, expires_delta: Optional[timedelta] = None):
         expire = datetime.now(timezone.utc) + expires_delta
     else:
         expire = datetime.now(timezone.utc) + timedelta(minutes=15)
-
     to_encode.update({"exp": expire})
-    encoded_jwt = jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
-    return encoded_jwt
+    return jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
 
-def get_current_user(credentials = Depends(oauth2_scheme), db: Session = Depends(get_db)):
-    token = credentials.credentials
-
+# ═══════ ОТРИМАННЯ КОРИСТУВАЧА (SQLAlchemy 2.0) ═══════
+def get_current_user(token: str = Depends(oauth2_scheme), db: Session = Depends(get_db)):
     credentials_exception = HTTPException(
         status_code=status.HTTP_401_UNAUTHORIZED,
         detail="Could not validate credentials",
@@ -47,17 +51,19 @@ def get_current_user(credentials = Depends(oauth2_scheme), db: Session = Depends
     )
     try:
         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
-        username: str | None = payload.get("sub")
-        if username is None:
+        user_id: str = payload.get("sub")
+        if user_id is None:
             raise credentials_exception
     except JWTError:
         raise credentials_exception
-    user = db.query(User).filter(User.username == username).first()
+    
+    # СУЧАСНИЙ СТАНДАРТ: select() замість query()
+    user = db.execute(select(User).where(user.id == int(user_id))).scalar_one_or_none()
     if user is None:
         raise credentials_exception
     return user
 
-def get_current_admin(current_user: User = Depends(get_current_user)):
+def get_current_admin(current_user: User = Depends(get_current_user)) -> User:
         if current_user.role != "admin":
             raise HTTPException(status_code=403, detail="Not enough permission")
         return current_user

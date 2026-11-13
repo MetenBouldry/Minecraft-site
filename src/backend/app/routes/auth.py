@@ -1,6 +1,7 @@
 from fastapi import APIRouter, Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordRequestForm
 from sqlalchemy.orm import Session
+from sqlalchemy import select
 from ..database import get_db
 from ..models import User
 from ..schemas import UserCreate, Token, UserResponse, PasswordResetRequest, PasswordResetConfirm
@@ -12,7 +13,15 @@ router = APIRouter()
 
 @router.post("/register", response_model=UserResponse)
 def register(user:UserCreate, db: Session = Depends(get_db)):
-    db_user = db.query(User).filter((User.username == user.username) | (User.email == user.email)).first()
+    # 1. Перевірка довжини пароля
+    if len(user.password) < 8:
+        raise HTTPException(status_code=400, detail="Пароль має містити мінімум 8 символів")
+
+    # 2. Перевірка на існуючого користувача
+    db_user = db.execute(
+        select(User).where((User.username == user.username) | (User.email == user.email))
+    ).scalar_one_or_none()
+
     if db_user:
         raise HTTPException(status_code=400, detail="Username or email already registered")
 
@@ -29,7 +38,8 @@ def register(user:UserCreate, db: Session = Depends(get_db)):
 
 @router.post("/login", response_model=Token)
 def login(form_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(get_db)):
-    user = db.query(User).filter(User.username == form_data.username).first()
+    user = db.execute(select(User).where(User.username == form_data.username)).scalar_one_or_none()
+
     if not user or not verify_password(form_data.password, user.hashed_password):
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
@@ -38,34 +48,36 @@ def login(form_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depend
         )
 
     access_token_expires = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
+    # ВАЖЛИВО: тепер використовуємо str(user.id)
     access_token = create_access_token(
-        data={"sub": user.username}, expires_delta=access_token_expires
+        data={"sub": str(user.id)}, expires_delta=access_token_expires
     )
     return {"access_token": access_token, "token_type": "bearer"}
 
 @router.post("/forgot-password")
 def forgot_password(data: PasswordResetRequest, db: Session = Depends(get_db)):
-    user = db.query(User).filter(User.email == data.email).first()
-    if not user:
-        # З міркувань безпеки не кажемо, чи є такий email
-        return {"message": "Якщо email існує, інструкції будуть надіслані."}
+    user = db.execute(select(User).where(User.email == data.email)).scalar_one_or_none()
 
     # Генерація токен
-    token = str(uuid.uuid4())
-    user.reset_token = token
-    db.commit()
+    if user:
+        token = str(uuid.uuid4())
+        user.reset_token = token
+        db.commit()
 
-    # У РЕАЛЬНОМУ ЖИТТІ ТУТ БУДЕ ВІДПРАВКА EMAIL
-    # А поки що ми виводимо токен у логи сервера
-    print(f"======================================")
-    print(f"🔑 ТОКЕН ДЛЯ ВІДНОВЛЕННЯ: {token}")
-    print(f"======================================")
-
-    return {"message": "Інструкції надіслані (перевірте логи сервера)"}
+        # Виводимо в логи (для тестів)
+        print(f"======================================")
+        print(f"🔑 ТОКЕН ДЛЯ ВІДНОВЛЕННЯ: {token}")
+        print(f"======================================")
+    return {"message": "Якщо email існує, інструкції будуть надіслані."}
 
 @router.post("/reset-password")
 def reset_password(data: PasswordResetConfirm, db: Session = Depends(get_db)):
-    user = db.query(User).filter(User.reset_token == data.token).first()
+    # 1. Перевірка довжини нового пароля
+    if len(data.new_password) < 8:
+        raise HTTPException(status_code=400, detail="Пароль занадто короткий (мін. 8 символів)")
+    
+    user = db.execute(select(User).where(User.reset_token == data.token)).scalar_one_or_none()
+
     if not user:
         raise HTTPException(status_code=400, detail="Недійсний або застарілий токен")
 

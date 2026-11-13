@@ -65,4 +65,4 @@ jobs:
       - name: Trigger Portainer Redeploy
         if: success()
         run: |
-          curl -k -X POST "https://app1.homelab.local:9444/api/stacks/webhooks/***REMOVED***"
+          curl -k -X POST "${{ secrets.PORTAINER_WEBHOOK}}"

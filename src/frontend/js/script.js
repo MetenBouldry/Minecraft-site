@@ -637,18 +637,34 @@ if (usersTableBody) {
                 users.forEach(user => {
                     const tr = document.createElement('tr');
 
-                    // Визначаємо, яка кнопка має бути
-                    const actionBtn = user.role === 'admin'
-                        ? `<button class="role-btn" onclick="changeRole(${user.id}, 'user')">Зробити користувачем</button>`
-                        : `<button class="role-btn" onclick="changeRole(${user.id}, 'admin')">Зробити адміністратором</button>`;
-                    
-                    tr.innerHTML = `
-                        <td>${user.id}</td>
-                        <td>${user.username}</td>
-                        <td>${user.email}</td>
-                        <td><strong>${user.role.toUpperCase()}</strong></td>
-                        <td>${actionBtn}</td>
-                    `;
+                    // Створюємо комірки безпечно (без innerHTML)
+                    const tdId = document.createElement('td');
+                    tdId.textContent = user.id;
+
+                    const tdName = document.createElement('td');
+                    const strongName = document.createElement('strong');
+                    strongName.textContent = user.username;
+                    tdName.appendChild(strongName);
+
+                    const tdEmail = document.createElement('td');
+                    tdEmail.textContent = user.email;
+
+                    const tdRole = document.createElement('td');
+                    tdRole.textContent = user.role.toUpperCase();
+
+                    const tdAction = document.createElement('td');
+                    const btn = document.createElement('button');
+                    btn.className = 'role-btn';
+                    btn.textContent = user.role === 'admin' ? 'Зробити користувачем' : 'Зробити адміністратором';
+                    btn.oneclick = () => changeRole(user.id, user.role == 'admin' ? 'user' : 'admin');
+                    tdAction.appendChild(btn);
+
+                    tr.appendChild(tdId);
+                    tr.appendChild(tdName);
+                    tr.appendChild(tdEmail);
+                    tr.appendChild(tdRole);
+                    tr.appendChild(tdAction);
+
                     usersTableBody.appendChild(tr);
                 });
             } catch (error) {
