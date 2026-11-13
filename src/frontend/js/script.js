@@ -656,7 +656,7 @@ if (usersTableBody) {
                     const btn = document.createElement('button');
                     btn.className = 'role-btn';
                     btn.textContent = user.role === 'admin' ? 'Зробити користувачем' : 'Зробити адміністратором';
-                    btn.oneclick = () => changeRole(user.id, user.role == 'admin' ? 'user' : 'admin');
+                    btn.onclick = () => changeRole(user.id, user.role == 'admin' ? 'user' : 'admin');
                     tdAction.appendChild(btn);
 
                     tr.appendChild(tdId);
