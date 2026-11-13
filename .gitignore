@@ -25,3 +25,5 @@ test.db
 *.log
 
 node_modules/
+.env.*
+!.env.example
