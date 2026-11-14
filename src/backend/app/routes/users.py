@@ -8,7 +8,7 @@ import shutil
 from ..database import get_db
 from ..models import User
 from ..schemas import UserResponse, ProfileUpdate
-from ..auth import get_current_user, get_current_admin, verify_password, get_password_hash
+from ..auth import get_current_user, get_current_admin, get_current_owner, verify_password, get_password_hash
 
 router = APIRouter()
 
@@ -31,6 +31,7 @@ def update_user_me(
     # Зміна імені
     if payload.username and payload.username != current_user.username:
         exist = db.execute(select(User).where(User.username == payload.username)).scalar_one_or_none()
+        
         if exist:
             raise HTTPException(status_code=400, detail="Ім'я вже зайняте")
         current_user.username = payload.username
@@ -38,6 +39,7 @@ def update_user_me(
     # Зміна Email
     if payload.email and payload.email != current_user.email:
         exist = db.execute(select(User).where(User.email == payload.email)).scalar_one_or_none()
+        
         if exist:
             raise HTTPException(status_code=400, detail="Email вже зайнято")
         current_user.email = payload.email
@@ -103,7 +105,12 @@ def get_users(db: Session = Depends(get_db), _ = Depends(get_current_admin)):
 
 # 5. Змінити роль користувача (для адмінки)
 @router.patch("/users/{user_id}/role", response_model=UserResponse)
-def  update_user_role(user_id: int, role: str, db: Session = Depends(get_db), _ = Depends(get_current_admin)):
+def  update_user_role(
+    user_id: int, 
+    role: str, 
+    db: Session = Depends(get_db),
+    current_admin: User = Depends(get_current_admin)
+    ):
     user = db.execute(select(User).where(User.id == user_id)).scalar_one_or_none()
 
     if not user:
@@ -116,3 +123,29 @@ def  update_user_role(user_id: int, role: str, db: Session = Depends(get_db), _ 
     db.commit()
     db.refresh(user)
     return user
+
+# 6. Видалити користувача (Тільки Owner)
+@router.delete("/users/{user_id}")
+def delete_user(
+    user_id: int,
+    db: Session = Depends(get_db),
+    current_owner: User = Depends(get_current_owner)
+):
+    user = db.execute(select(User).where(User.id == user_id)).scalar_one_or_none()
+
+    if not user:
+        raise HTTPException(status_code=400, detail="User not found")
+
+    # Захист: власник не може видалити себе
+    if current_owner.id == user.id:
+        raise HTTPException(status_code=400, detail="Ви не можете видалити себе")
+
+    # Видалення аватарки
+    if user.avatar_url:
+        old_path = user.avatar_url.lstrip("/")
+        if os.path_exists(old_path):
+            os.remove(old_path)
+
+            db.delete(user)
+            db.commit()
+            return {"message": "Користувача успішно видалено"}

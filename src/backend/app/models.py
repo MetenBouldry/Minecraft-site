@@ -1,5 +1,5 @@
 from sqlalchemy.orm import Mapped, mapped_column
-from sqlalchemy import Integer, String
+from sqlalchemy import Integer, String, DateTime
 from .database import Base
 from typing import Optional
 
@@ -12,4 +12,7 @@ class User(Base):
     hashed_password: Mapped[str] = mapped_column(String)
     role: Mapped[str] = mapped_column(String, default='user')
     avatar_url: Mapped[Optional[str]] = mapped_column(String, nullable=True)
+
+     # Токен та час його життя
     reset_token: Mapped[Optional[str]] = mapped_column(String, nullable=True)
+    reset_token_expiry: Mapped[Optional[DateTime]] = mapped_column(DateTime, nullable=True)

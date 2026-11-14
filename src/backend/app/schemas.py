@@ -1,10 +1,10 @@
-from pydantic import BaseModel, EmailStr, ConfigDict
+from pydantic import BaseModel, EmailStr, Field, ConfigDict
 from typing import Optional
 
 class UserCreate(BaseModel):
-    username: str
+    username: str = Field(..., min_length=3, max_lenght=20, pattern="^[a-zA-Z0-9_]+$")
     email: EmailStr
-    password: str
+    password: str = Field(..., min_length=8)
 
 class UserLogin(BaseModel):
     username: str
@@ -16,6 +16,7 @@ class UserResponse(BaseModel):
     email: str
     role: str
     avatar_url: Optional[str] = None
+
     model_config = ConfigDict(from_attributes=True)
 
 class Token(BaseModel):
@@ -23,10 +24,10 @@ class Token(BaseModel):
     token_type: str
 
 class ProfileUpdate(BaseModel):
-    username: Optional[str] = None
+    username: Optional[str] = Field(None, min_length=3, max_length=20, pattern="^[a-zA-Z0-9_]+$")
     email: Optional[EmailStr] = None
     current_password: Optional[str] = None
-    new_password: Optional[str] = None
+    new_password: Optional[str] = Field(None, min_length=3)
 
 class PasswordResetRequest(BaseModel):
     email: EmailStr

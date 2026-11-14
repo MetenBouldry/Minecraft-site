@@ -2,7 +2,7 @@ import sqlite3
 import os
 
 # Шлях до бази даних (відносно папки app)
-DB_PATH = "test.db"
+DB_PATH = os.getenv("DATABASE_URL", "sqlite:///./data/app.db").replace("sqlite:///./", "")
 
 def add_column_if_not_exist(cursor, table, column, col_type):
     """Перевіряє, чи існує колонка, і якщо ні — додає її."""
@@ -10,18 +10,15 @@ def add_column_if_not_exist(cursor, table, column, col_type):
     columns = [info[1] for info in cursor.fetchall()]
 
     if column not in columns:
-        print(f"⏳ Додаємо колонку '{column}' у таблицю '{table}'...")
+        print(f"⏳ Додаємо колонку '{column}'...")
         cursor.execute(f"ALTER TABLE {table} ADD COLUMN {column} {col_type}")
-        print(f"✅ Колонку '{column}' успішно додано!")
-    else:
-        print(f"ℹ️ Колонка '{column}' вже існує. Пропуск.")
+        print(f"✅ Додано!")
 
 def run_migrations():
     if not os.path.exists(DB_PATH):
-        print("ℹ️ База даних ще не створена. Вона створиться автоматично при першому запуску.")
+        print("ℹ️ База даних ще не створена.")
         return
 
-    print("🔄 Перевірка оновлень бази даних...")
     conn = sqlite3.connect(DB_PATH)
     cursor = conn.cursor()
 
@@ -30,12 +27,11 @@ def run_migrations():
 
     add_column_if_not_exist(cursor, "users", "avatar_url", "VARCHAR")
     add_column_if_not_exist(cursor, "users", "reset_token", "VARCHAR")
+    add_column_if_not_exist(cursor, "users", "reset_token_expiry", "DATETIME")
 
     # Якщо завтра додаси нову колонку, просто допиши сюди ще один рядок:
     # add_column_if_not_exists(cursor, "users", "bio", "TEXT")
 
     conn.commit()
     conn.close()
-
-if __name__ == "__main__":
-    run_migrations()
+    print("✅ Міграція завершена.")
