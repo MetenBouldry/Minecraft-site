@@ -19,5 +19,5 @@ def check_status(server_name: str) -> dict[str, bool | str]:
         # Підключення до стандартного порту Minecraft
         with socket.create_connection((host, 25565), timeout=2):
             return {"online": True}
-    except (socket.timeout, ConnectionRefusedError, socket.gaierror):
+    except OSError:
         return {"online": False}       
