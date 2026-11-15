@@ -14,14 +14,14 @@ Base.metadata.create_all(bind=engine)
 
 app = FastAPI(title="Minecraft site API")
 
-# Створюємо папку uploads, якщо її немає (це вирішує баг)
+# Створюємо теку uploads, якщо її немає (це вирішує баг)
 os.makedirs("uploads", exist_ok=True)
 app.mount("/uploads", StaticFiles(directory="uploads"), name="uploads")
 
 # CORS(щоб фронт міг робити запити)
 app.add_middleware(
     CORSMiddleware, # type: ignore
-    allow_origins=[
+    allow_origins=[ # type: ignore
         "http://localhost:63342",
         "http://127.0.0.1:5500",
         "http://localhost:5500",

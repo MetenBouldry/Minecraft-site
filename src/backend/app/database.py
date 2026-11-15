@@ -2,7 +2,7 @@ import os
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, declarative_base
 
-# Створюємо папку data, якщо її немає
+# Створюємо теку data, якщо її немає
 os.makedirs("data", exist_ok=True)
 
 # SQLite база даних

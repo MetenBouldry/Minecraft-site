@@ -18,7 +18,7 @@ MAX_FILE_SIZE = 2 * 1024 * 1024
 
 # 1. Отримати дані поточного користувача
 @router.get("/me", response_model=UserResponse)
-def read_user_me(current_user: User = Depends(get_current_user)):
+def read_user_me(current_user: User = Depends(get_current_user)) -> User:
     return current_user
 
 # 2. Оновити дані поточного користувача (Ім'я, Email, Пароль)
@@ -29,8 +29,8 @@ def update_user_me(
     current_user: User = Depends(get_current_user),
 ):
     # Зміна імені
-    if payload.username and payload.username != current_user.username:
-        exist = db.execute(select(User).where(User.username == payload.username)).scalar_one_or_none()
+    if payload.username and str(payload.username) != current_user.username:
+        exist = db.execute(select(User).where(User.username == payload.username)).scalar_one_or_none() # type: ignore
         
         if exist:
             raise HTTPException(status_code=400, detail="Ім'я вже зайняте")
@@ -42,13 +42,13 @@ def update_user_me(
         
         if exist:
             raise HTTPException(status_code=400, detail="Email вже зайнято")
-        current_user.email = payload.email
+        current_user.email = str(payload.email)
 
-    # Зміна паролю
+    # Зміна пароля
     if payload.new_password:
         if not payload.current_password:
             raise HTTPException(status_code=400, detail="Вкажіть поточний пароль")
-        if not verify_password(payload.current_password, current_user.hashed_password):
+        if not verify_password(payload.current_password, str(current_user.hashed_password)):
             raise HTTPException(status_code=400, detail="Невірний поточний пароль")
         if len (payload.new_password) <8:
             raise HTTPException(status_code=400, detail="Пароль занадто короткий(мін. 8 символів)")
@@ -64,9 +64,9 @@ async def upload_avatar(
     file: UploadFile = File(...),
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user)
-):
+) -> User:
     # 1. Перевірка розширення
-    file_ext = os.path.splitext(file.filename)[1].lower()
+    file_ext = os.path.splitext(str(file.filename))[1].lower()
     if file_ext not in ALLOWED_EXTENSIONS:
         raise HTTPException(status_code=400, detail="Дозволені формати: JPG, PNG, WEBP")
 
@@ -79,12 +79,12 @@ async def upload_avatar(
     # 3. Збереження
     unique_filename = f"{uuid.uuid4()}{file_ext}"
     file_path = f"uploads/{unique_filename}"
-    # Створюємо папку uploads, якщо її немає
+    # Створюємо теку uploads, якщо її немає
     os.makedirs("uploads", exist_ok=True)
 
     # Зберігаємо файл
     with open(file_path, "wb") as buffer:
-        shutil.copyfileobj(file.file, buffer)
+        shutil.copyfileobj(file.file, buffer) # type: ignore
 
     # Видаляємо старий аватар, якщо він був
     if current_user.avatar_url:
@@ -100,8 +100,9 @@ async def upload_avatar(
 
 # 4. Отримати всіх користувачів (для адмінки)
 @router.get("/users", response_model=list[UserResponse])
-def get_users(db: Session = Depends(get_db), _ = Depends(get_current_admin)):
-    return db.execute(select(User)).scalars().all()
+def get_users(db: Session = Depends(get_db), _ = Depends(get_current_admin)) -> list[User]:
+    # current_admin не використовується в тілі, але потрібен для перевірки прав
+    return list(db.execute(select(User)).scalars().all())
 
 # 5. Змінити роль користувача (для адмінки)
 @router.patch("/users/{user_id}/role", response_model=UserResponse)
@@ -110,7 +111,7 @@ def  update_user_role(
     role: str, 
     db: Session = Depends(get_db),
     current_admin: User = Depends(get_current_admin)
-    ):
+    ) -> User:
     user = db.execute(select(User).where(User.id == user_id)).scalar_one_or_none()
 
     if not user:
@@ -118,6 +119,12 @@ def  update_user_role(
 
     if role not in ["user", "admin"]:
         raise HTTPException(status_code=400, detail="Invalid role")
+
+    if user.role == "owner":
+        raise HTTPException(status_code=403,detail="Не можна змінити роль власника")
+
+    if user.id == current_admin.id:
+        raise HTTPException(status_code=400, detail="Ви не можете змінити власну роль")
 
     user.role = role
     db.commit()
@@ -130,22 +137,27 @@ def delete_user(
     user_id: int,
     db: Session = Depends(get_db),
     current_owner: User = Depends(get_current_owner)
-):
+) -> dict[str, str]:
     user = db.execute(select(User).where(User.id == user_id)).scalar_one_or_none()
 
+    # 1. Спочатку перевіряємо, чи існує користувач
     if not user:
-        raise HTTPException(status_code=400, detail="User not found")
+        raise HTTPException(status_code=404, detail="User not found")
 
-    # Захист: власник не може видалити себе
+    # 2. Захист: власник не може видалити себе
     if current_owner.id == user.id:
         raise HTTPException(status_code=400, detail="Ви не можете видалити себе")
+
+    # 3. Не можна видалити іншого власника
+    if user.role == "owner":
+        raise HTTPException(status_code=403, detail="Не можна видалити власника")
 
     # Видалення аватарки
     if user.avatar_url:
         old_path = user.avatar_url.lstrip("/")
-        if os.path_exists(old_path):
+        if os.path.exists(old_path):
             os.remove(old_path)
 
-            db.delete(user)
-            db.commit()
-            return {"message": "Користувача успішно видалено"}
+    db.delete(user)
+    db.commit()
+    return {"message": "Користувача успішно видалено"}

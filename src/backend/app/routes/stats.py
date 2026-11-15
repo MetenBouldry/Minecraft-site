@@ -1,11 +1,12 @@
 import os
 import json
+from json import JSONDecodeError
 from fastapi import APIRouter, HTTPException
 from typing import Any
 
 router = APIRouter()
 
-# Базова папка, куди ми підключили /data/minecraft
+# Базова тека, куди ми під'єднали /data/minecraft
 BASE_MC_PATH = "/app/mc-servers"
 
 def get_username(uuid: str, server_data_path: str) -> str:
@@ -20,8 +21,9 @@ def get_username(uuid: str, server_data_path: str) -> str:
                     # Порівнюємо UUID без дефісів (для надійності)
                     if user.get("uuid", "").replace("-", "") == uuid.replace("-", ""):
                         return user.get("name", uuid)
-    except Exception:
-        pass
+    except (OSError, JSONDecodeError) as e:
+        print(f"Помилка читання usercache.json: {e}")
+
     return uuid # Якщо не знайшли — повертаємо UUID
 
 @router.get("/stats/players/{server_name}")
@@ -30,6 +32,7 @@ def get_players_stats(server_name: str) -> list[dict[str, Any]]:
         "terrafirmagreg": "server1",
         "vanilla": "server2"
     }
+
     folder = server_paths.get(server_name.lower())
     if not folder:
         raise HTTPException(status_code=404, detail="Сервер не знайдено")

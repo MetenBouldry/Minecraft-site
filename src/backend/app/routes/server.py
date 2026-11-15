@@ -4,7 +4,7 @@ import socket
 router = APIRouter()
 
 @router.get("/status/{server_name}")
-def check_status(server_name: str):
+def check_status(server_name: str) -> dict[str, bool | str]:
     # Імена контейнерів з твого docker-compose.yml
     servers = {
         "terrafirmagreg": "terragreg",
@@ -19,5 +19,5 @@ def check_status(server_name: str):
         # Підключення до стандартного порту Minecraft
         with socket.create_connection((host, 25565), timeout=2):
             return {"online": True}
-    except Exception:
+    except (socket.timeout, ConnectionRefusedError, socket.gaierror):
         return {"online": False}       

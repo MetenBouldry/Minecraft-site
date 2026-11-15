@@ -1,7 +1,7 @@
 import sqlite3
 import os
 
-# Шлях до бази даних (відносно папки app)
+# Шлях до бази даних (відносно теки app)
 DB_PATH = os.getenv("DATABASE_URL", "sqlite:///./data/app.db").replace("sqlite:///./", "")
 
 def add_column_if_not_exist(cursor, table, column, col_type):
