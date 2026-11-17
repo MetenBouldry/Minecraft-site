@@ -7,16 +7,17 @@ import uuid
 from slowapi import Limiter
 from slowapi.util import get_remote_address
 
+from ..main import limiter
 from ..database import get_db
 from ..models import User
 from ..schemas import UserCreate, Token, UserResponse, PasswordResetRequest, PasswordResetConfirm
 from ..auth import get_password_hash, verify_password, create_access_token, ACCESS_TOKEN_EXPIRE_MINUTES
 
 router = APIRouter()
-limiter = Limiter(key_func=get_remote_address)
 
 @router.post("/register", response_model=UserResponse)
-def register(user:UserCreate, db: Session = Depends(get_db)) -> User:
+@limiter.limit("3/minutes")
+def register(request: Request, user:UserCreate, db: Session = Depends(get_db)) -> User:
     # 1. Перевірка на чинного користувача
     db_user = db.execute(select(User).where((User.username == user.username) | (User.email == user.email))).scalar_one_or_none() # type: ignore
     if db_user:
@@ -48,7 +49,8 @@ def login(request: Request, form_data: OAuth2PasswordRequestForm = Depends(), db
     return {"access_token": access_token, "token_type": "bearer"}
 
 @router.post("/forgot-password")
-def forgot_password(data: PasswordResetRequest, db: Session = Depends(get_db)) -> dict[str, str]:
+@limiter.limit("3/minutes")
+def forgot_password(request: Request, data: PasswordResetRequest, db: Session = Depends(get_db)) -> dict[str, str]:
     user = db.execute(select(User).where(User.email == data.email)).scalar_one_or_none() # type: ignore
 
     # Генерація токен

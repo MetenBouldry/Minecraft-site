@@ -1,5 +1,6 @@
 from sqlalchemy.orm import Mapped, mapped_column
 from sqlalchemy import Integer, String, DateTime
+from datetime import datetime
 from .database import Base
 from typing import Optional
 
@@ -15,4 +16,4 @@ class User(Base):
 
      # Токен та час його життя
     reset_token: Mapped[Optional[str]] = mapped_column(String, nullable=True)
-    reset_token_expiry: Mapped[Optional[DateTime]] = mapped_column(DateTime, nullable=True)
+    reset_token_expiry: Mapped[Optional[datetime]] = mapped_column(DateTime, nullable=True)

@@ -1,9 +1,10 @@
 import os
+import jwt
 from datetime import datetime, timedelta, timezone
 from typing import Optional, Any
 from fastapi import Depends, HTTPException
 from fastapi.security import OAuth2PasswordBearer
-from jose import JWTError, jwt
+from jwt.exceptions import InvalidTokenError
 from sqlalchemy.orm import Session
 from sqlalchemy import select
 from dotenv import load_dotenv
@@ -48,7 +49,7 @@ def get_current_user(token: str = Depends(oauth2_scheme), db: Session = Depends(
         user_id = payload.get("sub")
         if user_id is None:
             raise credentials_exception
-    except JWTError:
+    except InvalidTokenError:
         raise credentials_exception
 
     # СУЧАСНИЙ СТАНДАРТ: select() замість query()

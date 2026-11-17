@@ -1,7 +1,12 @@
 import os
 from fastapi import FastAPI
 from fastapi.staticfiles import StaticFiles
+from slowapi import Limiter, _rate_limit_exceeded_handler
+from slowapi.errors import RateLimitExceeded
+from slowapi.util import get_remote_address
 from starlette.middleware.cors import CORSMiddleware
+
+from .limiter import limiter
 from .migrate import run_migrations
 from .database import engine
 from .models import Base
@@ -12,7 +17,12 @@ run_migrations()
 #Створюємо таблицю в БД(якщо немає)
 Base.metadata.create_all(bind=engine)
 
+# Додаток
 app = FastAPI(title="Minecraft site API")
+
+# ═══════ ЛІМІТЕР ═══════
+app.state.limiter = limiter
+app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
 
 # Створюємо теку uploads, якщо її немає (це вирішує баг)
 os.makedirs("uploads", exist_ok=True)

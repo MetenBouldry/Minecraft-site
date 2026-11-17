@@ -65,4 +65,4 @@ jobs:
       - name: Trigger Portainer Redeploy
         if: success()
         run: |
-          curl -k -X POST "${{ secrets.PORTAINER_WEBHOOK}}"
+          curl -X POST "${{ secrets.PORTAINER_WEBHOOK}}"

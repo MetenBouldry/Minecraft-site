@@ -50,9 +50,6 @@ def update_user_me(
             raise HTTPException(status_code=400, detail="Вкажіть поточний пароль")
         if not verify_password(payload.current_password, str(current_user.hashed_password)):
             raise HTTPException(status_code=400, detail="Невірний поточний пароль")
-        if len (payload.new_password) <8:
-            raise HTTPException(status_code=400, detail="Пароль занадто короткий(мін. 8 символів)")
-        current_user.hashed_password = get_password_hash(payload.new_password)
 
     db.commit()
     db.refresh(current_user)

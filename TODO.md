@@ -1,27 +1,27 @@
 # TODO — Minecraft-site (огляд від 15.11.2026, коміт 02d3fb9)
 
 ## 🔴 1. Критичне
-- [ ] schemas.py:7 — PasswordType скопійовано з UsernameType.
+- [x] schemas.py:7 — PasswordType скопійовано з UsernameType.
       Замінити на: Annotated[str, Field(min_length=8, max_length=128)]
-- [ ] schemas.py:42 — PasswordResetConfirm.new_password: str → PasswordType
-- [ ] schemas.py:1 — видалити зайвий `from dataclasses import field`
-- [ ] users.py:53-54 — прибрати ручну перевірку len < 8 (тепер її робить схема)
+- [x] schemas.py:42 — PasswordResetConfirm.new_password: str → PasswordType
+- [x] schemas.py:1 — видалити зайвий `from dataclasses import field`
+- [x] users.py:53-54 — прибрати ручну перевірку len < 8 (тепер її робить схема)
 
 ## 🟠 2. Важливе
-- [ ] server.py — `except (socket.timeout, ConnectionRefusedError, socket.gaierror)` → `except OSError`
-- [ ] main.py — зареєструвати slowapi:
+- [x] server.py — `except (socket.timeout, ConnectionRefusedError, socket.gaierror)` → `except OSError`
+- [x] main.py — зареєструвати slowapi:
       app.state.limiter = limiter
       app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
-- [ ] Справжній IP за проксі: uvicorn --proxy-headers --forwarded-allow-ips="*"
+- [x] Справжній IP за проксі: uvicorn --proxy-headers --forwarded-allow-ips="*"
       (або CF-Connecting-IP у key_func, якщо за Cloudflare)
-- [ ] Ліміт також на /register і /forgot-password
-- [ ] script.js:163 — querySelectorAll('.lang-toggle') → querySelector('.lang-toggle')
-- [ ] build.yaml:15 — self-hosted runner у публічному репо: зробити репо приватним
+- [x] Ліміт також на /register і /forgot-password
+- [x] script.js:163 — querySelectorAll('.lang-toggle') → querySelector('.lang-toggle')
+- [x] build.yaml:15 — self-hosted runner у публічному репо: зробити репо приватним
       або Settings → Actions → вимагати approval для зовнішніх PR
-- [ ] build.yaml:68 — прибрати `-k` з curl
+- [x] build.yaml:68 — прибрати `-k` з curl
 - [ ] Portainer: volumes на /app/data (БД) і /app/uploads (аватарки).
       Перевірити: після redeploy користувачі й аватарки на місці
-- [ ] requirements.txt: fastapi>=0.115.6, python-multipart>=0.0.18,
+- [x] requirements.txt: fastapi>=0.115.6, python-multipart>=0.0.18,
       python-jose → PyJWT
 
 ## 🟡 3. Дрібниці

@@ -160,7 +160,7 @@ function toggleLangMenu() {
 // Закрити після клацання поза меню
 document.addEventListener('click', (e) => {
     const menu = document.getElementById('langMenu');
-    const toggle = document.querySelectorAll('.lang-toggle');
+    const toggle = document.querySelector('.lang-toggle');
     if (menu && toggle && !menu.contains(e.target) && !toggle.contains(e.target)) {
         menu.classList.remove('show');
     }
