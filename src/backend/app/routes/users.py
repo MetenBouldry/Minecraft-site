@@ -51,6 +51,8 @@ def update_user_me(
         if not verify_password(payload.current_password, str(current_user.hashed_password)):
             raise HTTPException(status_code=400, detail="Невірний поточний пароль")
 
+        current_user.hashed_password = get_password_hash(payload.new_password)
+
     db.commit()
     db.refresh(current_user)
     return current_user

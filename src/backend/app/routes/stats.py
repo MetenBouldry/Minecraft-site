@@ -63,7 +63,7 @@ def get_players_stats(server_name: str) -> list[dict[str, Any]]:
                         "walk_km": round(custom_stats.get("minecraft:walk_one_cm", 0) / 100000, 1),
                         "jumps": custom_stats.get("minecraft:jump", 0)
                     })
-            except Exception as e:
+            except (OSError, JSONDecodeError) as e:
                 print(f"Помилка читання {filename}: {e}")
 
     players.sort(key=lambda x: x["play_time_hours"], reverse=True)

@@ -74,8 +74,12 @@ def reset_password(data: PasswordResetConfirm, db: Session = Depends(get_db)) ->
         raise HTTPException(status_code=400, detail="Недійсний токен")
 
     # Перевірка терміну дії
-    if user.reset_token_expiry and user.reset_token_expiry.replace(tzinfo=timezone.utc) < datetime.now(timezone.utc):
-        raise HTTPException(status_code=400, detail="Термін дії токена витік")
+    if user.reset_token_expiry:
+        expiry = user.reset_token_expiry
+        if isinstance(expiry, str):
+            expiry = datetime.fromisoformat(expiry)
+        if expiry.replace(tzinfo=timezone.utc) < datetime.now(timezone.utc):
+            raise HTTPException(status_code=400, detail="Термін дії токена витік")
 
     # Зміна пароля
     user.hashed_password = get_password_hash(data.new_password)
