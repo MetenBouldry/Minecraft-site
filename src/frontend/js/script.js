@@ -3,7 +3,6 @@
 // ═══════════════════════════════════════
 
 // TODO: замінити на реальні URL, коли буде backend
-const API_URL ='https://minemine.my-work.pp.ua/api';
 
 const SERVERS = [
     { name: 'terrafirmagreg', iconId: 'status-tfg' },
@@ -82,7 +81,6 @@ if (API_URL) {
 //    3. АВТОРИЗАЦІЯ (Підключення до API)
 // ═══════════════════════════════════════════════════════════
 
-const API_BASE_URL = 'https://minemine.my-work.pp.ua/api'; // Базова URL-адреса бекенду
 
 
 

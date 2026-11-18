@@ -1,11 +1,11 @@
 // ═══════════════════════════════════════
-//     АДРЕСА БЕКЕНДУ (одна на весь сайт)
+//     1. АДРЕСА БЕКЕНДУ (одна на весь сайт)
 // ═══════════════════════════════════════
 const API_ORIGIN = `https://minemine.my-work.pp.ua`;
 const API_BASE_URL = `${API_ORIGIN}/api`;
 
 // ═══════════════════════════════════════
-//     СИСТЕМА СПОВІЩЕНЬ (ТОСТИ)
+//     2. СИСТЕМА СПОВІЩЕНЬ (ТОСТИ)
 // ═══════════════════════════════════════
 function showToast(message, type = 'info') {
     // 1. Створюємо контейнер, якщо його ще немає
@@ -52,150 +52,183 @@ function getErrorMessage(data, fallback) {
     if (!data || !data.detail) return fallback;
     if (typeof data.detail == 'string') return data.detail;
     if (Array.isArray(data.detail)) return data.detail.map(e => e.msg).join('; ');
+    return fallback;
 }
 
 // ═══════════════════════════════════════
-//     ПЕРЕМИКАННЯ МОВ (без перезавантаження)
+//     3. ПЕРЕКЛАДИ (i18n)
 // ═══════════════════════════════════════
 
-// Прапорці для кнопок
+// Прапорці мов. Щоб додати мову — додай рядок сюди і в LANG_NAMES
 const FLAGS = {
     uk: 'https://flagcdn.com/24x18/ua.png',
     en: 'https://flagcdn.com/24x18/gb.png'
 };
 
-// Поточні переклади (використовуються й для підказок статусу)
-let translations = {};
+// Назви мов для меню
+const LANG_NAMES = {
+    uk: 'Українська',
+    en: 'English'
+};
 
-// Допоміжна функція: дістає значення з вкладеного об'єкта за шляхом "main.login"
+// Поточні переклади
+let translation = {};
+
+// Дістає значення з вкладеного об'єкта за шляхом "main.login"
 function getNestedValue(obj, path) {
     return path.split('.').reduce((acc, part) => acc && acc[part], obj);
 }
 
-// Функція t() — бере текст з JSON за ключем (тепер підтримує крапки)
-// Якщо ключа немає — повертає fallback (запасний текст)
+// Бере текст з JSON за ключем. Якщо ключа немає — повертає fallback
 function t(key, fallback) {
     const translation = getNestedValue(translations, key);
     return translation || fallback;
 }
 
-// Функція завантаження мови
+// Завантаження та застосування мови
 async function loadLanguage(lang) {
     try {
         const basePath = window.location.pathname.includes('/pages') ? '../' : '';
         const response = await fetch(`${basePath}lang/${lang}.json`);
         const data = await response.json();
 
-        translations = data; // Зберігаємо для функції t()
+        translation = data; // Зберігаємо для функції t()
 
-        // Оновлюємо ВСІ елементи, які мають атрибут data-i18n
+        // Оновлюємо всі елементи з атрибутом data-i18n
         document.querySelectorAll('[data-i18n]').forEach(el => {
             const key = el.getAttribute('data-i18n'); // Наприклад, "main.login"
             const translation = getNestedValue(data, key);
-
             if (translation) {
                 el.textContent = translation;
             }
         });
 
-        // Оновлюємо елементи за ID (якщо вони є, для зворотної сумісності)
-        // (Але краще використовувати тільки data-i18n)
-
         // Мова документа та заголовок вкладки
         document.documentElement.lang = lang;
-        if (data.page && data.page.title) {
+        if (data.page && data.page.title){
             document.title = data.page.title;
         }
 
-        // Оновлення прапорця на іконці
+        // Прапорець на кнопці перемикача
         const currentLangEl = document.getElementById('currentLang');
         if (currentLangEl) {
-            currentLangEl.innerHTML = `<img src="${FLAGS[lang]}" alt="" style="width:20px;height:15px;vertical-align:middle;">`;
+            const flag = document.createElement('img');
+            flag.src = FLAGS[lang];
+            flag.alt = '';
+            currentLangEl.replaceChildren(flag);
         }
 
-        // Запам'ятовування вибору
+        // Запам'ятовуємо вибір
         localStorage.setItem('lang', lang);
 
-        // Оновлення URL(без перезавантаження)
-        const url = new URL(window.location);
-        url.searchParams.set('lang', lang);
+        // Оновлюємо URL (без перезавантаження і без нового запису в історії)
+        const url = new URL(window.location.href);
+        url.searchParams.set('lsng', lang);
         history.replaceState({}, '', url);
 
         // Повідомляємо інші скрипти, що мова змінилася
         // (наприклад, server-status.js оновить підказки статусу)
-        document.dispatchEvent('Помилка завантаження мови', error);
+        document.dispatchEvent(new CustomEvent('languagechance'));
     } catch (error) {
-        console.error('Помилка завантаження мови', error);
-    }
-    
-}
-
-// Функція перемикання(викликається кнопкою)
-function setLang(newLang) {
-    loadLanguage(newLang);
-}
-
-// ═══════════════════════════════════════
-//     ВИЗНАЧЕННЯ МОВИ ПРИ ЗАВАНТАЖЕННІ
-// ═══════════════════════════════════════
-
-document.addEventListener('DOMContentLoaded', () => {
-    let lang;
-
-    //1. URL
-    const params = new URLSearchParams(window.location.search);
-    lang = params.get('lang');
-
-    // 2. З localstorage
-    if (!lang) {
-        lang = localStorage.getItem('lang');
-    }
-
-    // 3. З мови браузера
-    if (!lang) {
-        lang = navigator.language.startsWith('uk') ? 'uk' : 'en';
-    }
-
-    // Типово
-    if (!lang || !FLAGS[lang]) {
-        lang = 'uk';
-    }
-
-    loadLanguage(lang).catch(err => console.error('Помилка завантаження мови', err));
- });
-
- // ═══════════════════════════════════════
-//     МЕНЮ ПЕРЕМИКАННЯ (шторка)
-// ═══════════════════════════════════════
-
-function toggleLangMenu() {
-    const menu = document.getElementById('langMenu');
-    if (menu) {
-        menu.classList.toggle('show');
+        console.error('Помилка завантаження мови', error);       
     }
 }
 
-// Закрити після клацання поза меню
-document.addEventListener('click', (e) => {
-    const menu = document.getElementById('langMenu');
-    const toggle = document.querySelector('.lang-toggle');
-    if (menu && toggle && !menu.contains(e.target) && !toggle.contains(e.target)) {
-        menu.classList.remove('show');
-    }
-});
+// ═══════════════════════════════════════
+//     4. ПЕРЕМИКАЧ МОВ (створюється з JS)
+//     У HTML: <div class="lang-switch" id="langSwitcher"></div>
+// ═══════════════════════════════════════
+function renderLangSwitcher() {
+    const holder = document.getElementById('langSwitcher');
+    if (!holder) return; // на цій сторінці перемикача немає
 
-// ═════════════════════════════════════════════════════
-//         ФУНКЦІЯ ПЕРЕМИКАННЯ ВИДИМОСТІ ПАРОЛЮ
-// ═════════════════════════════════════════════════════
+    // ── Кнопка: [🌐] ▼ ──
+    const toggle = document.createElement('button');
+    toggle.type = 'button';
+    toggle.className = 'lang-toggle';
 
+    const current = document.createElement('span');
+    current.id = 'currentLang'; // сюди loadLanguage() поставить прапорець
+    current.textContent = '🌐';
+
+    toggle.append(current, ' ▼');
+
+    // ── Випадне меню ──
+    const menu = document.createElement('div');
+    menu.className = 'lang-menu';
+    menu.id = 'langMenu';
+
+    // Кнопка для кожної мови з FLAGS
+    Object.keys(FLAGS).forEach(lang => {
+        const btn = document.createElement('button');
+        btn.type = 'button';
+
+        const img = document.createElement('img');
+        img.src = FLAGS[lang];
+        img.alt = '';
+
+        btn.append(img, ' ', LANG_NAMES[lang]);
+        btn.addEventListener('click', () => {
+            loadLanguage(lang);
+            menu.classList.remove('show');
+        });
+
+        menu.appendChild(btn);
+    });
+
+    // Відкрити / закрити меню
+    toggle.addEventListener('click', () => menu.classList.toggle('show'));
+
+    holder.append(toggle, menu);
+}
+
+// ═══════════════════════════════════════
+//     5. ПОКАЗАТИ / СХОВАТИ ПАРОЛЬ
+//     У HTML: onclick="togglePassword('password', this)"
+// ═══════════════════════════════════════
 function togglePassword(inputId, iconElement) {
-    const input = document.getElementById(inputId);
+    const input = /** @type {HTMLInputElement | null} */ (document.getElementById(inputId));
+    if (!input) return;
 
-    if (input.type === 'password'){
+    if (input.type === 'password') {
         input.type = 'text';
-        iconElement.textContent = '🚫'; // закрите вічко. ЗАМІНИТИ!!!!!!!
+        iconElement.textContent = '🚫'; // закрите вічко.
     } else {
         input.type = 'password';
         iconElement.textContent = '👁️';
     }
 }
+
+// ═══════════════════════════════════════
+//     6. ЗАПУСК ПІСЛЯ ЗАВАНТАЖЕННЯ СТОРІНКИ
+// ═══════════════════════════════════════
+document.addEventListener('DOMContentLoaded', () => {
+    // ── 1. Створюємо перемикач мов (до loadLanguage — йому потрібен #currentLang) ──
+    renderLangSwitcher();
+
+    // ── 2. Визначення мови ──
+    // Порядок: URL → localStorage → мова браузера → українська
+    let lang = new URLSearchParams(window.location.search).get('lang')
+        || localStorage.getItem('lang')
+        || (navigator.language.startsWith('uk') ? 'uk' : 'en');
+
+    if (!FLAGS[lang]) {
+        lang = 'uk';
+    }
+    loadLanguage(lang);
+
+    // ── 3. Динамічна шапка (гість / авторизований) ──
+    const guestNav = document.getElementById('guestNav');
+    const authNav = document.getElementById('authNav');
+    const logoutBtn = document.getElementById('logoutBtn');
+
+    if (guestNav && authNav) {
+        const token = localStorage.getItem('token');
+        guestNav.style.display = token ? 'none' : 'flex';
+        authNav.style.display = token ? 'flex' : 'none';
+    }
+
+    if (logoutBtn) {
+        logoutBtn.addEventListener
+    }
+})
