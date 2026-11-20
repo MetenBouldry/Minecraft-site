@@ -1,17 +1,226 @@
 // ═══════════════════════════════════════
+//     ПЕРЕМИКАННЯ МОВ (без перезавантаження)
+// ═══════════════════════════════════════
+
+// Прапорці для кнопок
+const FLAGS = {
+    uk: 'https://flagcdn.com/24x18/ua.png',
+    en: 'https://flagcdn.com/24x18/gb.png'
+};
+
+// ═══════════════════════════════════════
+//     СИСТЕМА СПОВІЩЕНЬ (ТОСТИ)
+// ═══════════════════════════════════════
+function showToast(message, type = 'info') {
+    // 1. Створюємо контейнер, якщо його ще немає
+    let container = document.getElementById('toast-container');
+    if (!container) {
+        container = document.createElement('div');
+        container.id = 'toast-container';
+        document.body.appendChild(container);
+    }
+
+     // 2. Створюємо саме сповіщення
+     const toast = document.createElement('div');
+     toast.className = `toast ${type}`;
+
+     // 3. Вибираємо іконку
+     let icon = 'ℹ️';
+     if (type === 'success') icon = '✅';
+     if (type === 'error') icon = '❌';
+
+     // 4. Наповнюємо HTML
+     toast.innerHTML = `
+        <span class = "toast-icon">${icon}</span>
+        <span class = "toast-message">${message}</span>
+        `;
+
+        // 5. Додаємо на сторінку
+        container.appendChild(toast);
+
+        // 6. Видаляємо через 3 секунди (з анімацією)
+        setTimeout(() => {
+            toast.classList.add('hide');
+            toast.addEventListener('animationend', () => {
+                toast.remove();
+            });
+        }, 3000)
+}
+
+// Поточні переклади (використовуються й для підказок статусу)
+let translations = {};
+
+// Допоміжна функція: дістає значення з вкладеного об'єкта за шляхом "main.login"
+function getNestedValue(obj, path) {
+    return path.split('.').reduce((acc, part) => acc && acc[part], obj);
+}
+
+// Функція t() — бере текст з JSON за ключем (тепер підтримує крапки)
+// Якщо ключа немає — повертає fallback (запасний текст)
+function t(key, fallback) {
+    const translation = getNestedValue(translations, key);
+    return translation || fallback;
+}
+
+// Функція завантаження мови
+async function loadLanguage(lang) {
+    try {
+        const basePath = window.location.pathname.includes('/pages') ? '../' : '';
+        const response = await fetch(`${basePath}lang/${lang}.json`);
+        const data = await response.json();
+
+        translations = data; // Зберігаємо для функції t()
+
+        // Оновлюємо ВСІ елементи, які мають атрибут data-i18n
+        document.querySelectorAll('[data-i18n]').forEach(el => {
+            const key = el.getAttribute('data-i18n'); // Наприклад, "main.login"
+            const translation = getNestedValue(data, key);
+
+            if (translation) {
+                el.textContent = translation;
+            }
+        });
+
+        // Оновлюємо елементи за ID (якщо вони є, для зворотної сумісності)
+        // (Але краще використовувати тільки data-i18n)
+
+        // Мова документа та заголовок вкладки
+        document.documentElement.lang = lang;
+        if (data.page && data.page.title) {
+            document.title = data.page.title;
+        }
+
+        // Підказки статусу відповідно до нової мови
+        refreshStatusTitles();
+
+        // Оновлення прапорця на іконці
+        const currentLangEl = document.getElementById('currentLang');
+        if (currentLangEl) {
+            currentLangEl.innerHTML = `<img src="${FLAGS[lang]}" alt="" style="width:20px;height:15px;vertical-align:middle;">`;
+        }
+
+        // Запам'ятовування вибору
+        localStorage.setItem('lang', lang);
+
+        // Оновлення URL(без перезавантаження)
+        const url = new URL(window.location);
+        url.searchParams.set('lang', lang);
+        history.pushState({}, '', url);
+    } catch (error) {
+        console.error('Помилка завантаження мови', error);
+    }
+    
+}
+
+// Функція перемикання(викликається кнопкою)
+function setLang(newLang) {
+    loadLanguage(newLang).catch(err => console.error('Помилка зміни мов', err));
+}
+
+// ═══════════════════════════════════════
+//     ВИЗНАЧЕННЯ МОВИ ПРИ ЗАВАНТАЖЕННІ
+// ═══════════════════════════════════════
+
+document.addEventListener('DOMContentLoaded', () => {
+    let lang;
+
+    //1. URL
+    const params = new URLSearchParams(window.location.search);
+    lang = params.get('lang');
+
+    // 2. З localstorage
+    if (!lang) {
+        lang = localStorage.getItem('lang');
+    }
+
+    // 3. З мови браузера
+    if (!lang) {
+        lang = navigator.language.startsWith('uk') ? 'uk' : 'en';
+    }
+
+    // Типово
+    if (!lang || !FLAGS[lang]) {
+        lang = 'uk';
+    }
+
+    loadLanguage(lang).catch(err => console.error('Помилка завантаження мови', err));
+ });
+
+ // ═══════════════════════════════════════
+//     МЕНЮ ПЕРЕМИКАННЯ (шторка)
+// ═══════════════════════════════════════
+
+function toggleLangMenu() {
+    const menu = document.getElementById('langMenu');
+    if (menu) {
+        menu.classList.toggle('show');
+    }
+}
+
+// Закрити після клацання поза меню
+document.addEventListener('click', (e) => {
+    const menu = document.getElementById('langMenu');
+    const toggle = document.querySelector('.lang-toggle');
+    if (menu && toggle && !menu.contains(e.target) && !toggle.contains(e.target)) {
+        menu.classList.remove('show');
+    }
+});
+
+// ═════════════════════════════════════════════════════
+//         ФУНКЦІЯ ПЕРЕМИКАННЯ ВИДИМОСТІ ПАРОЛЮ
+// ═════════════════════════════════════════════════════
+
+function togglePassword(inputId, iconElement) {
+    const input = document.getElementById(inputId);
+
+    if (input.type === 'password'){
+        input.type = 'text';
+        iconElement.textContent = '🚫'; // закрите вічко. ЗАМІНИТИ!!!!!!!
+    } else {
+        input.type = 'password';
+        iconElement.textContent = '👁️';
+    }
+}
+
+// ═══════════════════════════════════════
 //         СТАТУС MINECRAFT-СЕРВЕРІВ
 // ═══════════════════════════════════════
 
 // TODO: замінити на реальні URL, коли буде backend
+const API_URL ='https://minemine.my-work.pp.ua/api';
 
+const SERVERS = [
+    { name: 'terrafirmagreg', iconId: 'status-tfg' },
+    { name: 'vanilla', iconId: 'status-vanilla' }
+];
 
+// Стан іконки -> ключ підказки та запасний текст
+const STATUS_TITLES = {
+    online:  ['status-online',  'Online'],
+    offline: ['status-offline', 'Offline'],
+    unknown: ['status-unknown', 'Status unavailable'],
+    checking: ['status-checking', 'Checking...']
+};
 
-
-
-
+function setStatus(icon, state) {
+    icon.classList.remove('online', 'offline', 'checking');
+    if (state !== 'unknown') {
+        icon.classList.add(state);
+    }
+    icon.dataset.state = state;
+    const [key, fallback] = STATUS_TITLES[state];
+    icon.title = t(key, fallback);
+}
 
 // Оновити підказки після зміни мови
-
+function refreshStatusTitles() {
+    SERVERS.forEach(({ iconId }) => {
+        const icon = document.getElementById(iconId);
+        if (icon && icon.dataset.state) {
+            setStatus(icon, icon.dataset.state);
+        }
+    });
+}
 
 // Функція перевірки статусу.
 // Поки backend немає (API_URL порожній) — показуємо нейтральний сірий значок,
@@ -57,8 +266,90 @@ if (API_URL) {
 //    3. АВТОРИЗАЦІЯ (Підключення до API)
 // ═══════════════════════════════════════════════════════════
 
+const API_BASE_URL = 'https://minemine.my-work.pp.ua/api'; // Базова URL-адреса бекенду
 
+// ─────────────────────────────────────────────
+//  3.1. РЕЄСТРАЦІЯ
+// ─────────────────────────────────────────────
 
+// Знаходимо форму реєстрації (якщо ми на сторінці register.html)
+const registerForm = document.getElementById('registerForm');
+
+if (registerForm) {
+    registerForm.addEventListener('submit', async (e) => {
+        e.preventDefault(); // Зупиняємо перезавантаження сторінки
+
+        // Беремо значення з полів
+        const username = document.getElementById('username').value;
+        const email = document.getElementById('email').value;
+        const password = document.getElementById('password').value;
+
+        try {
+            // Відправляємо POST-запит на бекенд (JSON)
+            const response = await fetch(`${API_BASE_URL}/register`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({username, email, password})
+            });
+
+            const data =await response.json();
+
+            if (response.ok) {
+                // Успіх — показуємо повідомлення і переходимо на логін
+                showToast(t('alert.reg_success', 'Реєстрація успішна!'), 'success');
+                window.location.href = 'login.html';
+            } else {
+                // Помилка — показуємо текст з сервера
+                showToast(t('alert.reg_error', 'Помилка') + ': ' + (data.detail || t('alert.unknown_error', 'Невідома помилка')), 'error');
+            }
+        } catch (error) {
+            // Помилка з'єднання (сервер не запущений)
+            console.error(error);
+            showToast(t('alert.connection_error', 'Помилка з\'єднання з сервером'), 'error');
+
+        }
+    });
+}
+
+// ─────────────────────────────────────────────
+//  3.2. ВХІД (ЛОГІН)
+// ─────────────────────────────────────────────
+
+// Знаходимо форму входу (якщо ми на сторінці login.html)
+const loginForm = document.getElementById('loginForm');
+
+if (loginForm) {
+    loginForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+        const username = document.getElementById('loginUsername').value;
+        const password = document.getElementById('loginPassword').value;
+
+        try {
+            // Відправляємо POST-запит на бекенд (form-data)
+            const response = await fetch(`${API_BASE_URL}/login`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                body: new URLSearchParams({username, password})
+            });
+
+            const data = await response.json();
+
+            if (response.ok) {
+                // Успіх — зберігаємо токен у localStorage
+                localStorage.setItem('token', data.access_token);
+                // alert(t('login-success', 'Вхід успішний!'));
+                window.location.href = '../index.html';
+            } else {
+                // Помилка — показуємо текст з сервера
+                showToast(t('alert.login_error', 'Невірний логін або пароль'), 'error');
+            }
+        } catch (error) {
+            console.error(error);
+            showToast(t('alert.connection_error', 'Помилка з\'єднання з сервером'), 'error');
+        }
+    });
+}
 
 // ─────────────────────────────────────────────
 //  3.3. НАЛАШТУВАННЯ (ПРОФІЛЬ)
@@ -319,7 +610,7 @@ document.addEventListener('DOMContentLoaded', () => {
 //    6. АДМІН-ПАНЕЛЬ
 // ═══════════════════════════════════════════════════════════
 
-
+const usersTableBody = document.getElementById('usersTableBody');
 
 if (usersTableBody) {
     const token = localStorage.getItem('token');
@@ -408,3 +699,74 @@ if (usersTableBody) {
     }
 }
 
+// ═══════════════════════════════════════════════════════════
+//    7. ВІДНОВЛЕННЯ ПАРОЛЮ
+// ═══════════════════════════════════════════════════════════
+
+const forgotForm = document.getElementById('forgotForm');
+const resetForm = document.getElementById('resetForm');
+
+if (forgotForm) {
+    // Крок 1: Запит токена (введення Email)
+    forgotForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const email = document.getElementById('resetEmail').value;
+
+        try {
+            const response = await fetch(`${API_BASE_URL}/forgot-password`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email })
+            });
+            const data = await response.json();
+
+            if (response.ok) {
+                // Показуємо повідомлення, що токен створено
+                const msg = document.getElementById('forgotMessage');
+                msg.textContent = "Токен створено! Перевірте логи Docker (Portainer).";
+                msg.style.display = 'block';
+
+                // Показуємо другу форму для введення токена
+                resetForm.style.display = 'flex';
+            } else {
+                showToast(data.detail || t('alert.error', 'Помилка'), 'error');
+            }
+        } catch (err) {
+            showToast(t('alert.connection_error', 'Помилка з\'єднання з сервером'), 'error');
+        }
+    });
+
+    // Крок 2: Зміна паролю (введення токена та нового паролю)
+    resetForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const token = document.getElementById('resetToken').value;
+        const new_password = document.getElementById('newPasswordReset').value;
+
+        try {
+            const response = await fetch(`${API_BASE_URL}/reset-password`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ token, new_password})
+            });
+            const data = await response.json();
+
+            if (response.ok) {
+                showToast(t('alert.success_password1','Пароль успішно змінено! Тепер можете увійти.'), 'success');
+                window.location.href = 'login.html';
+            } else {
+                showToast(data.detail || t('alert.change_password_error', 'Помилка зміни паролю'), 'error');
+            }
+        } catch (err) {
+            showToast(t('alert.connection_error', 'Помилка з\'єднання з сервером'), 'error');
+        }
+    });
+        
+    
+}
+
+// Закрити меню при кліку на будь-яке посилання в ньому
+document.querySelectorAll('.lang-menu button').forEach(btn => {
+    btn.addEventListener('click', () => {
+        document.getElementById('langMenu').classList.remove('show');
+    });
+});
