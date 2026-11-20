@@ -4,38 +4,14 @@
 
 // TODO: замінити на реальні URL, коли буде backend
 
-const SERVERS = [
-    { name: 'terrafirmagreg', iconId: 'status-tfg' },
-    { name: 'vanilla', iconId: 'status-vanilla' }
-];
 
-// Стан іконки -> ключ підказки та запасний текст
-const STATUS_TITLES = {
-    online:  ['status-online',  'Online'],
-    offline: ['status-offline', 'Offline'],
-    unknown: ['status-unknown', 'Status unavailable'],
-    checking: ['status-checking', 'Checking...']
-};
 
-function setStatus(icon, state) {
-    icon.classList.remove('online', 'offline', 'checking');
-    if (state !== 'unknown') {
-        icon.classList.add(state);
-    }
-    icon.dataset.state = state;
-    const [key, fallback] = STATUS_TITLES[state];
-    icon.title = t(key, fallback);
-}
+
+
+
 
 // Оновити підказки після зміни мови
-function refreshStatusTitles() {
-    SERVERS.forEach(({ iconId }) => {
-        const icon = document.getElementById(iconId);
-        if (icon && icon.dataset.state) {
-            setStatus(icon, icon.dataset.state);
-        }
-    });
-}
+
 
 // Функція перевірки статусу.
 // Поки backend немає (API_URL порожній) — показуємо нейтральний сірий значок,
@@ -343,7 +319,7 @@ document.addEventListener('DOMContentLoaded', () => {
 //    6. АДМІН-ПАНЕЛЬ
 // ═══════════════════════════════════════════════════════════
 
-const usersTableBody = document.getElementById('usersTableBody');
+
 
 if (usersTableBody) {
     const token = localStorage.getItem('token');

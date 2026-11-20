@@ -107,7 +107,9 @@
     "login_error": "Incorrect username or password",
     "settings_saved": "The data has been successfully updated!",
     "big_file": "The file is too large! The maximum size is 2 MB.",
-    "access_denied": "You do not have permission to view this page."
+    "access_denied": "You do not have permission to view this page.",
+    "too_many_requests": "Too many requests",
+    "token_created": "The token has been created! Check the Docker (Portainer) logs."
     }
 }
 

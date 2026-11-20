@@ -1,7 +1,16 @@
-// ─────────────────────────────────────────────
-//  3.1. РЕЄСТРАЦІЯ
-// ─────────────────────────────────────────────
+// ═══════════════════════════════════════════════════════════
+//    AUTH.JS — вхід, реєстрація, відновлення пароля
+//    Сторінки: register.html, login.html, forgot-password.html
+//    Потребує: core.js (API_BASE_URL, t, showToast, getErrorMessage,
+//              getInputValue, readJson)
+// ═══════════════════════════════════════════════════════════
 
+// Затримка перед переходом на іншу сторінку (щоб встигнути прочитати тост)
+const REDIRECT_DELAY = 1500;
+
+// ─────────────────────────────────────────────
+//  1. РЕЄСТРАЦІЯ (register.html)
+// ─────────────────────────────────────────────
 // Знаходимо форму реєстрації (якщо ми на сторінці register.html)
 const registerForm = document.getElementById('registerForm');
 
@@ -9,10 +18,10 @@ if (registerForm) {
     registerForm.addEventListener('submit', async (e) => {
         e.preventDefault(); // Зупиняємо перезавантаження сторінки
 
-        // Беремо значення з полів
-        const username = document.getElementById('username').value;
-        const email = document.getElementById('email').value;
-        const password = document.getElementById('password').value;
+        // Беремо значення з полів (пароль НЕ обрізаємо — пробіли можуть бути його частиною)
+        const username = getInputValue('username').trim();
+        const email = getInputValue('email').trim();
+        const password = getInputValue('password');
 
         try {
             // Відправляємо POST-запит на бекенд (JSON)
@@ -21,28 +30,28 @@ if (registerForm) {
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({username, email, password})
             });
-
-            const data =await response.json();
+            const data = await readJson(response);
 
             if (response.ok) {
                 // Успіх — показуємо повідомлення і переходимо на логін
                 showToast(t('alert.reg_success', 'Реєстрація успішна!'), 'success');
-                window.location.href = 'login.html';
+                setTimeout(() => {window.location.href = 'login.html'; }, REDIRECT_DELAY);
+            } else if (response.status === 429) {
+                showToast(t('alert.too_many_requests', 'Забагато спроб. Спробуйте за хвилину.'), 'error');
             } else {
-                // Помилка — показуємо текст з сервера
-                showToast(t('alert.reg_error', 'Помилка') + ': ' + (data.detail || t('alert.unknown_error', 'Невідома помилка')), 'error');
+                const message = getErrorMessage(data, t('alert.unknown_error', 'Невідома помилка'));
+                showToast(t('alert.reg_error', 'Помилка реєстрації') + ': ' + message, 'error');
             }
         } catch (error) {
             // Помилка з'єднання (сервер не запущений)
             console.error(error);
             showToast(t('alert.connection_error', 'Помилка з\'єднання з сервером'), 'error');
-
         }
     });
 }
 
 // ─────────────────────────────────────────────
-//  3.2. ВХІД (ЛОГІН)
+//  2. ВХІД (login.html)
 // ─────────────────────────────────────────────
 
 // Знаходимо форму входу (якщо ми на сторінці login.html)
@@ -52,25 +61,25 @@ if (loginForm) {
     loginForm.addEventListener('submit', async (e) => {
         e.preventDefault();
 
-        const username = document.getElementById('loginUsername').value;
-        const password = document.getElementById('loginPassword').value;
+        const username = getInputValue('loginUsername').trim();
+        const password = getInputValue('loginPassword');
 
         try {
-            // Відправляємо POST-запит на бекенд (form-data)
+            // Бекенд чекає form-data (стандарт OAuth2), а не JSON
             const response = await fetch(`${API_BASE_URL}/login`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
                 body: new URLSearchParams({username, password})
             });
-
-            const data = await response.json();
+            const data = await readJson(response);
 
             if (response.ok) {
                 // Успіх — зберігаємо токен у localStorage
                 localStorage.setItem('token', data.access_token);
-                // alert(t('login-success', 'Вхід успішний!'));
                 window.location.href = '../index.html';
-            } else {
+            } else if (response.status === 429) {
+                showToast(t('alert.too_many_requests', 'Забагато спроб. Спробуйте за хвилину.'), 'error');
+            } else{
                 // Помилка — показуємо текст з сервера
                 showToast(t('alert.login_error', 'Невірний логін або пароль'), 'error');
             }
@@ -81,18 +90,17 @@ if (loginForm) {
     });
 }
 
-// ═══════════════════════════════════════════════════════════
-//    7. ВІДНОВЛЕННЯ ПАРОЛЮ
-// ═══════════════════════════════════════════════════════════
-
+// ─────────────────────────────────────────────
+//  3. ВІДНОВЛЕННЯ ПАРОЛЯ (forgot-password.html)
+// ─────────────────────────────────────────────
 const forgotForm = document.getElementById('forgotForm');
 const resetForm = document.getElementById('resetForm');
 
-if (forgotForm) {
+if (forgotForm && resetForm) {
     // Крок 1: Запит токена (введення Email)
     forgotForm.addEventListener('submit', async (e) => {
         e.preventDefault();
-        const email = document.getElementById('resetEmail').value;
+        const email = getInputValue('resetEmail').trim();
 
         try {
             const response = await fetch(`${API_BASE_URL}/forgot-password`, {
@@ -100,29 +108,35 @@ if (forgotForm) {
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ email })
             });
-            const data = await response.json();
+            const data = await readJson(response);
 
             if (response.ok) {
-                // Показуємо повідомлення, що токен створено
+                // Повідомлення, що токен створено
                 const msg = document.getElementById('forgotMessage');
-                msg.textContent = "Токен створено! Перевірте логи Docker (Portainer).";
-                msg.style.display = 'block';
+                if (msg) {
+                    msg.textContent = t('alert.token_created', 'Токен створено! Перевірте логи Docker (Portainer).');
+                    msg.style.display = 'block';
+                }
+                
 
                 // Показуємо другу форму для введення токена
                 resetForm.style.display = 'flex';
+            } else if (response.status ===429) {
+                showToast(t('alert.too_many_requests', 'Забагато спроб. Спробуйте за хвилину.'), 'error');
             } else {
-                showToast(data.detail || t('alert.error', 'Помилка'), 'error');
+                showToast(getErrorMessage(data, t('alert.error', 'Помилка')), 'error');
             }
         } catch (err) {
+            console.error(err);
             showToast(t('alert.connection_error', 'Помилка з\'єднання з сервером'), 'error');
         }
     });
 
-    // Крок 2: Зміна паролю (введення токена та нового паролю)
+    // ── Крок 2: новий пароль (токен + пароль) ──
     resetForm.addEventListener('submit', async (e) => {
         e.preventDefault();
-        const token = document.getElementById('resetToken').value;
-        const new_password = document.getElementById('newPasswordReset').value;
+        const token = getInputValue('resetToken').trim();
+        const new_password = getInputValue('newPasswordReset');
 
         try {
             const response = await fetch(`${API_BASE_URL}/reset-password`, {
@@ -130,25 +144,17 @@ if (forgotForm) {
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ token, new_password})
             });
-            const data = await response.json();
+            const data = await readJson(response);
 
             if (response.ok) {
                 showToast(t('alert.success_password1','Пароль успішно змінено! Тепер можете увійти.'), 'success');
-                window.location.href = 'login.html';
+                setTimeout(() => {window.location.href = 'login.html';}, REDIRECT_DELAY);
             } else {
-                showToast(data.detail || t('alert.change_password_error', 'Помилка зміни паролю'), 'error');
+                showToast(getErrorMessage(data, t('alert.change_password_error', 'Помилка зміни паролю')), 'error');
             }
         } catch (err) {
+            console.error(err);
             showToast(t('alert.connection_error', 'Помилка з\'єднання з сервером'), 'error');
         }
-    });
-        
-    
+    });    
 }
-
-// Закрити меню при кліку на будь-яке посилання в ньому
-document.querySelectorAll('.lang-menu button').forEach(btn => {
-    btn.addEventListener('click', () => {
-        document.getElementById('langMenu').classList.remove('show');
-    });
-});

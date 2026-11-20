@@ -50,9 +50,39 @@ function showToast(message, type = 'info') {
 // FastAPI повертає detail як рядок, а помилки валідації (422) — як масив
 function getErrorMessage(data, fallback) {
     if (!data || !data.detail) return fallback;
-    if (typeof data.detail == 'string') return data.detail;
+    if (typeof data.detail === 'string') return data.detail;
     if (Array.isArray(data.detail)) return data.detail.map(e => e.msg).join('; ');
     return fallback;
+}
+
+// Значення поля введення за id (порожній рядок, якщо поля немає)
+function getInputValue(id) {
+    const input = /** @type {HTMLInputElement | null} */ (document.getElementById(id));
+    return input ? input.value: '';
+}
+
+// Безпечно читає JSON з відповіді (якщо сервер повернув не JSON — порожній об'єкт)
+async function readJson(response) {
+    try {
+        return await response.json();
+    } catch {
+        return {};
+    }
+}
+
+// Токен входу. Якщо його немає — перенаправляє на сторінку входу.
+// (Використовується на сторінках у /pages, тому шлях 'login.html')
+function requireToken() {
+    const token = localStorage.getItem('token');
+    if (!token) {
+        window.location.href = 'login.html';
+    }
+    return token;
+}
+
+// Заголовок авторизації для запитів до API
+function authHeaders() {
+    return { 'Authorization': 'Bearer ' + localStorage.getItem('token') };
 }
 
 // ═══════════════════════════════════════
@@ -72,7 +102,7 @@ const LANG_NAMES = {
 };
 
 // Поточні переклади
-let translation = {};
+let translations = {};
 
 // Дістає значення з вкладеного об'єкта за шляхом "main.login"
 function getNestedValue(obj, path) {
@@ -92,7 +122,7 @@ async function loadLanguage(lang) {
         const response = await fetch(`${basePath}lang/${lang}.json`);
         const data = await response.json();
 
-        translation = data; // Зберігаємо для функції t()
+        translations = data; // Зберігаємо для функції t()
 
         // Оновлюємо всі елементи з атрибутом data-i18n
         document.querySelectorAll('[data-i18n]').forEach(el => {
@@ -123,12 +153,12 @@ async function loadLanguage(lang) {
 
         // Оновлюємо URL (без перезавантаження і без нового запису в історії)
         const url = new URL(window.location.href);
-        url.searchParams.set('lsng', lang);
+        url.searchParams.set('lang', lang);
         history.replaceState({}, '', url);
 
         // Повідомляємо інші скрипти, що мова змінилася
         // (наприклад, server-status.js оновить підказки статусу)
-        document.dispatchEvent(new CustomEvent('languagechance'));
+        document.dispatchEvent(new CustomEvent('languagechange'));
     } catch (error) {
         console.error('Помилка завантаження мови', error);       
     }
@@ -182,6 +212,16 @@ function renderLangSwitcher() {
     holder.append(toggle, menu);
 }
 
+// Закрити меню після клацання поза ним
+document.addEventListener('click', (e) => {
+    const menu = document.getElementById('langMenu');
+    const toggle = document.querySelector('.lang-toggle');
+    const target = /** @type {Node} */ (e.target);
+    if (menu && toggle && !menu.contains(target) && !toggle.contains(target)) {
+        menu.classList.remove('show');
+    }
+});
+
 // ═══════════════════════════════════════
 //     5. ПОКАЗАТИ / СХОВАТИ ПАРОЛЬ
 //     У HTML: onclick="togglePassword('password', this)"
@@ -229,6 +269,11 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     if (logoutBtn) {
-        logoutBtn.addEventListener
+        logoutBtn.addEventListener('click', (e)  => {
+            e.preventDefault();
+            localStorage.removeItem('token');
+            const isSubPage = window.location.pathname.includes('/pages');
+            window.location.href = isSubPage ? '../index.html' : 'index.html';
+        });
     }
-})
+});
