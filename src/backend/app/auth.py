@@ -8,10 +8,11 @@ from jwt.exceptions import InvalidTokenError
 from sqlalchemy.orm import Session
 from sqlalchemy import select
 from dotenv import load_dotenv
+from pwdlib import PasswordHash
 
 from .database import get_db
 from .models import User
-from pwdlib import PasswordHash
+from .roles import role_level
 
 # Завантажуємо .env для локальної розробки
 load_dotenv()
@@ -59,15 +60,14 @@ def get_current_user(token: str = Depends(oauth2_scheme), db: Session = Depends(
         raise credentials_exception
     return user
 
-def get_current_admin(current_user: User = Depends(get_current_user)) -> User:
-    if current_user.role not in ["admin", "owner"]:
-        raise HTTPException(status_code=403, detail="Not enough permission")
-    return current_user
+def require_role(min_role: str):
+    """Створює перевірку: користувач має роль не нижче за min_role."""
+    def checker(current_user: User = Depends(get_current_user)) -> User:
+        if role_level(current_user.role) < role_level(min_role):
+            raise HTTPException(status_code=403, detail="Not enough permission")
+        return current_user
+    return checker
 
-
-def get_current_owner(current_user: User = Depends(get_current_user)) -> User:
-    # Тільки Власник
-    if current_user.role != "owner":
-        raise HTTPException(status_code=403, detail="Only owner can do this")
-    return current_user
-
+# Старі назви залишаються — роути в users.py міняти не треба
+get_current_admin = require_role("admin")
+get_current_owner = require_role("owner")
