@@ -14,7 +14,7 @@ jobs:
   build:
     # збірка на серверах GitHub (Безоплатно для публічних)
     # На сервер образ потрапляє через watchtower
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
     permissions:
       contents: write
       packages: write
