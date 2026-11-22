@@ -12,6 +12,8 @@ env:
 
 jobs:
   build:
+    # збірка на серверах GitHub (Безоплатно для публічних)
+    # На сервер образ потрапляє через watchtower
     runs-on: self-hosted
     permissions:
       contents: write
@@ -61,8 +63,3 @@ jobs:
         if: startsWith(github.ref, 'refs/tags/')
         with:
           files: docker-info.txt
-
-      - name: Trigger Portainer Redeploy
-        if: success()
-        run: |
-          curl -X POST "${{ secrets.PORTAINER_WEBHOOK}}"
