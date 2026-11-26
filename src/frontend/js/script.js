@@ -187,7 +187,7 @@ function togglePassword(inputId, iconElement) {
 // ═══════════════════════════════════════
 
 // TODO: замінити на реальні URL, коли буде backend
-const API_URL ='https://minemine.my-work.pp.ua/api';
+const API_URL ='https://core-back.metlab.pp.ua/api';
 
 const SERVERS = [
     { name: 'terrafirmagreg', iconId: 'status-tfg' },
