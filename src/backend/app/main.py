@@ -35,7 +35,8 @@ app.add_middleware(
         "http://localhost:63342",
         "http://127.0.0.1:5500",
         "http://localhost:5500",
-        "https://minecraft.my-work.pp.ua",  
+        "https://metlab.pp.ua",
+        "https://minecraft.metlab.pp.ua/",  
         "https://minecraft-site-ac7.pages.dev"
     ], # type: ignore
     allow_credentials=True, # type: ignore

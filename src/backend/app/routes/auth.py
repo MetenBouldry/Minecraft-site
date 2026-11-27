@@ -16,7 +16,7 @@ from ..auth import get_password_hash, verify_password, create_access_token, ACCE
 router = APIRouter()
 
 @router.post("/register", response_model=UserResponse)
-@limiter.limit("3/minutes")
+@limiter.limit("3/minute")
 def register(request: Request, user:UserCreate, db: Session = Depends(get_db)) -> User:
     # 1. Перевірка на чинного користувача
     db_user = db.execute(select(User).where((User.username == user.username) | (User.email == user.email))).scalar_one_or_none() # type: ignore
@@ -49,7 +49,7 @@ def login(request: Request, form_data: OAuth2PasswordRequestForm = Depends(), db
     return {"access_token": access_token, "token_type": "bearer"}
 
 @router.post("/forgot-password")
-@limiter.limit("3/minutes")
+@limiter.limit("3/minute")
 def forgot_password(request: Request, data: PasswordResetRequest, db: Session = Depends(get_db)) -> dict[str, str]:
     user = db.execute(select(User).where(User.email == data.email)).scalar_one_or_none() # type: ignore
 

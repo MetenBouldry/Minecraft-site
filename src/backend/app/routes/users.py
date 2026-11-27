@@ -9,6 +9,7 @@ from ..database import get_db
 from ..models import User
 from ..schemas import UserResponse, ProfileUpdate
 from ..auth import get_current_user, get_current_admin, get_current_owner, verify_password, get_password_hash
+from ..roles import ASSIGNABLE_ROLES, role_level
 
 router = APIRouter()
 
@@ -116,14 +117,22 @@ def  update_user_role(
     if not user:
         raise HTTPException(status_code=404, detail="User not found")
 
-    if role not in ["user", "admin"]:
+    if role not in ASSIGNABLE_ROLES:
         raise HTTPException(status_code=400, detail="Invalid role")
 
-    if user.role == "owner":
-        raise HTTPException(status_code=403,detail="Не можна змінити роль власника")
-
+    # Перевірка рівня ролі
     if user.id == current_admin.id:
-        raise HTTPException(status_code=400, detail="Ви не можете змінити власну роль")
+        raise HTTPException(status_code=400, detail="Ви не можете змінити свою роль")
+
+    my_level = role_level(current_admin.role)
+
+    # Правило 1: змінювати можна лише тих, хто нижче за тебе
+    if role_level(user.role) >= my_level:
+        raise HTTPException(status_code=403, detail="Не можна змінити роль користувача з рівними або вищими правами")
+    
+    # Правило 2: видавати можна лише ролі, нижчі за свою
+    if role_level(role) >= my_level:
+        raise HTTPException(status_code=403, detail="Не можна видати роль, рівну або вищу за свою")
 
     user.role = role
     db.commit()
@@ -160,3 +169,9 @@ def delete_user(
     db.delete(user)
     db.commit()
     return {"message": "Користувача успішно видалено"}
+
+    # 7. Ролі, які поточний адмін може видавати (для випадного списку в адмінці)
+    @router.get("/roles")
+    def get_assignable_roles(current_admin: User = Depends(get_current_admin)) -> list[str]:
+        my_level = role_level(current_admin.role)
+        return [r for r in ASSIGNABLE_ROLES if role_level(r) < my_level]

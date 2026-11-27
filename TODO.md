@@ -11,25 +11,25 @@
 
 ## Блок 1. Чому зависає робочий ноут (необов'язково)
 
-- [ ] Диспетчер завдань (Ctrl+Shift+Esc) → вкладка «Продуктивність»:
+- [x] Диспетчер завдань (Ctrl+Shift+Esc) → вкладка «Продуктивність»:
       що на 100% під час зависання — ЦП, Пам'ять чи Диск?
-- [ ] Якщо Диск 100% → найімовірніше старий HDD.
+- [x] Якщо Диск 100% → найімовірніше старий HDD.
       Рішення: SSD (найбільший приріст швидкості для старих ноутбуків)
-- [ ] Якщо Пам'ять → закрити зайве, перевірити автозапуск
+- [x] Якщо Пам'ять → закрити зайве, перевірити автозапуск
       (Диспетчер → «Автозавантаження» → вимкнути непотрібне)
-- [ ] Якщо ЦП + ноут гарячий → чистка від пилу, заміна термопасти
-- [ ] Антивірус: повна перевірка один раз, потім подивитись,
+- [x] Якщо ЦП + ноут гарячий → чистка від пилу, заміна термопасти
+- [x] Антивірус: повна перевірка один раз, потім подивитись,
       чи він сам не вантажить систему
 
 ---
 
 ## Блок 2. Сайт на мій домен
 
-- [ ] Cloudflare → Workers & Pages → знайти проєкт minecraft-site
-- [ ] Перевірити: проєкт у ТОМУ Ж акаунті, що й metlab.pp.ua?
+- [x] Cloudflare → Workers & Pages → знайти проєкт minecraft-site
+- [x] Перевірити: проєкт у ТОМУ Ж акаунті, що й metlab.pp.ua?
       (якщо ні — напишу, як перенести)
-- [ ] Проєкт → Custom domains → Set up a custom domain → metlab.pp.ua
-- [ ] Почекати кілька хвилин → відкрити https://metlab.pp.ua
+- [x] Проєкт → Custom domains → Set up a custom domain → metlab.pp.ua
+- [x] Почекати кілька хвилин → відкрити https://metlab.pp.ua
       Сайт відкривається, але API поки "помилка з'єднання" — це нормально,
       URL змінимо в блоці 3
 
@@ -38,20 +38,20 @@
 ## Блок 3. Міняємо URL + перший реліз
 
 ### 3.1. Підготувати комп'ютер (якщо VS Code / Python видалені)
-- [ ] Встановити VS Code
-- [ ] Встановити Python 3.15 з python.org (звичайний інсталятор,
+- [x] Встановити VS Code
+- [x] Встановити Python 3.15 з python.org (звичайний інсталятор,
       галочка «Add to PATH»)
-- [ ] git clone https://github.com/MetenBouldry/Minecraft-site D:\Project\Minecraft-site
-- [ ] git checkout refactor/split-js
-- [ ] cd src\backend → python -m venv .venv → .venv\Scripts\Activate.ps1
-- [ ] pip install -r requirements.txt
-- [ ] Покласти .env (SECRET_KEY) у src\backend — завантажити з сервера
+- [x] git clone https://github.com/MetenBouldry/Minecraft-site D:\Project\Minecraft-site
+- [x] git checkout refactor/split-js
+- [x] cd src\backend → python -m venv .venv → .venv\Scripts\Activate.ps1
+- [x] pip install -r requirements.txt
+- [x] Покласти .env (SECRET_KEY) у src\backend — завантажити з сервера
       через filebrowser (site/src/backend/.env)
 
 ### 3.2. Бекенд
-- [ ] requirements.txt → UTF-8:
+- [x] requirements.txt → UTF-8:
       Set-Content -Encoding ascii requirements.txt (Get-Content requirements.txt)
-- [ ] main.py → allow_origins → додати "https://metlab.pp.ua"
+- [x] main.py → allow_origins → додати "https://metlab.pp.ua"
 - [ ] Запустити локально: uvicorn app.main:app --reload → без помилок
 
 ### 3.3. База — ПЕРЕД релізом!
