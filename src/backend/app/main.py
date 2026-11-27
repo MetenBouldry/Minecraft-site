@@ -10,7 +10,7 @@ from .database import engine
 from .limiter import limiter
 from .migrate import run_migrations
 from .models import Base
-from .routes import auth, server, stats, users
+from .routes import auth, logs, server, stats, users
 
 # ═══════ ВИКЛИК МІГРАЦІЇ ═══════
 run_migrations()
@@ -36,7 +36,7 @@ app.add_middleware(
         "http://127.0.0.1:5500",
         "http://localhost:5500",
         "https://metlab.pp.ua",
-        "https://minecraft.metlab.pp.ua/",  
+        "https://minecraft.metlab.pp.ua",  
         "https://minecraft-site-ac7.pages.dev"
     ], # type: ignore
     allow_credentials=True, # type: ignore
@@ -49,6 +49,7 @@ app.include_router(auth.router, prefix="/api", tags=["Auth"])
 app.include_router(users.router, prefix="/api", tags=["User"])
 app.include_router(server.router, prefix="/api", tags=["Server"])
 app.include_router(stats.router, prefix="/api", tags=["Stats"])
+app.include_router(logs.router, prefix="/api", tags=["Logs"])
 
 @app.get("/")
 def root():

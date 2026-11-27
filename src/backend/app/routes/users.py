@@ -177,8 +177,8 @@ def delete_user(
     db.commit()
     return {"message": "Користувача успішно видалено"}
 
-    # 7. Ролі, які поточний адмін може видавати (для випадного списку в адмінці)
-    @router.get("/roles")
-    def get_assignable_roles(current_admin: User = Depends(get_current_admin)) -> list[str]:
-        my_level = role_level(current_admin.role)
-        return [r for r in ASSIGNABLE_ROLES if role_level(r) < my_level]
+# 7. Ролі, які поточний адмін може видавати (для випадного списку в адмінці)
+@router.get("/roles")
+def get_assignable_roles(current_admin: User = Depends(get_current_admin)) -> list[str]:
+    my_level = role_level(current_admin.role)
+    return [r for r in ASSIGNABLE_ROLES if role_level(r) < my_level]

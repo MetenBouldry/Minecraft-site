@@ -1,7 +1,7 @@
 // ═══════════════════════════════════════
 //     1. АДРЕСА БЕКЕНДУ (одна на весь сайт)
 // ═══════════════════════════════════════
-const API_ORIGIN = `https://minemine.my-work.pp.ua`;
+const API_ORIGIN = `https://core-back.metlab.pp.ua`;
 const API_BASE_URL = `${API_ORIGIN}/api`;
 
 // ═══════════════════════════════════════

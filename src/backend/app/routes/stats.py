@@ -1,13 +1,13 @@
-import os
 import json
+import os
 from json import JSONDecodeError
-from fastapi import APIRouter, HTTPException
 from typing import Any
 
-router = APIRouter()
+from fastapi import APIRouter, HTTPException
 
-# Базова тека, куди ми під'єднали /data/minecraft
-BASE_MC_PATH = "/app/mc-servers"
+from ..mc_server import get_server_data_path
+
+router = APIRouter()
 
 def get_username(uuid: str, server_data_path: str) -> str:
     """Шукає ім'я гравця у конкретному usercache.json для цього сервера."""
@@ -15,7 +15,7 @@ def get_username(uuid: str, server_data_path: str) -> str:
 
     try:
         if os.path.exists(usercache_path):
-            with open(usercache_path, 'r', encoding='utf-8') as f:
+            with open(usercache_path, encoding='utf-8') as f:
                 users = json.load(f)
                 for user in users:
                     # Порівнюємо UUID без дефісів (для надійності)
@@ -28,20 +28,14 @@ def get_username(uuid: str, server_data_path: str) -> str:
 
 @router.get("/stats/players/{server_name}")
 def get_players_stats(server_name: str) -> list[dict[str, Any]]:
-    server_paths = {
-        "terrafirmagreg": "server1",
-        "vanilla": "server2"
-    }
-
-    folder = server_paths.get(server_name.lower())
-    if not folder:
+    server_data_path = get_server_data_path(server_name)
+    if not server_data_path:
         raise HTTPException(status_code=404, detail="Сервер не знайдено")
 
-    server_data_path = f"{BASE_MC_PATH}/{folder}/data"
-    stats_dir = f"{server_data_path}/world/stats"
+    stats_dir = os.path.join(server_data_path, "word", "stats")
 
     if not os.path.exists(stats_dir):
-        raise HTTPException(status_code=404, detail=f"Папка статистики не знайдена")
+        raise HTTPException(status_code=404, detail="Папка статистики не знайдена")
 
     players = []
     for filename in os.listdir(stats_dir):
@@ -49,7 +43,7 @@ def get_players_stats(server_name: str) -> list[dict[str, Any]]:
             uuid = filename.replace(".json", "")
             filepath = os.path.join(stats_dir, filename)
             try:
-                with open(filepath, 'r', encoding='utf-8') as f:
+                with open(filepath, encoding='utf-8') as f:
                     data = json.load(f)
                     custom_stats = data.get("stats", {}).get("minecraft:custom", {})
                     killed_stats = data.get("stats", {}).get("minecraft:killed", {})
