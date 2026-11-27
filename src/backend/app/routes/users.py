@@ -1,15 +1,22 @@
-from fastapi import APIRouter, Depends, HTTPException, UploadFile, File
-from sqlalchemy.orm import Session
-from sqlalchemy import select
-import uuid
 import os
 import shutil
+import uuid
 
+from fastapi import APIRouter, Depends, File, HTTPException, UploadFile
+from sqlalchemy import select
+from sqlalchemy.orm import Session
+
+from ..auth import (
+    get_current_admin,
+    get_current_owner,
+    get_current_user,
+    get_password_hash,
+    verify_password,
+)
 from ..database import get_db
 from ..models import User
-from ..schemas import UserResponse, ProfileUpdate
-from ..auth import get_current_user, get_current_admin, get_current_owner, verify_password, get_password_hash
 from ..roles import ASSIGNABLE_ROLES, role_level
+from ..schemas import ProfileUpdate, UserResponse
 
 router = APIRouter()
 

@@ -1,0 +1,17 @@
+# Налаштування Ruff для бекенду
+
+[lint]
+# Які перевірки увімкнені:
+# E/F — помилки, I — порядок імпортів, B — типові баги, UP — сучасний синтаксис
+select = ["E", "F", "I", "B", "UP"]
+# E501 — занадто довгі рядки (не критично)
+ignore = ["E501"]
+
+[lint.flake8-bugbear]
+# FastAPI навмисно використовує ці виклики в параметрах — це не помилка
+extend-immutable-calls = [
+    "fastapi.Depends",
+    "fastapi.File",
+    "fastapi.Query",
+    "fastapi.Form",
+]

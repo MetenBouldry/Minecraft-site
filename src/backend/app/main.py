@@ -1,16 +1,16 @@
 import os
+
 from fastapi import FastAPI
 from fastapi.staticfiles import StaticFiles
-from slowapi import Limiter, _rate_limit_exceeded_handler
+from slowapi import _rate_limit_exceeded_handler
 from slowapi.errors import RateLimitExceeded
-from slowapi.util import get_remote_address
 from starlette.middleware.cors import CORSMiddleware
 
+from .database import engine
 from .limiter import limiter
 from .migrate import run_migrations
-from .database import engine
 from .models import Base
-from .routes import auth, users, server, stats
+from .routes import auth, server, stats, users
 
 # ═══════ ВИКЛИК МІГРАЦІЇ ═══════
 run_migrations()

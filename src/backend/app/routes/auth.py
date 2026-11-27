@@ -1,17 +1,27 @@
+import uuid
+from datetime import UTC, datetime, timedelta
+
 from fastapi import APIRouter, Depends, HTTPException, Request
 from fastapi.security import OAuth2PasswordRequestForm
-from sqlalchemy.orm import Session
 from sqlalchemy import select
-from datetime import timedelta, datetime, timezone
-import uuid
-from slowapi import Limiter
-from slowapi.util import get_remote_address
+from sqlalchemy.orm import Session
 
-from ..main import limiter
+from ..auth import (
+    ACCESS_TOKEN_EXPIRE_MINUTES,
+    create_access_token,
+    get_password_hash,
+    verify_password,
+)
 from ..database import get_db
+from ..limiter import limiter
 from ..models import User
-from ..schemas import UserCreate, Token, UserResponse, PasswordResetRequest, PasswordResetConfirm
-from ..auth import get_password_hash, verify_password, create_access_token, ACCESS_TOKEN_EXPIRE_MINUTES
+from ..schemas import (
+    PasswordResetConfirm,
+    PasswordResetRequest,
+    Token,
+    UserCreate,
+    UserResponse,
+)
 
 router = APIRouter()
 
@@ -56,13 +66,13 @@ def forgot_password(request: Request, data: PasswordResetRequest, db: Session = 
     # Генерація токен
     if user:
         user.reset_token = str(uuid.uuid4())
-        user.reset_token_expiry = datetime.now(timezone.utc) + timedelta(minutes=15) # noqa
+        user.reset_token_expiry = datetime.now(UTC) + timedelta(minutes=15) # noqa
         
         db.commit()
         # Виводимо в логи (для тестів)
-        print(f"======================================")
+        print("======================================")
         print(f"🔑 ТОКЕН ДЛЯ ВІДНОВЛЕННЯ: {user.reset_token}")
-        print(f"======================================")
+        print("======================================")
 
     return {"message": "Якщо email існує, інструкції будуть надіслані."}
 
@@ -78,7 +88,7 @@ def reset_password(data: PasswordResetConfirm, db: Session = Depends(get_db)) ->
         expiry = user.reset_token_expiry
         if isinstance(expiry, str):
             expiry = datetime.fromisoformat(expiry)
-        if expiry.replace(tzinfo=timezone.utc) < datetime.now(timezone.utc):
+        if expiry.replace(tzinfo=UTC) < datetime.now(UTC):
             raise HTTPException(status_code=400, detail="Термін дії токена витік")
 
     # Зміна пароля
