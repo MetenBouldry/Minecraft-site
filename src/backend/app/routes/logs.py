@@ -3,14 +3,14 @@ import re
 from datetime import UTC, datetime
 from typing import Any
 
-from fastapi import APIRoutes, Depends, HTTPException, Query
+from fastapi import APIRouter, Depends, HTTPException, Query
 from fastapi.responses import FileResponse
 
 from ..auth import require_role
 from ..mc_server import get_server_data_path
 from ..models import User
 
-router = APIRoutes()
+router = APIRouter()
 
 # Доступ: модератор і вище
 get_moderator = require_role("moderator")
@@ -82,7 +82,7 @@ def list_logs(server_name: str, _: User = Depends(get_moderator)) -> list[dict[s
 @router.get("/logs/{server_name}/live")
 def live_log(
     server_name: str,
-    offsset: int = Query(-1, ge=1),
+    offset: int = Query(-1, ge=1),
     _: User = Depends(get_moderator),
 ) -> dict[str, Any]:
     path = get_log_path(server_name, LATEST_LOG)
@@ -91,8 +91,8 @@ def live_log(
     # reset = почати заново:
     #   offset = -1   → перше підключення сторінки
     #   offset > size → сервер перезапустився, новий latest.log коротший
-    reset = offsset < 0 or offsset > size
-    start = max(0, size - INITIAL_BYTES) if reset else offsset
+    reset = offset < 0 or offset > size
+    start = max(0, size - INITIAL_BYTES) if reset else offset
 
     # Читаємо в байтах — так позиція offset завжди точна
     with open(path, "rb") as f:

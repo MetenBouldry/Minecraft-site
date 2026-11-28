@@ -1,5 +1,5 @@
-import sqlite3
 import os
+import sqlite3
 
 # Шлях до бази даних (відносно теки app)
 DB_PATH = os.getenv("DATABASE_URL", "sqlite:///./data/app.db").replace("sqlite:///./", "")
@@ -12,7 +12,7 @@ def add_column_if_not_exist(cursor, table, column, col_type):
     if column not in columns:
         print(f"⏳ Додаємо колонку '{column}'...")
         cursor.execute(f"ALTER TABLE {table} ADD COLUMN {column} {col_type}")
-        print(f"✅ Додано!")
+        print("✅ Додано!")
 
 def run_migrations():
     if not os.path.exists(DB_PATH):
